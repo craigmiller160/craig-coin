@@ -2,10 +2,12 @@
   "name": "@craigmiller160/udemy-crypto",
   "version": "0.0.1-beta",
   "scripts": {
-    "build:direct": "tsc",
+    "forceBuild": "tsc",
     "build": "yarn validate && tsc",
-    "start:direct": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
-    "start": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'yarn lint && ts-node src'",
+    "forceStart:primary": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
+    "start:primary": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'yarn lint && ts-node src'",
+    "forceStart:secondary": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
+    "start:secondary": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'yarn lint && ts-node src'",
     "lint": "eslint . --fix --max-warnings=0",
     "test": "jest",
     "validate": "yarn lint && yarn test"
