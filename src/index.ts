@@ -1,5 +1,7 @@
-setInterval(() => {
-	console.error('Hello World 2');
-}, 2000);
+import { Block } from './Block';
+import {createTimestamp} from './utils/createTimestamp';
 
-export {};
+
+const block = new Block(createTimestamp(), 'abc', 'def', 'Hello World');
+
+console.log(block);
