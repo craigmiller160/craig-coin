@@ -1,4 +1,4 @@
-import {createTimestamp} from './utils/createTimestamp';
+import { createTimestamp } from './utils/createTimestamp';
 
 export class Block {
 	static genesis() {
