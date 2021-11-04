@@ -23,4 +23,18 @@ describe('Blockchain', () => {
 		expect(blockchain.chain).toHaveLength(2);
 		expect(JSON.stringify(block)).toEqual(JSON.stringify(lastBlock));
 	});
+
+	describe('isValidChain', () => {
+		it('is valid', () => {
+			throw new Error();
+		});
+
+		it('invalid genesis block', () => {
+			throw new Error();
+		});
+
+		it('invalid block in chain', () => {
+			throw new Error();
+		})
+	});
 });
