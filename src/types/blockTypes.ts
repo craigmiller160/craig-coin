@@ -1,1 +1,1 @@
-export type BlockDataType = any[]; // TODO improve this type
+export type BlockDataType = string[];
