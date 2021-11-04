@@ -4,10 +4,10 @@
   "scripts": {
     "forceBuild": "tsc",
     "build": "yarn validate && tsc",
-    "forceStart:primary": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
-    "start:primary": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'yarn lint && ts-node src'",
-    "forceStart:secondary": "env-cmd -f .env.secondary nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
-    "start:secondary": "env-cmd -f .env.secondary nodemon --watch 'src/**' --ext 'ts,json' --exec 'yarn lint && ts-node src'",
+    "start:dev": "env-cmd -f .env.primary nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
+    "start:primary": "env-cmd -f .env.primary ts-node src",
+    "start:secondary": "env-cmd -f .env.secondary ts-node src",
+    "start:tertiary": "env-cmd -f .env.tertiary ts-node src",
     "lint": "eslint . --fix --max-warnings=0",
     "test": "jest",
     "validate": "yarn lint && yarn test"
