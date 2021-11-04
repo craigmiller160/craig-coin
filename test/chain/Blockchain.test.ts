@@ -35,6 +35,6 @@ describe('Blockchain', () => {
 
 		it('invalid block in chain', () => {
 			throw new Error();
-		})
+		});
 	});
 });
