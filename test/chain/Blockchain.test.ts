@@ -1,4 +1,7 @@
 import { Blockchain } from '../../src/chain/Blockchain';
+import {createChain} from '../testutils/utilityFunctions';
+import {Block} from '../../src/block/Block';
+import {genesisBlock} from '../../src/block/blockUtils';
 
 describe('Blockchain', () => {
 	it('starts with genesis block', () => {
@@ -25,15 +28,27 @@ describe('Blockchain', () => {
 
 	describe('replaceChain', () => {
 		it('successful', () => {
-			throw new Error();
+			const blockchain = new Blockchain();
+			const chain = createChain();
+			blockchain.replaceChain(chain);
+			expect(blockchain.chain).toEqual(chain);
 		});
 
 		it('invalid chain', () => {
-			throw new Error();
+			const blockchain = new Blockchain();
+			const chain = createChain();
+			chain.push(genesisBlock());
+			blockchain.replaceChain(chain);
+			expect(blockchain.chain).toHaveLength(1);
+			expect(blockchain.chain).not.toEqual(chain);
 		});
 
 		it('chain too short', () => {
-			throw new Error();
+			const blockchain = new Blockchain();
+			const newChain: Block[] = [];
+			blockchain.replaceChain(newChain);
+			expect(blockchain.chain).toHaveLength(1);
+			expect(blockchain.chain).not.toEqual(newChain);
 		});
 	});
 });
