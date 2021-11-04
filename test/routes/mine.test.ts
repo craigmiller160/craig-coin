@@ -1,4 +1,4 @@
-import {createTestServer} from '../testutils/testServer';
+import { createTestServer } from '../testutils/testServer';
 import request from 'supertest';
 
 describe('mine', () => {
@@ -7,12 +7,12 @@ describe('mine', () => {
 			data: []
 		};
 		const [app, blockchain] = createTestServer();
-		const response = await request(app)
+		await request(app)
 			.post('/mine')
 			.send(body)
-			.expect('Content-Type', /application\/json/)
-			.expect(200);
+			.expect(302);
 		expect(blockchain.chain).toHaveLength(2);
-		expect(response.body).toEqual(blockchain.chain);
+		expect(blockchain.chain[blockchain.chain.length - 1].data)
+			.toEqual(body.data);
 	});
 });
