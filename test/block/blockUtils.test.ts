@@ -1,3 +1,4 @@
+import { genesisBlock, mineBlock, hashBlock } from '../../src/block/blockUtils';
 
 describe('blockUtils', () => {
     it('genesisBlock', () => {
