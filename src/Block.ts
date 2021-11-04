@@ -1,7 +1,9 @@
 import { createTimestamp } from './utils/createTimestamp';
 
+type BlockDataType = any[]; // TODO improve this type
+
 export class Block {
-	static genesis() {
+	static genesis(): Block {
 		return new this(
 			createTimestamp(),
 			'----',
@@ -10,11 +12,16 @@ export class Block {
 		);
 	}
 
+	static mineBlock(lastBlock: Block, data: BlockDataType) {
+		const hash = 'todo-hash';
+		return new this(createTimestamp(), lastBlock.hash, hash, data);
+	}
+
 	constructor(
 		public timestamp: string, // TODO need to create this internally, but also prevent it from changing during mining if i make this immutable
 		public lastHash: string,
 		public hash: string,
-		public data: any[] // TODO want a type for this
+		public data: BlockDataType
 	) {}
 
 	toString(): string {
