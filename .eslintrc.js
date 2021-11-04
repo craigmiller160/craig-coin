@@ -1,22 +1,20 @@
 module.exports = {
-    parser: '@typescript-eslint/parser',
-    extends: [
-        'plugin:@typescript-eslint/recommended',
-        'plugin:prettier/recommended'
-    ],
-    parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module'
-    },
-    rules: {
-        'prettier/prettier': [
-            'error', {}, { usePrettierrc: true }
-        ],
-        'no-console': [
-            'error',
-            {
-                allow: ['error']
-            }
-        ]
-    }
-}
+	parser: '@typescript-eslint/parser',
+	extends: [
+		'plugin:@typescript-eslint/recommended',
+		'plugin:prettier/recommended'
+	],
+	parserOptions: {
+		ecmaVersion: 2020,
+		sourceType: 'module'
+	},
+	rules: {
+		'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+		'no-console': [
+			'error',
+			{
+				allow: ['error']
+			}
+		]
+	}
+};

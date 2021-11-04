@@ -4,7 +4,7 @@
   "scripts": {
     "build": "tsc",
     "start": "nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
-    "lint": "eslint src --fix --max-warnings=0"
+    "lint": "eslint . --fix --max-warnings=0"
   },
   "dependencies": {
     "crypto-js": "^4.1.1",
