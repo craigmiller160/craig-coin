@@ -2,10 +2,10 @@ import { BlockDataType } from '../types/blockTypes';
 
 export class Block {
 	constructor(
-		public timestamp: string,
-		public lastHash: string,
-		public hash: string,
-		public data: BlockDataType
+		public readonly timestamp: string,
+		public readonly lastHash: string,
+		public readonly hash: string,
+		public readonly data: BlockDataType
 	) {}
 
 	toString(): string {
