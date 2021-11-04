@@ -1,4 +1,4 @@
-import { genesisBlock, hashBlock, mineBlock } from '../../src/block/blockUtils';
+import { genesisBlock, hash, mineBlock } from '../../src/block/blockUtils';
 import { Block } from '../../src/block/Block';
 import { verifyTs } from '../testutils/utilityFunctions';
 
@@ -21,7 +21,7 @@ describe('blockUtils', () => {
 	});
 
 	it('hashBlock', () => {
-		const hash = hashBlock('timestamp', 'lastHash', []);
+		const hash = hash('timestamp', 'lastHash', []);
 		expect(hash).toEqual(
 			'af5e8e66d42193775e16e0c701ce630760efc63f7c58843c7f3e6685640d7a59'
 		);
