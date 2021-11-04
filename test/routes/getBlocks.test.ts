@@ -1,14 +1,9 @@
-import { Blockchain } from '../../src/chain/Blockchain';
-import express from 'express';
-import { configureGetBlocks } from '../../src/routes/getBlocks';
 import request from 'supertest';
-
-const blockchain = new Blockchain();
-const app = express();
-configureGetBlocks(app, blockchain); // TODO move to utility function
+import { createTestServer } from '../testutils/testServer';
 
 describe('getBlocks', () => {
 	it('returns blocks from blockchain', async () => {
+		const [app, blockchain] = createTestServer();
 		const response = await request(app)
 			.get('/blocks')
 			.expect('Content-Type', /application\/json/)

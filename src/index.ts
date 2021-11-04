@@ -2,7 +2,7 @@ import express from 'express';
 import { Blockchain } from './chain/Blockchain';
 import { configureGetBlocks } from './routes/getBlocks';
 import bodyParser from 'body-parser';
-import {configureMine} from './routes/mine';
+import { configureMine } from './routes/mine';
 
 const HTTP_PORT = process.env.HTTP_PORT || 3001;
 
