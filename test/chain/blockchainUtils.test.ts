@@ -14,6 +14,7 @@ describe('blockchainUtils', () => {
                         newBlock
                     ];
                 }, [genesisBlock()]);
+            console.log(chain);
             expect(isValidChain(chain)).toEqual(true);
         });
 

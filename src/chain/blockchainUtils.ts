@@ -6,13 +6,19 @@ export const isValidChain = (chain: Block[]): boolean => {
 		return false;
 	}
 
-	return chain.reduce((valid: boolean, block, index, currentChain) => {
-		if (!valid) {
-			return false;
-		}
-		const lastBlock = currentChain[index];
-		return (
-			block.lastHash === lastBlock.hash && block.hash === hashBlock(block)
-		);
-	}, true);
+	return chain
+		.reduce((valid: boolean, block, index, currentChain) => {
+			if (index === 0) {
+				return true;
+			}
+
+			if (!valid) {
+				return false;
+			}
+
+			const lastBlock = currentChain[index - 1];
+			return (
+				block.lastHash === lastBlock.hash && block.hash === hashBlock(block)
+			);
+		}, true);
 };
