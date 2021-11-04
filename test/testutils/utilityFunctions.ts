@@ -1,4 +1,4 @@
-import {format, utcToZonedTime} from 'date-fns-tz';
+import { format, utcToZonedTime } from 'date-fns-tz';
 
 export const getExpectedTs = () =>
 	format(utcToZonedTime(new Date(), 'UTC'), 'yyyyMMddHHmmssSSSXX', {
@@ -6,9 +6,7 @@ export const getExpectedTs = () =>
 	});
 
 export const verifyTs = (timestamp: string) => {
-    const expectedTs = getExpectedTs();
-    expect(timestamp).toHaveLength(expectedTs.length);
-    expect(timestamp.substring(0, 12)).toEqual(
-        expectedTs.substring(0, 12)
-    );
-}
+	const expectedTs = getExpectedTs();
+	expect(timestamp).toHaveLength(expectedTs.length);
+	expect(timestamp.substring(0, 12)).toEqual(expectedTs.substring(0, 12));
+};

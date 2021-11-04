@@ -1,5 +1,5 @@
-import {Blockchain} from '../../src/chain/Blockchain';
-import {verifyTs} from '../testutils/utilityFunctions';
+import { Blockchain } from '../../src/chain/Blockchain';
+import { verifyTs } from '../testutils/utilityFunctions';
 
 describe('Blockchain', () => {
 	it('starts with genesis block', () => {

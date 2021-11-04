@@ -1,6 +1,6 @@
-import {genesisBlock, hashBlock, mineBlock} from '../../src/block/blockUtils';
-import {Block} from '../../src/block/Block';
-import {verifyTs} from '../testutils/utilityFunctions';
+import { genesisBlock, hashBlock, mineBlock } from '../../src/block/blockUtils';
+import { Block } from '../../src/block/Block';
+import { verifyTs } from '../testutils/utilityFunctions';
 
 describe('blockUtils', () => {
 	it('genesisBlock', () => {
