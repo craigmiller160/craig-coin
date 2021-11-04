@@ -13,7 +13,7 @@ module.exports = {
 		'no-console': [
 			'error',
 			{
-				allow: ['error']
+				allow: ['error', 'warn', 'info', 'debug']
 			}
 		]
 	}

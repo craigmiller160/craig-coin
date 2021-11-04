@@ -22,4 +22,18 @@ describe('Blockchain', () => {
 		expect(blockchain.chain).toHaveLength(2);
 		expect(JSON.stringify(block)).toEqual(JSON.stringify(lastBlock));
 	});
+
+	describe('replaceChain', () => {
+		it('successful', () => {
+			throw new Error();
+		});
+
+		it('invalid chain', () => {
+			throw new Error();
+		});
+
+		it('chain too short', () => {
+			throw new Error();
+		});
+	});
 });
