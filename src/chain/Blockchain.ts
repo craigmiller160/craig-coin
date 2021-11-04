@@ -1,5 +1,5 @@
 import { Block } from '../block/Block';
-import { genesisBlock, hash, hashBlock, mineBlock } from '../block/blockUtils';
+import { genesisBlock, hashBlock, mineBlock } from '../block/blockUtils';
 import { BlockData } from '../types/blockTypes';
 
 export class Blockchain {
