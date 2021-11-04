@@ -8,6 +8,7 @@ const HTTP_PORT = process.env.HTTP_PORT || 3001;
 
 const blockchain = new Blockchain();
 
+// TODO make this re-usable instead of test server
 const app = express();
 app.use(bodyParser.json());
 configureGetBlocks(app, blockchain);
