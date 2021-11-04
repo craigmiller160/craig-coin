@@ -1,4 +1,3 @@
-import { Block } from './block/Block';
 import { genesisBlock, mineBlock } from './block/blockUtils';
 
 const genesis = genesisBlock();
