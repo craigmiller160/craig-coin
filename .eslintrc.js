@@ -16,5 +16,6 @@ module.exports = {
 				allow: ['error', 'warn', 'info', 'debug']
 			}
 		]
+		// '@typescript-eslint/no-unused-vars': 0
 	}
 };

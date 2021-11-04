@@ -10,5 +10,5 @@ const app = express();
 configureGetBlocks(app, blockchain);
 
 app.listen(HTTP_PORT, () => {
-    console.info(`Listening on port ${HTTP_PORT}`);
+	console.info(`Listening on port ${HTTP_PORT}`);
 });

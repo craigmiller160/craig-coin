@@ -1,5 +1,4 @@
 {
-  "outDir": "dist",
   "compilerOptions": {
     "target": "es2020",
     "lib": [
@@ -7,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "outDir": "dist",
     "sourceMap": true,
     "allowJs": true,
     "skipLibCheck": true,
