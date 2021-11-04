@@ -1,8 +1,9 @@
 {
-  "name": "UdemyCrypto",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "name": "@craigmiller160/udemy-crypto",
+  "version": "0.0.1-beta",
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "date-fns": "^2.25.0"
   },
