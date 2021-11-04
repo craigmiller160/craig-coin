@@ -4,8 +4,8 @@
   "scripts": {
     "build:direct": "tsc",
     "build": "yarn validate && tsc",
-    "start:direct": "nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
-    "start": "nodemon --watch 'src/**' --ext 'ts,json' --exec 'yarn lint && ts-node src'",
+    "start:direct": "env-cmd nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
+    "start": "env-cmd nodemon --watch 'src/**' --ext 'ts,json' --exec 'yarn lint && ts-node src'",
     "lint": "eslint . --fix --max-warnings=0",
     "test": "jest",
     "validate": "yarn lint && yarn test"
@@ -14,13 +14,16 @@
     "crypto-js": "^4.1.1",
     "date-fns": "^2.25.0",
     "date-fns-tz": "^1.1.6",
+    "express": "^4.17.1",
     "fp-ts": "^2.11.5"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.0.2",
+    "@types/express": "^4.17.13",
     "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
     "@typescript-eslint/parser": "^5.3.0",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
