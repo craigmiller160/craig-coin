@@ -8,13 +8,8 @@ export const genesisBlock = (): Block => {
 	const data: BlockDataType = [];
 	const lastHash = '----';
 	const hash = hashBlock(timestamp, lastHash, data);
-	return new Block(
-		timestamp,
-		lastHash,
-		hash,
-		data
-	);
-}
+	return new Block(timestamp, lastHash, hash, data);
+};
 
 export const mineBlock = (lastBlock: Block, data: BlockDataType): Block => {
 	const timestamp = createTimestamp();
@@ -22,5 +17,8 @@ export const mineBlock = (lastBlock: Block, data: BlockDataType): Block => {
 	return new Block(timestamp, lastBlock.hash, hash, data);
 };
 
-export const hashBlock = (timestamp: string, lastHash: string, data: BlockDataType): string =>
-	SHA256(timestamp + lastHash + JSON.stringify(data)).toString()
+export const hashBlock = (
+	timestamp: string,
+	lastHash: string,
+	data: BlockDataType
+): string => SHA256(timestamp + lastHash + JSON.stringify(data)).toString();
