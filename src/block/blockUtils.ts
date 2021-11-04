@@ -4,7 +4,7 @@ import { BlockData } from '../types/blockTypes';
 import SHA256 from 'crypto-js/sha256';
 
 export const genesisBlock = (): Block => {
-	const timestamp = createTimestamp();
+	const timestamp = '0';
 	const data: BlockData = [];
 	const lastHash = '----';
 	const theHash = hash(timestamp, lastHash, data);

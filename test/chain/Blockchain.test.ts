@@ -7,7 +7,7 @@ describe('Blockchain', () => {
 		expect(blockchain.chain).toHaveLength(1);
 
 		const genesisBlock = blockchain.chain[0];
-		verifyTs(genesisBlock.timestamp);
+		expect(genesisBlock.timestamp).toEqual('0');
 		expect(genesisBlock.lastHash).toEqual('----');
 		expect(genesisBlock.data).toEqual([]);
 		expect(genesisBlock.hash).toHaveLength(64);

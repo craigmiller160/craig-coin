@@ -11,6 +11,7 @@ describe('blockUtils', () => {
 	it('genesisBlock', () => {
 		const block = genesisBlock();
 
+		expect(block.timestamp).toEqual('0');
 		expect(block.lastHash).toEqual('----');
 		expect(block.data).toEqual([]);
 		expect(block.hash).toHaveLength(64);
