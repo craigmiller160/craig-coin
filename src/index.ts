@@ -1,13 +1,8 @@
 import { Blockchain } from './chain/Blockchain';
-import { createServer } from './rest-server';
-
-const HTTP_PORT = process.env.HTTP_PORT
-	? parseInt(process.env.HTTP_PORT)
-	: 3001;
+import { createAndStartRestServer } from './rest-server';
+import {P2pServer} from './p2p-server';
 
 const blockchain = new Blockchain();
-const app = createServer(blockchain);
-
-app.listen(HTTP_PORT, () => {
-	console.info(`Listening on port ${HTTP_PORT}`);
-});
+const p2pServer = new P2pServer(blockchain);
+p2pServer.listen();
+createAndStartRestServer(blockchain);
