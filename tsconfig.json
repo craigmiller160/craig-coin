@@ -19,7 +19,7 @@
     "isolatedModules": true,
     "jsx": "react",
     "declaration": false,
-    "module": "es2015"
+    "module": "commonjs"
   },
   "include": [
     "src/**/*.ts"

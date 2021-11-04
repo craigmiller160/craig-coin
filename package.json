@@ -2,7 +2,8 @@
   "name": "@craigmiller160/udemy-crypto",
   "version": "0.0.1-beta",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "start": "ts-node src"
   },
   "dependencies": {
     "date-fns": "^2.25.0"
