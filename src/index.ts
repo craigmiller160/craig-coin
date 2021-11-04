@@ -1,7 +1,8 @@
-import { Block } from './Block';
+import { Block } from './block/Block';
+import { genesisBlock, mineBlock } from './block/blockUtils';
 
-const genesis = Block.genesis();
-const block = Block.mineBlock(genesis, ['Hello World']);
+const genesis = genesisBlock();
+const block = mineBlock(genesis, ['Hello World']);
 
 console.log(genesis);
 console.log(block);
