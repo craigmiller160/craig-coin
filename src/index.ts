@@ -1,3 +1,5 @@
-console.error('Hello World');
+setInterval(() => {
+	console.error('Hello World');
+}, 2000);
 
 export {};
