@@ -1,5 +1,5 @@
 import { Block } from './Block';
-import { createTimestamp } from '../utils/createTimestamp';
+import { createTimestamp } from '../utils/dateUtils';
 import { BlockDataType } from '../types/blockTypes';
 import SHA256 from 'crypto-js/sha256';
 
