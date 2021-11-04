@@ -1,4 +1,4 @@
-import type { Blockchain } from '../chain/Blockchain';
+import { Blockchain } from '../chain/Blockchain';
 import { Express } from 'express';
 
 export const configureGetBlocks = (app: Express, blockchain: Blockchain) =>

@@ -30,3 +30,5 @@ export class Blockchain {
 		console.info('Replacing blockchain with the new chain');
 	}
 }
+
+export type BlockchainType = Blockchain;
