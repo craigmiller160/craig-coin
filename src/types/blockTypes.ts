@@ -1,1 +1,1 @@
-export type BlockDataType = string[];
+export type BlockData = string[];

@@ -1,11 +1,11 @@
-import { BlockDataType } from '../types/blockTypes';
+import { BlockData } from '../types/blockTypes';
 
 export class Block {
 	constructor(
 		public readonly timestamp: string,
 		public readonly lastHash: string,
 		public readonly hash: string,
-		public readonly data: BlockDataType
+		public readonly data: BlockData
 	) {}
 
 	toString(): string {
