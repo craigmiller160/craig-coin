@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { createServer } from '../../src/server';
+import { createServer } from '../../src/rest-server';
 import { Blockchain } from '../../src/chain/Blockchain';
 
 describe('getBlocks', () => {

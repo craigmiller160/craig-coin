@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { Blockchain } from '../../src/chain/Blockchain';
-import { createServer } from '../../src/server';
+import { createServer } from '../../src/rest-server';
 
 describe('mine', () => {
 	it('creates a new block on the blockchain', async () => {

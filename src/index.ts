@@ -1,5 +1,5 @@
 import { Blockchain } from './chain/Blockchain';
-import { createServer } from './server';
+import { createServer } from './rest-server';
 
 const HTTP_PORT = process.env.HTTP_PORT || 3001;
 
