@@ -1,20 +1,11 @@
-import { genesisBlock, mineBlock, hashBlock } from '../../src/block/blockUtils';
-import { format, utcToZonedTime } from 'date-fns-tz';
-import { Block } from '../../src/block/Block';
-
-const getExpectedTs = () =>
-	format(utcToZonedTime(new Date(), 'UTC'), 'yyyyMMddHHmmssSSSXX', {
-		timeZone: 'UTC'
-	});
+import {genesisBlock, hashBlock, mineBlock} from '../../src/block/blockUtils';
+import {Block} from '../../src/block/Block';
+import {verifyTs} from '../testutils/utilityFunctions';
 
 describe('blockUtils', () => {
 	it('genesisBlock', () => {
-		const expectedTs = getExpectedTs();
 		const block = genesisBlock();
-		expect(block.timestamp).toHaveLength(expectedTs.length);
-		expect(block.timestamp.substring(0, 12)).toEqual(
-			expectedTs.substring(0, 12)
-		);
+
 		expect(block.lastHash).toEqual('----');
 		expect(block.data).toEqual([]);
 		expect(block.hash).toHaveLength(64);
@@ -22,12 +13,8 @@ describe('blockUtils', () => {
 
 	it('mineBlock', () => {
 		const lastBlock = new Block('timestamp', 'lastHash', 'hash', []);
-		const expectedTs = getExpectedTs();
 		const block = mineBlock(lastBlock, []);
-		expect(block.timestamp).toHaveLength(expectedTs.length);
-		expect(block.timestamp.substring(0, 12)).toEqual(
-			expectedTs.substring(0, 12)
-		);
+		verifyTs(block.timestamp);
 		expect(block.lastHash).toEqual(lastBlock.hash);
 		expect(block.data).toEqual([]);
 		expect(block.hash).toHaveLength(64);
