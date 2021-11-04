@@ -2,8 +2,10 @@
   "name": "@craigmiller160/udemy-crypto",
   "version": "0.0.1-beta",
   "scripts": {
-    "build": "tsc",
-    "start": "nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
+    "build:direct": "tsc",
+    "build": "yarn validate && tsc",
+    "start:direct": "nodemon --watch 'src/**' --ext 'ts,json' --exec 'ts-node src'",
+    "start": "nodemon --watch 'src/**' --ext 'ts,json' --exec 'yarn lint && ts-node src'",
     "lint": "eslint . --fix --max-warnings=0",
     "test": "jest",
     "validate": "yarn lint && yarn test"
