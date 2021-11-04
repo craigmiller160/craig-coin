@@ -1,16 +1,6 @@
 import { Block } from '../../src/block/Block';
-import { genesisBlock, mineBlock } from '../../src/block/blockUtils';
 import { isValidChain } from '../../src/chain/blockchainUtils';
-
-const createChain = (): Block[] =>
-	[...new Array(3).keys()].reduce(
-		(newArray, index) => {
-			const lastBlock = newArray[index];
-			const newBlock = mineBlock(lastBlock, [`${index}`]);
-			return [...newArray, newBlock];
-		},
-		[genesisBlock()]
-	);
+import { createChain } from '../testutils/utilityFunctions';
 
 describe('blockchainUtils', () => {
 	describe('isValidChain', () => {

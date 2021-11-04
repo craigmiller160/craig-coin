@@ -5,7 +5,7 @@ import {
 	mineBlock
 } from '../../src/block/blockUtils';
 import { Block } from '../../src/block/Block';
-import { verifyTs } from '../testutils/utilityFunctions';
+import { verifyTimestamp } from '../testutils/utilityFunctions';
 
 describe('blockUtils', () => {
 	it('genesisBlock', () => {
@@ -20,7 +20,7 @@ describe('blockUtils', () => {
 	it('mineBlock', () => {
 		const lastBlock = new Block('timestamp', 'lastHash', 'hash', []);
 		const block = mineBlock(lastBlock, []);
-		verifyTs(block.timestamp);
+		verifyTimestamp(block.timestamp);
 		expect(block.lastHash).toEqual(lastBlock.hash);
 		expect(block.data).toEqual([]);
 		expect(block.hash).toHaveLength(64);
