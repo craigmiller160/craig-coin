@@ -1,7 +1,7 @@
 import { Blockchain } from '../../src/chain/Blockchain';
-import {createChain} from '../testutils/utilityFunctions';
-import {Block} from '../../src/block/Block';
-import {genesisBlock} from '../../src/block/blockUtils';
+import { createChain } from '../testutils/utilityFunctions';
+import { Block } from '../../src/block/Block';
+import { genesisBlock } from '../../src/block/blockUtils';
 
 describe('Blockchain', () => {
 	it('starts with genesis block', () => {
