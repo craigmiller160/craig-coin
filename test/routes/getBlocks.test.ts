@@ -1,9 +1,11 @@
 import request from 'supertest';
-import { createTestServer } from '../testutils/testServer';
+import { createServer } from '../../src/server';
+import { Blockchain } from '../../src/chain/Blockchain';
 
 describe('getBlocks', () => {
 	it('returns blocks from blockchain', async () => {
-		const [app, blockchain] = createTestServer();
+		const blockchain = new Blockchain();
+		const app = createServer(blockchain);
 		const response = await request(app)
 			.get('/blocks')
 			.expect('Content-Type', /application\/json/)
