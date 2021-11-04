@@ -1,7 +1,9 @@
 import { Blockchain } from './chain/Blockchain';
 import { createServer } from './rest-server';
 
-const HTTP_PORT = process.env.HTTP_PORT || 3001;
+const HTTP_PORT = process.env.HTTP_PORT
+	? parseInt(process.env.HTTP_PORT)
+	: 3001;
 
 const blockchain = new Blockchain();
 const app = createServer(blockchain);
