@@ -5,7 +5,7 @@ import request from 'supertest';
 
 const blockchain = new Blockchain();
 const app = express();
-configureGetBlocks(app, blockchain);
+configureGetBlocks(app, blockchain); // TODO move to utility function
 
 describe('getBlocks', () => {
 	it('returns blocks from blockchain', async () => {
