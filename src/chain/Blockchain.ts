@@ -2,6 +2,7 @@ import { Block } from '../block/Block';
 import { genesisBlock, mineBlock } from '../block/blockUtils';
 import { BlockData } from '../types/blockTypes';
 import { isValidChain } from './blockchainUtils';
+import { logger } from '../logger';
 
 export class Blockchain {
 	#chain: ReadonlyArray<Block> = [genesisBlock()];
@@ -18,15 +19,15 @@ export class Blockchain {
 
 	replaceChain(newChain: ReadonlyArray<Block>) {
 		if (newChain.length <= this.#chain.length) {
-			console.warn('Received chain is not longer than the current chain');
+			logger.warn('Received chain is not longer than the current chain');
 			return;
 		}
 		if (!isValidChain(newChain)) {
-			console.warn('Received chain is not valid');
+			logger.warn('Received chain is not valid');
 			return;
 		}
 
 		this.#chain = newChain;
-		console.info('Replacing blockchain with the new chain');
+		logger.info('Replacing blockchain with the new chain');
 	}
 }
