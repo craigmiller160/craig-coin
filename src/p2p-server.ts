@@ -19,8 +19,18 @@ export class P2pServer {
 	}
 
 	#connectSocket(socket: WebSocket) {
+		this.#messageHandler(socket);
 		this.#sockets = [...this.#sockets, socket];
 		console.debug('Socket Connected');
+
+		socket.send(JSON.stringify(this.blockchain.chain));
+	}
+
+	#messageHandler(socket: WebSocket) {
+		socket.on('message', (message: string) => {
+			const data = JSON.parse(message);
+			console.debug('Data', data);
+		});
 	}
 
 	#connectToPeers() {
