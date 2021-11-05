@@ -1,4 +1,7 @@
-import {createTimestamp, millisFromTimestamp} from '../../src/utils/dateUtils';
+import {
+	createTimestamp,
+	millisFromTimestamp
+} from '../../src/utils/dateUtils';
 import { format, utcToZonedTime } from 'date-fns-tz';
 
 describe('dateUtils', () => {
