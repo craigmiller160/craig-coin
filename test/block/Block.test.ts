@@ -16,7 +16,7 @@ describe('Block', () => {
 			Timestamp : timestamp
 			Last Hash : lastHash
 			Nonce     : 1
-			Difficulty: 2
+			Difficulty: ${DIFFICULTY}
 			Hash      : hash`);
 	});
 });

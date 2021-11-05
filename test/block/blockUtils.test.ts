@@ -38,7 +38,7 @@ describe('blockUtils', () => {
 				lastBlock,
 				millisToTimestamp(lastMillis + 36000)
 			);
-			expect(newDifficulty).toEqual(1);
+			expect(newDifficulty).toEqual(DIFFICULTY - 1);
 		});
 
 		it('raises difficulty for quickly mined blocks', () => {
@@ -56,7 +56,7 @@ describe('blockUtils', () => {
 				lastBlock,
 				millisToTimestamp(lastMillis - 36000)
 			);
-			expect(newDifficulty).toEqual(3);
+			expect(newDifficulty).toEqual(DIFFICULTY + 1);
 		});
 	});
 
@@ -75,7 +75,7 @@ describe('blockUtils', () => {
 	it('hash', () => {
 		const theHash = hash([], 'timestamp', 'lastHash', 0, DIFFICULTY);
 		expect(theHash).toEqual(
-			'8ef6f25e2e87229014eea59a054e94c674b16a74f0b1e0ba67561a549173ff4a'
+			'6ab8514cad967fd6d5d3bb4e925c3a781659b47800ed52baea9176e5881ed3c3'
 		);
 	});
 
@@ -90,7 +90,7 @@ describe('blockUtils', () => {
 		);
 		const hash = hashBlock(block);
 		expect(hash).toEqual(
-			'8ef6f25e2e87229014eea59a054e94c674b16a74f0b1e0ba67561a549173ff4a'
+			'6ab8514cad967fd6d5d3bb4e925c3a781659b47800ed52baea9176e5881ed3c3'
 		);
 	});
 });
