@@ -1,6 +1,6 @@
 import WebSocket, { Server } from 'ws';
 import { Blockchain } from './chain/Blockchain';
-import {Block} from './block/Block';
+import { Block } from './block/Block';
 
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
@@ -19,18 +19,28 @@ export class P2pServer {
 		this.#connectToPeers();
 	}
 
+	#sendChain(socket: WebSocket) {
+		socket.send(JSON.stringify(this.blockchain.chain));
+	}
+
 	#connectSocket(socket: WebSocket) {
 		this.#messageHandler(socket);
 		this.#sockets = [...this.#sockets, socket];
 		console.debug('Socket Connected');
 
-		socket.send(JSON.stringify(this.blockchain.chain));
+		this.#sendChain(socket);
 	}
 
 	#messageHandler(socket: WebSocket) {
 		socket.on('message', (message: string) => {
 			const chain = JSON.parse(message) as Block[];
 			this.blockchain.replaceChain(chain);
+		});
+	}
+
+	syncChains() {
+		this.#sockets.forEach((socket) => {
+			this.#sendChain(socket);
 		});
 	}
 
