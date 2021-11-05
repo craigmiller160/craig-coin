@@ -1,5 +1,4 @@
 import {
-	DIFFICULTY,
 	genesisBlock,
 	hash,
 	hashBlock,
@@ -7,6 +6,7 @@ import {
 } from '../../src/block/blockUtils';
 import { Block } from '../../src/block/Block';
 import { verifyTimestamp } from '../testutils/utilityFunctions';
+import {DIFFICULTY} from '../../src/config';
 
 describe('blockUtils', () => {
 	it('genesisBlock', () => {

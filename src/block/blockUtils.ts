@@ -2,9 +2,7 @@ import { Block } from './Block';
 import { createTimestamp } from '../utils/dateUtils';
 import { BlockData } from '../types/blockTypes';
 import SHA256 from 'crypto-js/sha256';
-
-// TODO need to make it faster for tests than in production
-export const DIFFICULTY = 2;
+import { DIFFICULTY } from '../config';
 
 export const genesisBlock = (): Block => {
 	const timestamp = '0';
