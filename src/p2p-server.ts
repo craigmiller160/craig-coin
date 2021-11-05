@@ -8,6 +8,7 @@ const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
 // TODO need to automatically lookup available peers
 // TODO need to handle peer going down and coming back up
+// TODO figure out how to unit test this
 
 export class P2pServer {
 	#sockets: ReadonlyArray<WebSocket> = [];
