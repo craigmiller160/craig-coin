@@ -14,4 +14,8 @@ describe('dateUtils', () => {
 		expect(actualTS.length).toEqual(expectedTS.length);
 		expect(actualTS.substring(0, 12)).toEqual(expectedTS.substring(0, 12));
 	});
+
+	it('millisFromTimestamp', () => {
+		throw new Error();
+	});
 });
