@@ -20,6 +20,17 @@ describe('blockUtils', () => {
 		expect(block.difficulty).toEqual(DIFFICULTY);
 	});
 
+	describe('mineBlock', () => {
+		it('lowers difficulty for slowly mined blocks', () => {
+			throw new Error();
+		});
+
+		it('raises difficulty for quickly mined blocks', () => {
+			throw new Error();
+		});
+	});
+
+	// TODO clean this one up... somehow
 	it('mineBlock', () => {
 		const lastBlock = new Block([], '0', 'lastHash', 0, DIFFICULTY, 'hash');
 		const block = mineBlock(lastBlock, []);
