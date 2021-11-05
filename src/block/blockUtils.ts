@@ -3,6 +3,8 @@ import { createTimestamp } from '../utils/dateUtils';
 import { BlockData } from '../types/blockTypes';
 import SHA256 from 'crypto-js/sha256';
 
+const DIFFICULTY = 4;
+
 export const genesisBlock = (): Block => {
 	const timestamp = '0';
 	const data: BlockData = [];
@@ -12,10 +14,16 @@ export const genesisBlock = (): Block => {
 };
 
 export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
-	// TODO update this
-	const timestamp = createTimestamp();
-	const theHash = hash(0, timestamp, lastBlock.hash, data);
-	return new Block(timestamp, lastBlock.hash, theHash, 0, data);
+	let nonce = 0;
+	let theHash = '';
+	let timestamp = '';
+
+	do {
+		timestamp = createTimestamp();
+		theHash = hash(nonce, timestamp, lastBlock.hash, data);
+	} while(theHash.substring(0, DIFFICULTY) !== '0'.repeat(DIFFICULTY));
+
+	return new Block(timestamp, lastBlock.hash, theHash, nonce, data);
 };
 
 export const hash = (

@@ -1,7 +1,5 @@
 import { BlockData } from '../types/blockTypes';
 
-const DIFFICULTY = 4;
-
 export class Block {
 	constructor(
 		public readonly timestamp: string,
