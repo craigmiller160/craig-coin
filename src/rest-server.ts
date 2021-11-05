@@ -14,6 +14,7 @@ export const createServer = (
 	p2pServer: P2pServer
 ): Express => {
 	const app = express();
+	app.disable('x-powered-by');
 	app.use(bodyParser.json());
 	configureGetBlocks(app, blockchain);
 	configureMine(app, blockchain, p2pServer);
