@@ -1,4 +1,4 @@
-import { createTimestamp } from '../../src/utils/dateUtils';
+import {createTimestamp, millisFromTimestamp} from '../../src/utils/dateUtils';
 import { format, utcToZonedTime } from 'date-fns-tz';
 
 describe('dateUtils', () => {
@@ -16,6 +16,7 @@ describe('dateUtils', () => {
 	});
 
 	it('millisFromTimestamp', () => {
-		throw new Error();
+		const time = millisFromTimestamp('20211105154415066Z');
+		expect(time).toEqual(1636127055066);
 	});
 });
