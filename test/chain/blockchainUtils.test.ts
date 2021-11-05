@@ -1,6 +1,7 @@
 import { Block } from '../../src/block/Block';
 import { isValidChain } from '../../src/chain/blockchainUtils';
 import { createChain } from '../testutils/utilityFunctions';
+import { DIFFICULTY } from '../../src/config';
 
 describe('blockchainUtils', () => {
 	describe('isValidChain', () => {
@@ -11,11 +12,12 @@ describe('blockchainUtils', () => {
 
 		it('invalid genesis block', () => {
 			const newGenesis = new Block(
+				[],
 				'timestamp',
 				'lastHash',
-				'hash',
 				0,
-				[]
+				DIFFICULTY,
+				'hash'
 			);
 			const chain = createChain();
 			chain[0] = newGenesis;
@@ -23,7 +25,14 @@ describe('blockchainUtils', () => {
 		});
 
 		it('invalid block in chain', () => {
-			const newBlock = new Block('timestamp', 'lastHash', 'hash', 0, []);
+			const newBlock = new Block(
+				[],
+				'timestamp',
+				'lastHash',
+				0,
+				DIFFICULTY,
+				'hash'
+			);
 			const chain = createChain();
 			chain.push(newBlock);
 			expect(isValidChain(chain)).toEqual(false);

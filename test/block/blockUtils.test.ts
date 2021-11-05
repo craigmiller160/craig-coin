@@ -21,7 +21,7 @@ describe('blockUtils', () => {
 	});
 
 	it('mineBlock', () => {
-		const lastBlock = new Block('0', 'lastHash', 'hash', 0, []);
+		const lastBlock = new Block([], '0', 'lastHash', 0, DIFFICULTY, 'hash');
 		const block = mineBlock(lastBlock, []);
 		verifyTimestamp(block.timestamp);
 		expect(block.lastHash).toEqual(lastBlock.hash);
@@ -40,7 +40,14 @@ describe('blockUtils', () => {
 	});
 
 	it('hashBlock', () => {
-		const block = new Block('timestamp', 'lastHash', 'hash', 0, []);
+		const block = new Block(
+			[],
+			'timestamp',
+			'lastHash',
+			0,
+			DIFFICULTY,
+			'hash'
+		);
 		const hash = hashBlock(block);
 		expect(hash).toEqual(
 			'8ef6f25e2e87229014eea59a054e94c674b16a74f0b1e0ba67561a549173ff4a'

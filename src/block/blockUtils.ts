@@ -9,7 +9,7 @@ export const genesisBlock = (): Block => {
 	const data: BlockData = [];
 	const lastHash = '----';
 	const theHash = hash(0, timestamp, lastHash, data, DIFFICULTY);
-	return new Block(timestamp, lastHash, theHash, 0, data);
+	return new Block(data, timestamp, lastHash, 0, DIFFICULTY, theHash);
 };
 
 // TODO write test
@@ -41,12 +41,12 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 	} while (theHash.substring(0, difficulty) !== '0'.repeat(difficulty));
 
 	return new Block(
+		data,
 		timestamp,
 		lastBlock.hash,
-		theHash,
 		nonce,
-		data,
-		difficulty
+		difficulty,
+		theHash
 	);
 };
 

@@ -1,8 +1,16 @@
 import { Block } from '../../src/block/Block';
+import { DIFFICULTY } from '../../src/config';
 
 describe('Block', () => {
 	it('prints custom toString()', () => {
-		const block = new Block('timestamp', 'lastHash', 'hash', 1, []);
+		const block = new Block(
+			[],
+			'timestamp',
+			'lastHash',
+			1,
+			DIFFICULTY,
+			'hash'
+		);
 		expect(block.toString()).toEqual(`Block - 
 			Timestamp : timestamp
 			Last Hash : lastHash

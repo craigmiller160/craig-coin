@@ -1,15 +1,13 @@
 import { BlockData } from '../types/blockTypes';
-import { DIFFICULTY } from '../config';
 
 export class Block {
-	// TODO clean up constructor param order
 	constructor(
+		public readonly data: BlockData,
 		public readonly timestamp: string,
 		public readonly lastHash: string,
-		public readonly hash: string,
 		public readonly nonce: number,
-		public readonly data: BlockData,
-		public readonly difficulty: number = DIFFICULTY
+		public readonly difficulty: number,
+		public readonly hash: string
 	) {}
 
 	toString(): string {
