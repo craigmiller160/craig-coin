@@ -1,6 +1,6 @@
 import {
-	createTimestamp,
-	millisFromTimestamp
+	createTimestamp, millisToTimestamp,
+	timestampToMillis
 } from '../../src/utils/dateUtils';
 import { format, utcToZonedTime } from 'date-fns-tz';
 
@@ -18,8 +18,13 @@ describe('dateUtils', () => {
 		expect(actualTS.substring(0, 12)).toEqual(expectedTS.substring(0, 12));
 	});
 
-	it('millisFromTimestamp', () => {
-		const time = millisFromTimestamp('20211105154415066Z');
-		expect(time).toEqual(1636127055066);
+	it('timestampToMillis', () => {
+		const millis = timestampToMillis('20211105154415066Z');
+		expect(millis).toEqual(1636127055066);
+	});
+
+	it('millisToTimestamp', () => {
+		const timestamp = millisToTimestamp(1636127055066);
+		expect(timestamp).toEqual('20211105154415066Z');
 	});
 });

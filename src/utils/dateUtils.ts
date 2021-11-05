@@ -9,7 +9,11 @@ export const createTimestamp = () =>
 		timeZone: TIME_ZONE
 	});
 
-export const millisFromTimestamp = (timestamp: string): number => {
+export const millisToTimestamp = (millis: number): string => {
+
+};
+
+export const timestampToMillis = (timestamp: string): number => {
 	const date = parse(timestamp, FORMAT, new Date());
 	return date.getTime();
 };

@@ -1,5 +1,5 @@
 import { Block } from './Block';
-import { createTimestamp, millisFromTimestamp } from '../utils/dateUtils';
+import { createTimestamp, timestampToMillis } from '../utils/dateUtils';
 import { BlockData } from '../types/blockTypes';
 import SHA256 from 'crypto-js/sha256';
 import { DIFFICULTY, MINE_RATE } from '../config';
@@ -18,8 +18,8 @@ export const adjustDifficulty = (
 	currentTimestamp: string
 ): number => {
 	const { difficulty, timestamp: lastBlockTimestamp } = lastBlock;
-	const lastBlockMillis = millisFromTimestamp(lastBlockTimestamp);
-	const currentMillis = millisFromTimestamp(currentTimestamp);
+	const lastBlockMillis = timestampToMillis(lastBlockTimestamp);
+	const currentMillis = timestampToMillis(currentTimestamp);
 	// TODO this seems like it would make things too easy?
 	return lastBlockMillis + MINE_RATE > currentMillis
 		? difficulty + 1
