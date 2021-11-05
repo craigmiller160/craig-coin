@@ -10,14 +10,20 @@ describe('blockchainUtils', () => {
 		});
 
 		it('invalid genesis block', () => {
-			const newGenesis = new Block('timestamp', 'lastHash', 'hash', []);
+			const newGenesis = new Block(
+				'timestamp',
+				'lastHash',
+				'hash',
+				0,
+				[]
+			);
 			const chain = createChain();
 			chain[0] = newGenesis;
 			expect(isValidChain(chain)).toEqual(false);
 		});
 
 		it('invalid block in chain', () => {
-			const newBlock = new Block('timestamp', 'lastHash', 'hash', []);
+			const newBlock = new Block('timestamp', 'lastHash', 'hash', 0, []);
 			const chain = createChain();
 			chain.push(newBlock);
 			expect(isValidChain(chain)).toEqual(false);
