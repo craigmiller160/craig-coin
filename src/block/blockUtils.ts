@@ -16,6 +16,7 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 	let nonce = 0;
 	let theHash = '';
 	let timestamp = '';
+	let { difficulty } = lastBlock;
 
 	do {
 		nonce++;
