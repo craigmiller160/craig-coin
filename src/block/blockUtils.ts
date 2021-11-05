@@ -25,7 +25,6 @@ export const adjustDifficulty = (
 		: difficulty - 1;
 };
 
-// TODO need a test that handles adjusting the difficulty
 export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 	let nonce = 0;
 	let theHash = '';

@@ -60,7 +60,6 @@ describe('blockUtils', () => {
 		});
 	});
 
-	// TODO clean this one up... somehow
 	it('mineBlock', () => {
 		const lastBlock = new Block([], '0', 'lastHash', 0, DIFFICULTY, 'hash');
 		const block = mineBlock(lastBlock, []);
