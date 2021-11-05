@@ -4,7 +4,6 @@ import { Blockchain } from './chain/Blockchain';
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
-// TODO this can be a function, rather than a class. Pretty sure anyway...
 export class P2pServer {
 	#sockets: ReadonlyArray<WebSocket> = [];
 	constructor(public readonly blockchain: Blockchain) {}
