@@ -3,7 +3,8 @@ import { createTimestamp } from '../utils/dateUtils';
 import { BlockData } from '../types/blockTypes';
 import SHA256 from 'crypto-js/sha256';
 
-export const DIFFICULTY = 4;
+// TODO need to make it faster for tests than in production
+export const DIFFICULTY = 2;
 
 export const genesisBlock = (): Block => {
 	const timestamp = '0';
@@ -19,9 +20,9 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 	let timestamp = '';
 
 	do {
+		nonce++;
 		timestamp = createTimestamp();
 		theHash = hash(nonce, timestamp, lastBlock.hash, data);
-		nonce++;
 	} while (theHash.substring(0, DIFFICULTY) !== '0'.repeat(DIFFICULTY));
 
 	return new Block(timestamp, lastBlock.hash, theHash, nonce, data);
