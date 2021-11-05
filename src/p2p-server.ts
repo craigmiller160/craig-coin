@@ -6,6 +6,9 @@ import { logger } from './logger';
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
+// TODO need to automatically lookup available peers
+// TODO need to handle peer going down and coming back up
+
 export class P2pServer {
 	#sockets: ReadonlyArray<WebSocket> = [];
 	constructor(public readonly blockchain: Blockchain) {}
@@ -40,9 +43,7 @@ export class P2pServer {
 	}
 
 	syncChains() {
-		this.#sockets.forEach((socket) => {
-			this.#sendChain(socket);
-		});
+		this.#sockets.forEach((socket) => this.#sendChain(socket));
 	}
 
 	#connectToPeers() {
