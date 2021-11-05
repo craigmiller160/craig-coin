@@ -8,7 +8,7 @@ export const genesisBlock = (): Block => {
 	const timestamp = '0';
 	const data: BlockData = [];
 	const lastHash = '----';
-	const theHash = hash(0, timestamp, lastHash, data, DIFFICULTY);
+	const theHash = hash(data, timestamp, lastHash, 0, DIFFICULTY);
 	return new Block(data, timestamp, lastHash, 0, DIFFICULTY, theHash);
 };
 
@@ -37,7 +37,7 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 		nonce++;
 		timestamp = createTimestamp();
 		difficulty = adjustDifficulty(lastBlock, timestamp);
-		theHash = hash(nonce, timestamp, lastBlock.hash, data, difficulty);
+		theHash = hash(data, timestamp, lastBlock.hash, nonce, difficulty);
 	} while (theHash.substring(0, difficulty) !== '0'.repeat(difficulty));
 
 	return new Block(
@@ -50,12 +50,11 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 	);
 };
 
-// TODO clean up method param order
 export const hash = (
-	nonce: number,
+	data: BlockData,
 	timestamp: string,
 	lastHash: string,
-	data: BlockData,
+	nonce: number,
 	difficulty: number
 ): string =>
 	SHA256(
@@ -64,9 +63,9 @@ export const hash = (
 
 export const hashBlock = (block: Block): string =>
 	hash(
-		block.nonce,
+		block.data,
 		block.timestamp,
 		block.lastHash,
-		block.data,
+		block.nonce,
 		block.difficulty
 	);
