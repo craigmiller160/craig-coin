@@ -4,6 +4,9 @@ import { configureGetBlocks } from './routes/getBlocks';
 import { configureMine } from './routes/mine';
 import { Blockchain } from './chain/Blockchain';
 import { P2pServer } from './p2p-server';
+import {logger} from './logger';
+
+logger.info('Testing 123')
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)
