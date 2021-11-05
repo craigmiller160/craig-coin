@@ -4,9 +4,7 @@ import { configureGetBlocks } from './routes/getBlocks';
 import { configureMine } from './routes/mine';
 import { Blockchain } from './chain/Blockchain';
 import { P2pServer } from './p2p-server';
-import {logger} from './logger';
-
-logger.info('Testing 123')
+import { logger } from './logger';
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)
@@ -30,6 +28,6 @@ export const createAndStartRestServer = (
 ) => {
 	const app = createServer(blockchain, p2pServer);
 	app.listen(HTTP_PORT, () => {
-		console.info(`Listening on port ${HTTP_PORT}`);
+		logger.info(`Listening on port ${HTTP_PORT}`);
 	});
 };
