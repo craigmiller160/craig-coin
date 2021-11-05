@@ -6,7 +6,6 @@ describe('blockchainUtils', () => {
 	describe('isValidChain', () => {
 		it('is valid', () => {
 			const chain = createChain();
-			// TODO dynamic difficulty is breaking this because of how it impacts hashing
 			expect(isValidChain(chain)).toEqual(true);
 		});
 

@@ -20,14 +20,14 @@ describe('blockUtils', () => {
 	});
 
 	it('mineBlock', () => {
-		const lastBlock = new Block('timestamp', 'lastHash', 'hash', 0, []);
+		const lastBlock = new Block('0', 'lastHash', 'hash', 0, []);
 		const block = mineBlock(lastBlock, []);
 		verifyTimestamp(block.timestamp);
 		expect(block.lastHash).toEqual(lastBlock.hash);
 		expect(block.data).toEqual([]);
 		expect(block.hash).toHaveLength(64);
-		expect(block.hash.substring(0, DIFFICULTY)).toEqual(
-			'0'.repeat(DIFFICULTY)
+		expect(block.hash.substring(0, block.difficulty)).toEqual(
+			'0'.repeat(block.difficulty)
 		);
 	});
 
