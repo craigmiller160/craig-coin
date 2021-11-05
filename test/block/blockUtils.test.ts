@@ -17,6 +17,7 @@ describe('blockUtils', () => {
 		expect(block.data).toEqual([]);
 		expect(block.hash).toHaveLength(64);
 		expect(block.nonce).toEqual(0);
+		expect(block.difficulty).toEqual(DIFFICULTY);
 	});
 
 	it('mineBlock', () => {
@@ -34,7 +35,7 @@ describe('blockUtils', () => {
 	it('hash', () => {
 		const theHash = hash(0, 'timestamp', 'lastHash', [], DIFFICULTY);
 		expect(theHash).toEqual(
-			'190cbe9463addc578f0f504f7ddec44ee3682c59c6d7149f68a3052214f07cf3'
+			'8ef6f25e2e87229014eea59a054e94c674b16a74f0b1e0ba67561a549173ff4a'
 		);
 	});
 
@@ -42,7 +43,7 @@ describe('blockUtils', () => {
 		const block = new Block('timestamp', 'lastHash', 'hash', 0, []);
 		const hash = hashBlock(block);
 		expect(hash).toEqual(
-			'190cbe9463addc578f0f504f7ddec44ee3682c59c6d7149f68a3052214f07cf3'
+			'8ef6f25e2e87229014eea59a054e94c674b16a74f0b1e0ba67561a549173ff4a'
 		);
 	});
 });
