@@ -40,7 +40,14 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 		theHash = hash(nonce, timestamp, lastBlock.hash, data, difficulty);
 	} while (theHash.substring(0, difficulty) !== '0'.repeat(difficulty));
 
-	return new Block(timestamp, lastBlock.hash, theHash, nonce, data, difficulty);
+	return new Block(
+		timestamp,
+		lastBlock.hash,
+		theHash,
+		nonce,
+		data,
+		difficulty
+	);
 };
 
 // TODO clean up method param order
