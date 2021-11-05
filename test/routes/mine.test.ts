@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { Blockchain } from '../../src/chain/Blockchain';
 import { createServer } from '../../src/rest-server';
-import {P2pServer} from '../../src/p2p-server';
+import { P2pServer } from '../../src/p2p-server';
 
 jest.mock('../../src/p2p-server');
 
