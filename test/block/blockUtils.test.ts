@@ -33,7 +33,7 @@ describe('blockUtils', () => {
 	});
 
 	it('hash', () => {
-		const theHash = hash(0, 'timestamp', 'lastHash', [], DIFFICULTY);
+		const theHash = hash([], 'timestamp', 'lastHash', 0, DIFFICULTY);
 		expect(theHash).toEqual(
 			'8ef6f25e2e87229014eea59a054e94c674b16a74f0b1e0ba67561a549173ff4a'
 		);
