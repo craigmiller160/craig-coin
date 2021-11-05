@@ -1,5 +1,6 @@
 import {
-	createTimestamp, millisToTimestamp,
+	createTimestamp,
+	millisToTimestamp,
 	timestampToMillis
 } from '../../src/utils/dateUtils';
 import { format, utcToZonedTime } from 'date-fns-tz';

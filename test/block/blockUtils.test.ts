@@ -8,7 +8,7 @@ import {
 import { Block } from '../../src/block/Block';
 import { verifyTimestamp } from '../testutils/utilityFunctions';
 import { DIFFICULTY } from '../../src/config';
-import {millisToTimestamp} from '../../src/utils/dateUtils';
+import { millisToTimestamp } from '../../src/utils/dateUtils';
 
 describe('blockUtils', () => {
 	it('genesisBlock', () => {
@@ -25,17 +25,37 @@ describe('blockUtils', () => {
 	describe('adjustDifficulty', () => {
 		it('lowers difficulty for slowly mined blocks', () => {
 			const lastMillis = Date.now();
-			const lastBlock = new Block([], millisToTimestamp(lastMillis), 'lastHash', 0, DIFFICULTY, 'hash');
+			const lastBlock = new Block(
+				[],
+				millisToTimestamp(lastMillis),
+				'lastHash',
+				0,
+				DIFFICULTY,
+				'hash'
+			);
 
-			const newDifficulty = adjustDifficulty(lastBlock, millisToTimestamp(lastMillis + 36000));
+			const newDifficulty = adjustDifficulty(
+				lastBlock,
+				millisToTimestamp(lastMillis + 36000)
+			);
 			expect(newDifficulty).toEqual(1);
 		});
 
 		it('raises difficulty for quickly mined blocks', () => {
 			const lastMillis = Date.now();
-			const lastBlock = new Block([], millisToTimestamp(lastMillis), 'lastHash', 0, DIFFICULTY, 'hash');
+			const lastBlock = new Block(
+				[],
+				millisToTimestamp(lastMillis),
+				'lastHash',
+				0,
+				DIFFICULTY,
+				'hash'
+			);
 
-			const newDifficulty = adjustDifficulty(lastBlock, millisToTimestamp(lastMillis - 36000));
+			const newDifficulty = adjustDifficulty(
+				lastBlock,
+				millisToTimestamp(lastMillis - 36000)
+			);
 			expect(newDifficulty).toEqual(3);
 		});
 	});
