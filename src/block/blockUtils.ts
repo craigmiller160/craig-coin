@@ -8,7 +8,7 @@ export const genesisBlock = (): Block => {
 	const timestamp = '0';
 	const data: BlockData = [];
 	const lastHash = '----';
-	const theHash = hash(0, timestamp, lastHash, data);
+	const theHash = hash(0, timestamp, lastHash, data, DIFFICULTY);
 	return new Block(timestamp, lastHash, theHash, 0, data);
 };
 
@@ -26,13 +26,15 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 	return new Block(timestamp, lastBlock.hash, theHash, nonce, data);
 };
 
+// TODO clean up method param order
 export const hash = (
 	nonce: number,
 	timestamp: string,
 	lastHash: string,
-	data: BlockData
+	data: BlockData,
+	difficulty: number
 ): string =>
-	SHA256(nonce + timestamp + lastHash + JSON.stringify(data)).toString();
+	SHA256(nonce + timestamp + lastHash + JSON.stringify(data) + difficulty).toString();
 
 export const hashBlock = (block: Block): string =>
-	hash(block.nonce, block.timestamp, block.lastHash, block.data);
+	hash(block.nonce, block.timestamp, block.lastHash, block.data, block.difficulty);
