@@ -1,8 +1,8 @@
 import { Block } from './Block';
-import {createTimestamp, millisFromTimestamp} from '../utils/dateUtils';
+import { createTimestamp, millisFromTimestamp } from '../utils/dateUtils';
 import { BlockData } from '../types/blockTypes';
 import SHA256 from 'crypto-js/sha256';
-import {DIFFICULTY, MINE_RATE} from '../config';
+import { DIFFICULTY, MINE_RATE } from '../config';
 
 export const genesisBlock = (): Block => {
 	const timestamp = '0';
@@ -13,12 +13,17 @@ export const genesisBlock = (): Block => {
 };
 
 // TODO write test
-export const adjustDifficulty = (lastBlock: Block, currentTimestamp: string): number => {
+export const adjustDifficulty = (
+	lastBlock: Block,
+	currentTimestamp: string
+): number => {
 	const { difficulty, timestamp: lastBlockTimestamp } = lastBlock;
 	const lastBlockMillis = millisFromTimestamp(lastBlockTimestamp);
 	const currentMillis = millisFromTimestamp(currentTimestamp);
 	// TODO this seems like it would make things too easy?
-	return lastBlockMillis + MINE_RATE > currentMillis ? difficulty + 1 : difficulty - 1;
+	return lastBlockMillis + MINE_RATE > currentMillis
+		? difficulty + 1
+		: difficulty - 1;
 };
 
 // TODO need a test that handles adjusting the difficulty
