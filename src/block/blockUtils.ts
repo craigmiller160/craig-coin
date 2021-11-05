@@ -12,7 +12,6 @@ export const genesisBlock = (): Block => {
 	return new Block(data, timestamp, lastHash, 0, DIFFICULTY, theHash);
 };
 
-// TODO write test
 export const adjustDifficulty = (
 	lastBlock: Block,
 	currentTimestamp: string
