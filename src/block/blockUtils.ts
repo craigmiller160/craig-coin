@@ -14,13 +14,14 @@ export const genesisBlock = (): Block => {
 };
 
 export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
-	const nonce = 0;
+	let nonce = 0;
 	let theHash = '';
 	let timestamp = '';
 
 	do {
 		timestamp = createTimestamp();
 		theHash = hash(nonce, timestamp, lastBlock.hash, data);
+		nonce++;
 	} while (theHash.substring(0, DIFFICULTY) !== '0'.repeat(DIFFICULTY));
 
 	return new Block(timestamp, lastBlock.hash, theHash, nonce, data);
