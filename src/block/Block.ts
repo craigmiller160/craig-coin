@@ -12,11 +12,11 @@ export class Block {
 
 	toString(): string {
 		return `Block - 
+			Data      : ${JSON.stringify(this.data)}
 			Timestamp : ${this.timestamp}
 			Last Hash : ${this.lastHash}
-			Hash      : ${this.hash}
 			Nonce     : ${this.nonce}
 			Difficulty: ${this.difficulty}
-			Data      : ${JSON.stringify(this.data)}`;
+			Hash      : ${this.hash}`;
 	}
 }

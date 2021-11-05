@@ -12,11 +12,11 @@ describe('Block', () => {
 			'hash'
 		);
 		expect(block.toString()).toEqual(`Block - 
+			Data      : []
 			Timestamp : timestamp
 			Last Hash : lastHash
-			Hash      : hash
 			Nonce     : 1
 			Difficulty: 2
-			Data      : []`);
+			Hash      : hash`);
 	});
 });
