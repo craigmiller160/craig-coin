@@ -1,6 +1,6 @@
 export interface TransactionInput {
-	timestamp: string;
-	amount: number;
-	address: string;
-	signature: string;
+	readonly timestamp: string;
+	readonly amount: number;
+	readonly address: string;
+	readonly signature: string;
 }

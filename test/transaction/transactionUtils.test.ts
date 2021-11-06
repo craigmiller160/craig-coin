@@ -1,8 +1,13 @@
 import { Wallet } from '../../src/wallet/Wallet';
-import { newTransaction } from '../../src/transaction/transactionUtils';
+import {
+	newTransaction,
+	verifyTransaction
+} from '../../src/transaction/transactionUtils';
 import '@relmify/jest-fp-ts';
 import { TransactionInput } from '../../src/transaction/TransactionInput';
 import SHA256 from 'crypto-js/sha256';
+import * as E from 'fp-ts/Either';
+import { Transaction } from '../../src/transaction/Transaction';
 
 const recipientAddress = 'recipient';
 const wallet = new Wallet();
@@ -45,12 +50,32 @@ describe('transactionUtils', () => {
 	});
 
 	describe('verifyTransaction', () => {
+		let transaction1: Transaction;
+		let transaction2: Transaction;
+		beforeEach(() => {
+			const transaction1Either = newTransaction(
+				wallet,
+				recipientAddress,
+				100
+			);
+			expect(transaction1Either).toBeRight();
+			transaction1 = (transaction1Either as E.Right<Transaction>).right;
+
+			transaction2 = new Transaction(transaction1.input, [
+				...transaction1.outputs,
+				{
+					address: '123',
+					amount: 456
+				}
+			]);
+		});
+
 		it('valid transaction', () => {
-			throw new Error();
+			expect(verifyTransaction(transaction1)).toBe(true);
 		});
 
 		it('invalid transaction', () => {
-			throw new Error();
+			expect(verifyTransaction(transaction2)).toBe(false);
 		});
 	});
 });

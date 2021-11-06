@@ -1,4 +1,4 @@
 export interface TransactionOutput {
-	amount: number;
-	address: string;
+	readonly amount: number;
+	readonly address: string;
 }
