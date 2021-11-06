@@ -38,7 +38,6 @@ export const newTransaction = (
 	return E.right(new Transaction(input, outputs));
 };
 
-// TODO write tests
 export const verifyTransaction = (transaction: Transaction): boolean =>
 	verifySignature(
 		transaction.input.address,

@@ -43,4 +43,14 @@ describe('transactionUtils', () => {
 			);
 		});
 	});
+
+	describe('verifyTransaction', () => {
+		it('valid transaction', () => {
+			throw new Error();
+		});
+
+		it('invalid transaction', () => {
+			throw new Error();
+		});
+	});
 });
