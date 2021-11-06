@@ -5,4 +5,10 @@ export class Wallet {
 	keyPair: any = null; // TODO need type
 	publicKey = '';
 	constructor() {}
+
+	toString(): string {
+		return `Wallet -
+		publicKey: ${this.publicKey}
+		balance  : ${this.balance}`;
+	}
 }
