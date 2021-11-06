@@ -5,5 +5,12 @@ import { TransactionOutput } from './TransactionOutput';
 export class Transaction {
 	readonly id: string = nanoid();
 	readonly input: any = null; // TODO need type
-	constructor(public output: ReadonlyArray<TransactionOutput>) {}
+	constructor(public outputs: ReadonlyArray<TransactionOutput>) {}
+
+	toString(): string {
+		return `Transaction - 
+		id     : ${this.id}
+		input  : ${this.input}
+		outputs: ${JSON.stringify(this.outputs, null, 2)}`;
+	}
 }
