@@ -13,6 +13,7 @@ export const newTransaction = (
 
 	return new Transaction([
 		{
+			// TODO wouldn't it just be -amount instead of the new balance?
 			amount: senderWallet.balance - amount,
 			address: senderWallet.publicKey
 		},
