@@ -103,12 +103,12 @@ describe('transactionUtils', () => {
 					address: recipientAddress
 				},
 				{
-					amount: 200,
-					address: wallet.publicKey
+					address: wallet.publicKey,
+					amount: 200
 				},
 				{
-					amount: 100,
-					address: recipientAddress
+					address: recipientAddress,
+					amount: 100
 				}
 			];
 			const input: TransactionInput = {
