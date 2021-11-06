@@ -1,6 +1,6 @@
 import { INITIAL_BALANCE } from '../config';
 import { ec } from 'elliptic';
-import { genKeyPair } from './walletUtils';
+import { genKeyPair } from '../utils/cryptoUtils';
 
 export class Wallet {
 	readonly balance = INITIAL_BALANCE;

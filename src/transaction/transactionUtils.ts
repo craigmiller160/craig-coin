@@ -5,9 +5,7 @@ import { createTimestamp } from '../utils/dateUtils';
 import SHA256 from 'crypto-js/sha256';
 import { TransactionInput } from './TransactionInput';
 import { TransactionOutput } from './TransactionOutput';
-import { ec } from 'elliptic';
-
-const ecInstance = new ec('secp256k1');
+import { verifySignature } from '../utils/cryptoUtils';
 
 export const newTransaction = (
 	senderWallet: Wallet,
@@ -40,18 +38,6 @@ export const newTransaction = (
 
 	return E.right(new Transaction(input, outputs));
 };
-
-// TODO write tests and move to EC utility file
-export const verifySignature = (
-	publicKeyString: string,
-	signature: string,
-	dataHash: string
-): boolean => {
-	// TODO need to handle exceptions here
-	const publicKey = ecInstance.keyFromPublic(publicKeyString, 'hex');
-	return publicKey.verify(dataHash, signature);
-};
-
 // TODO write tests
 export const verifyTransaction = (transaction: Transaction): boolean =>
 	verifySignature(
