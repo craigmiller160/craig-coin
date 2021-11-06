@@ -6,8 +6,18 @@ describe('cryptoUtils', () => {
 		expect(keyPair).not.toBeUndefined();
 	});
 
-	it('verifySignature', () => {
-		throw new Error();
+	describe('verifySignature', () => {
+		it('valid signature', () => {
+			throw new Error();
+		});
+
+		it('invalid signature', () => {
+			throw new Error();
+		});
+
+		it('error while validating', () => {
+			throw new Error();
+		});
 	});
 
 	it('hashData', () => {
