@@ -9,6 +9,9 @@ describe('Wallet', () => {
 	});
 
 	it('sign', () => {
-		throw new Error();
+		const dataHash = 'abcdefg';
+		const wallet = new Wallet();
+		const result = wallet.sign(dataHash);
+		expect(result).toEqual(wallet.keyPair.sign(dataHash).toDER('hex'));
 	});
 });
