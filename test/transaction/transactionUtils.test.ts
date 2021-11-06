@@ -1,5 +1,6 @@
 import { Wallet } from '../../src/wallet/Wallet';
 import { newTransaction } from '../../src/transaction/transactionUtils';
+import '@relmify/jest-fp-ts';
 
 const recipientAddress = 'recipient';
 const wallet = new Wallet();
@@ -8,7 +9,7 @@ describe('transactionUtils', () => {
 	describe('newTransaction', () => {
 		it('creates transaction', () => {
 			const transaction = newTransaction(wallet, recipientAddress, 200);
-			expect(transaction).toEqual({
+			expect(transaction).toEqualRight({
 				id: expect.any(String),
 				input: '',
 				outputs: [
