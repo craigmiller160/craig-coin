@@ -40,7 +40,9 @@ describe('cryptoUtils', () => {
 		});
 
 		it('error while validating', () => {
-			throw new Error();
+			expect(verifySignature('abcdefg', validSignature, dataHash)).toBe(
+				false
+			);
 		});
 	});
 
