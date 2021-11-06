@@ -1,4 +1,4 @@
-import { Wallet } from '../../src/wallet/Wallet';
+import { Wallet } from '../wallet/Wallet';
 import { Transaction } from './Transaction';
 
 export const newTransaction = (
