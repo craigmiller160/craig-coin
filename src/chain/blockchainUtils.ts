@@ -17,7 +17,9 @@ export const isValidChain = (chain: ReadonlyArray<Block>): boolean => {
 
 		const lastBlock = currentChain[index - 1];
 		return (
-			block.lastHash === lastBlock.hash && block.hash === hashBlock(block)
+			block.lastHash === lastBlock.hash &&
+			block.hash === hashBlock(block) &&
+			block.hash.startsWith('0'.repeat(block.difficulty))
 		);
 	}, true);
 };
