@@ -78,4 +78,18 @@ describe('transactionUtils', () => {
 			expect(verifyTransaction(transaction2)).toBe(false);
 		});
 	});
+
+	describe('updateTransaction', () => {
+		it('successfully updates transaction', () => {
+			throw new Error();
+		});
+
+		it('exceeds sender balance and cannot update', () => {
+			throw new Error();
+		});
+
+		it('cannot find existing sender output and cannot update', () => {
+			throw new Error();
+		});
+	});
 });
