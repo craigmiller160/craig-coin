@@ -26,7 +26,10 @@ describe('transactionUtils', () => {
 		});
 
 		it('exceeds sender balance and cannot create transaction', () => {
-			throw new Error();
+			const transaction = newTransaction(wallet, recipientAddress, 700);
+			expect(transaction).toEqualLeft(
+				new Error(`Amount 700 exceeds sender balance`)
+			);
 		});
 	});
 });
