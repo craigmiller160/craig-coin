@@ -1,7 +1,8 @@
-export {};
+import { genKeyPair } from '../../src/wallet/walletUtils';
 
 describe('walletUtils', () => {
 	it('genKeyPair', () => {
-		throw new Error();
+		const keyPair = genKeyPair();
+		expect(keyPair).not.toBeUndefined();
 	});
 });
