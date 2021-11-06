@@ -8,7 +8,6 @@ export const newTransaction = (
 	amount: number
 ): E.Either<Error, Transaction> => {
 	if (amount > senderWallet.balance) {
-		// TODO modify for functional error handling
 		return E.left(new Error(`Amount ${amount} exceeds sender balance`));
 	}
 
