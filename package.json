@@ -10,7 +10,8 @@
     "start:tertiary": "env-cmd -f .env.tertiary ts-node src",
     "lint": "eslint . --fix --max-warnings=0",
     "test": "jest",
-    "validate": "yarn lint && yarn test"
+    "validate": "yarn lint && yarn test",
+    "prepare": "husky install"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -35,6 +36,7 @@
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
     "jest": "^27.3.1",
     "nodemon": "^2.0.14",
     "prettier": "^2.4.1",
