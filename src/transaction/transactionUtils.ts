@@ -64,7 +64,7 @@ export const updateTransaction = (
 	const senderOutput = baseTransaction.outputs[senderOutputIndex];
 	if (amount > senderOutput.amount) {
 		// The only senderOutput that would exist is one referencing the balance of the sender
-		return E.left(new Error(`Amount ${amount} exceeds balance`));
+		return E.left(new Error(`Amount ${amount} exceeds sender balance`));
 	}
 
 	const newSenderAmount = senderOutput.amount - amount;

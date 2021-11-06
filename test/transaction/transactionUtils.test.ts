@@ -125,11 +125,44 @@ describe('transactionUtils', () => {
 		});
 
 		it('exceeds sender balance and cannot update', () => {
-			throw new Error();
+			const transaction = (
+				newTransaction(
+					wallet,
+					recipientAddress,
+					200
+				) as E.Right<Transaction>
+			).right;
+			const updatedTransaction = updateTransaction(
+				transaction,
+				wallet,
+				recipientAddress,
+				500
+			);
+			expect(updatedTransaction).toEqualLeft(
+				new Error('Amount 500 exceeds sender balance')
+			);
 		});
 
 		it('cannot find existing sender output and cannot update', () => {
-			throw new Error();
+			const transaction = (
+				newTransaction(
+					wallet,
+					recipientAddress,
+					200
+				) as E.Right<Transaction>
+			).right;
+			const newWallet = new Wallet();
+			const updatedTransaction = updateTransaction(
+				transaction,
+				newWallet,
+				recipientAddress,
+				100
+			);
+			expect(updatedTransaction).toEqualLeft(
+				new Error(
+					'Cannot find existing output for sender wallet to update'
+				)
+			);
 		});
 	});
 });
