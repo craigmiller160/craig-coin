@@ -10,6 +10,7 @@ import SHA256 from 'crypto-js/sha256';
 import * as E from 'fp-ts/Either';
 import { Transaction } from '../../src/transaction/Transaction';
 import { hashData } from '../../src/utils/cryptoUtils';
+import { TransactionOutput } from '../../src/transaction/TransactionOutput';
 
 const recipientAddress = 'recipient';
 const wallet = new Wallet();
@@ -96,7 +97,7 @@ describe('transactionUtils', () => {
 				recipientAddress,
 				100
 			);
-			const outputs = [
+			const outputs: ReadonlyArray<TransactionOutput> = [
 				{
 					amount: 200,
 					address: recipientAddress
