@@ -1,7 +1,10 @@
-export {};
+import { Wallet } from '../../src/wallet/Wallet';
 
 describe('Wallet', () => {
 	it('toString', () => {
-		throw new Error();
+		const wallet = new Wallet();
+		expect(wallet.toString()).toEqual(`Wallet - 
+		publicKey: ${wallet.publicKey}
+		balance  : ${wallet.balance}`);
 	});
 });

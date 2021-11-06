@@ -8,7 +8,7 @@ export class Wallet {
 	readonly publicKey = this.keyPair.getPublic().encode('hex', false);
 
 	toString(): string {
-		return `Wallet -
+		return `Wallet - 
 		publicKey: ${this.publicKey}
 		balance  : ${this.balance}`;
 	}
