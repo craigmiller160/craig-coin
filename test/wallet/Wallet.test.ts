@@ -7,4 +7,8 @@ describe('Wallet', () => {
 		publicKey: ${wallet.publicKey}
 		balance  : ${wallet.balance}`);
 	});
+
+	it('sign', () => {
+		throw new Error();
+	});
 });
