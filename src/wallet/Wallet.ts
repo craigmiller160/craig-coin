@@ -5,7 +5,7 @@ import { genKeyPair } from './walletUtils';
 export class Wallet {
 	balance = INITIAL_BALANCE;
 	keyPair: ec.KeyPair = genKeyPair();
-	publicKey = this.keyPair.getPublic().encode('hex', false); // TODO do I want true or false here?
+	publicKey = this.keyPair.getPublic().encode('hex', false);
 
 	toString(): string {
 		return `Wallet -
