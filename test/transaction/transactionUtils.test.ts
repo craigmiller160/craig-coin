@@ -1,6 +1,7 @@
 import { Wallet } from '../../src/wallet/Wallet';
 import {
 	newTransaction,
+	updateTransaction,
 	verifyTransaction
 } from '../../src/transaction/transactionUtils';
 import '@relmify/jest-fp-ts';
@@ -81,7 +82,46 @@ describe('transactionUtils', () => {
 
 	describe('updateTransaction', () => {
 		it('successfully updates transaction', () => {
-			throw new Error();
+			const transaction = (
+				newTransaction(
+					wallet,
+					recipientAddress,
+					200
+				) as E.Right<Transaction>
+			).right;
+			const updatedTransaction = updateTransaction(
+				transaction,
+				wallet,
+				recipientAddress,
+				100
+			);
+			const outputs = [
+				{
+					amount: 200,
+					address: recipientAddress
+				},
+				{
+					amount: 200,
+					address: wallet.publicKey
+				},
+				{
+					amount: 100,
+					address: recipientAddress
+				}
+			];
+			const input: TransactionInput = {
+				timestamp: expect.any(String),
+				amount: wallet.balance,
+				address: wallet.publicKey,
+				signature: wallet.sign(
+					SHA256(JSON.stringify(outputs)).toString()
+				)
+			};
+			expect(updatedTransaction).toEqualRight({
+				id: expect.any(String),
+				input,
+				outputs
+			});
 		});
 
 		it('exceeds sender balance and cannot update', () => {

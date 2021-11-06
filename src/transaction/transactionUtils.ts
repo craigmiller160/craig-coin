@@ -78,6 +78,10 @@ export const updateTransaction = (
 		{
 			address: senderWallet.publicKey,
 			amount: newSenderAmount
+		},
+		{
+			address: recipientAddress,
+			amount: amount
 		}
 	];
 	const input: TransactionInput = createTransactionInput(
