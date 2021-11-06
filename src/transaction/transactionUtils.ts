@@ -6,23 +6,19 @@ export const newTransaction = (
 	recipientAddress: string,
 	amount: number
 ): Transaction => {
-	const transaction = new Transaction();
 	if (amount > senderWallet.balance) {
 		// TODO modify for functional error handling
 		throw new Error(`Amount ${amount} exceeds sender balance`);
 	}
 
-	transaction.outputs.push(
-		...[
-			{
-				amount: senderWallet.balance - amount,
-				address: senderWallet.publicKey
-			},
-			{
-				amount,
-				address: recipientAddress
-			}
-		]
-	);
-	return transaction;
+	return new Transaction([
+		{
+			amount: senderWallet.balance - amount,
+			address: senderWallet.publicKey
+		},
+		{
+			amount,
+			address: recipientAddress
+		}
+	]);
 };
