@@ -68,6 +68,7 @@ export const updateTransaction = (
 	}
 
 	const newSenderAmount = senderOutput.amount - amount;
+	// TODO clean up these array part variables
 	const firstPartArray = baseTransaction.outputs.slice(0, senderOutputIndex);
 	const secondPartArray = baseTransaction.outputs.slice(
 		senderOutputIndex + 1

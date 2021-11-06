@@ -9,6 +9,7 @@ import { TransactionInput } from '../../src/transaction/TransactionInput';
 import SHA256 from 'crypto-js/sha256';
 import * as E from 'fp-ts/Either';
 import { Transaction } from '../../src/transaction/Transaction';
+import { hashData } from '../../src/utils/cryptoUtils';
 
 const recipientAddress = 'recipient';
 const wallet = new Wallet();
@@ -113,9 +114,7 @@ describe('transactionUtils', () => {
 				timestamp: expect.any(String),
 				amount: wallet.balance,
 				address: wallet.publicKey,
-				signature: wallet.sign(
-					SHA256(JSON.stringify(outputs)).toString()
-				)
+				signature: wallet.sign(hashData(outputs))
 			};
 			expect(updatedTransaction).toEqualRight({
 				id: expect.any(String),
