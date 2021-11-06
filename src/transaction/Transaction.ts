@@ -2,7 +2,6 @@ import { nanoid } from 'nanoid';
 import { TransactionOutput } from './TransactionOutput';
 import { TransactionInput } from './TransactionInput';
 
-// TODO couldn't there just be one output per-transaction, rather than this?
 export class Transaction {
 	readonly id: string = nanoid();
 	constructor(
