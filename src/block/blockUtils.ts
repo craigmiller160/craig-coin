@@ -1,8 +1,8 @@
 import { Block } from './Block';
 import { createTimestamp, timestampToMillis } from '../utils/dateUtils';
 import { BlockData } from '../types/blockTypes';
-import SHA256 from 'crypto-js/sha256';
 import { DIFFICULTY, MINE_RATE } from '../config';
+import { hashText } from '../utils/cryptoUtils';
 
 export const genesisBlock = (): Block => {
 	const timestamp = '0';
@@ -55,9 +55,7 @@ export const hash = (
 	nonce: number,
 	difficulty: number
 ): string =>
-	SHA256(
-		nonce + timestamp + lastHash + JSON.stringify(data) + difficulty
-	).toString();
+	hashText(nonce + timestamp + lastHash + JSON.stringify(data) + difficulty);
 
 export const hashBlock = (block: Block): string =>
 	hash(
