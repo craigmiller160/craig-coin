@@ -1,4 +1,10 @@
-import { genKeyPair, hashData, hashText } from '../../src/utils/cryptoUtils';
+import {
+	genKeyPair,
+	hashData,
+	hashText,
+	verifySignature
+} from '../../src/utils/cryptoUtils';
+import { ec } from 'elliptic';
 
 describe('cryptoUtils', () => {
 	it('genKeyPair', () => {
@@ -7,12 +13,30 @@ describe('cryptoUtils', () => {
 	});
 
 	describe('verifySignature', () => {
+		let keyPair: ec.KeyPair;
+		let publicKeyString: string;
+		let dataHash: string;
+		let validSignature: string;
+		beforeEach(() => {
+			keyPair = genKeyPair();
+			publicKeyString = keyPair.getPublic().encode('hex', false);
+			const data = {
+				abc: 'def'
+			};
+			dataHash = hashData(data);
+			validSignature = keyPair.sign(dataHash).toDER('hex');
+		});
+
 		it('valid signature', () => {
-			throw new Error();
+			expect(
+				verifySignature(publicKeyString, validSignature, dataHash)
+			).toBe(true);
 		});
 
 		it('invalid signature', () => {
-			throw new Error();
+			expect(verifySignature(publicKeyString, 'abcdefg', dataHash)).toBe(
+				false
+			);
 		});
 
 		it('error while validating', () => {
