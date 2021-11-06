@@ -30,7 +30,6 @@ describe('Blockchain', () => {
 		it('successful', () => {
 			const blockchain = new Blockchain();
 			const chain = createChain();
-			// TODO dynamic difficulty is breaking the hashing behavior for validation here
 			blockchain.replaceChain(chain);
 			expect(blockchain.chain).toEqual(chain);
 		});
