@@ -4,7 +4,7 @@ import { createTestServer } from '../testutils/createTestServer';
 jest.mock('../../src/p2p-server');
 
 describe('mine', () => {
-	it('creates a new block on the blockchain', async () => {
+	it('POST /mine', async () => {
 		const body = {
 			data: []
 		};

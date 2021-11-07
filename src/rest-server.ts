@@ -1,12 +1,12 @@
 import express, { Express } from 'express';
 import bodyParser from 'body-parser';
-import { configureGetBlocks } from './routes/getBlocks';
+import { configureGetBlocks } from './routes/blocks';
 import { configureMine } from './routes/mine';
 import { Blockchain } from './chain/Blockchain';
 import { P2pServer } from './p2p-server';
 import { logger } from './logger';
 import { TransactionPool } from './transaction/TransactionPool';
-import { configureGetTransactions } from './routes/getTransactions';
+import { configureGetTransactions } from './routes/transactions';
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)

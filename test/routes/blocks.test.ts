@@ -3,8 +3,8 @@ import { createTestServer } from '../testutils/createTestServer';
 
 jest.mock('../../src/p2p-server');
 
-describe('getBlocks', () => {
-	it('returns blocks from blockchain', async () => {
+describe('blocks', () => {
+	it('GET /blocks', async () => {
 		const { app, blockchain } = createTestServer();
 		const response = await request(app)
 			.get('/blocks')

@@ -3,8 +3,8 @@ import { unpackRight } from '../testutils/utilityFunctions';
 import { newTransaction } from '../../src/transaction/transactionUtils';
 import request from 'supertest';
 
-describe('getTransactions', () => {
-	it('gets all transactions', async () => {
+describe('transactions', () => {
+	it('GET /transactions', async () => {
 		const { app, transactionPool, wallet } = createTestServer();
 		const transaction = unpackRight(
 			newTransaction(wallet, 'recipient', 100)
