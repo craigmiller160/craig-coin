@@ -1,4 +1,8 @@
 import { Wallet } from '../../src/wallet/Wallet';
+import { TransactionPool } from '../../src/transaction/TransactionPool';
+import '@relmify/jest-fp-ts';
+import { INITIAL_BALANCE } from '../../src/config';
+import { unpackRight } from '../testutils/utilityFunctions';
 
 describe('Wallet', () => {
 	it('toString', () => {
@@ -17,7 +21,29 @@ describe('Wallet', () => {
 
 	describe('createTransaction', () => {
 		it('creates brand new transaction', () => {
-			throw new Error();
+			const wallet = new Wallet();
+			const pool = new TransactionPool();
+			const transaction = wallet.createTransaction(
+				'recipient',
+				100,
+				pool
+			);
+			expect(transaction).toEqualRight({
+				id: expect.any(String),
+				input: expect.any(Object),
+				outputs: [
+					{
+						address: wallet.publicKey,
+						amount: INITIAL_BALANCE - 100
+					},
+					{
+						address: 'recipient',
+						amount: 100
+					}
+				]
+			});
+			expect(pool.transactions).toHaveLength(1);
+			expect(pool.transactions[0]).toEqual(unpackRight(transaction));
 		});
 
 		it('updates existing transaction', () => {
