@@ -1,7 +1,11 @@
 import { Transaction } from './Transaction';
 
 export class TransactionPool {
-	#transactions: ReadonlyArray<Transaction> = [];
+	#transactions: ReadonlyArray<Transaction>;
+
+	constructor(transactions: ReadonlyArray<Transaction> = []) {
+		this.#transactions = transactions;
+	}
 
 	get transactions(): ReadonlyArray<Transaction> {
 		return this.transactions.slice();

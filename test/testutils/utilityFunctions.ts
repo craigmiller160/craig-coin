@@ -1,6 +1,8 @@
 import { format, utcToZonedTime } from 'date-fns-tz';
 import { Block } from '../../src/block/Block';
 import { genesisBlock, mineBlock } from '../../src/block/blockUtils';
+import * as E from 'fp-ts/Either';
+import { pipe } from 'fp-ts/function';
 
 export const getExpectedTimestamp = () =>
 	format(utcToZonedTime(new Date(), 'UTC'), 'yyyyMMddHHmmssSSSXX', {
@@ -21,4 +23,12 @@ export const createChain = (): Block[] =>
 			return [...newArray, newBlock];
 		},
 		[genesisBlock()]
+	);
+
+export const unpackRight = <T>(either: E.Either<Error, T>) =>
+	pipe(
+		either,
+		E.getOrElse<Error, T>((error) => {
+			throw error;
+		})
 	);
