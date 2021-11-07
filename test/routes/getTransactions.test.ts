@@ -1,7 +1,7 @@
 export {};
 
 describe('getTransactions', () => {
-    it('gets all transactions', () => {
-        throw new Error();
-    })
+	it('gets all transactions', () => {
+		throw new Error();
+	});
 });
