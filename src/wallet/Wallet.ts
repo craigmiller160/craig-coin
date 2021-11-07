@@ -20,7 +20,6 @@ export class Wallet {
 		return this.keyPair.sign(dataHash).toDER('hex');
 	}
 
-	// TODO write tests
 	createTransaction(
 		recipient: string,
 		amount: number,
