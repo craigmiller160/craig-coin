@@ -1,7 +1,13 @@
 export {};
 
 describe('TransactionPool', () => {
-	it('updateOrAddTransaction', () => {
-		throw new Error();
+	describe('updateOrAddTransaction', () => {
+		it('updates existing transaction', () => {
+			throw new Error();
+		});
+
+		it('adds new transaction', () => {
+			throw new Error();
+		});
 	});
 });
