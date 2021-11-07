@@ -11,6 +11,7 @@ import {
 	configureGetTransactions
 } from './routes/transactions';
 import { Wallet } from './wallet/Wallet';
+import { configureGetWallet } from './routes/wallet';
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)
@@ -29,6 +30,7 @@ export const createServer = (
 	configureMine(app, blockchain, p2pServer);
 	configureGetTransactions(app, transactionPool);
 	configureCreateTransaction(app, wallet, transactionPool);
+	configureGetWallet(app, wallet);
 	return app;
 };
 
