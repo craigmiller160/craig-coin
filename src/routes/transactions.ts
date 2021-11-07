@@ -32,7 +32,8 @@ export const configureCreateTransaction = (
 				wallet.createTransaction(recipient, amount, transactionPool),
 				E.fold(
 					(error) => {
-						logger.error('Error creating a transaction', error);
+						logger.error('Error creating a transaction');
+						logger.error(error);
 						res.status(500);
 						res.send(error.message);
 					},
