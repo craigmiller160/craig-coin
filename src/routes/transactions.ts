@@ -23,6 +23,11 @@ export const configureCreateTransaction = (
 		'/transactions',
 		(req: Request<unknown, unknown, TransactionRequest>, res) => {
 			const { recipient, amount } = req.body;
+			if (!recipient || !amount) {
+				res.status(400);
+				res.send('Invalid transaction');
+				return;
+			}
 			pipe(
 				wallet.createTransaction(recipient, amount, transactionPool),
 				E.fold(
