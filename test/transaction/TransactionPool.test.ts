@@ -28,7 +28,24 @@ describe('TransactionPool', () => {
 		});
 
 		it('adds new transaction', () => {
-			throw new Error();
+			const transaction = unpackRight(
+				newTransaction(wallet, recipient, 100)
+			);
+			const transaction2 = unpackRight(
+				newTransaction(wallet, recipient, 200)
+			);
+
+			const pool = new TransactionPool([transaction, transaction2]);
+			const transaction3 = unpackRight(
+				newTransaction(wallet, recipient, 300)
+			);
+			pool.updateOrAddTransaction(transaction3);
+			expect(pool.transactions).toHaveLength(3);
+			expect(pool.transactions).toEqual([
+				transaction,
+				transaction2,
+				transaction3
+			]);
 		});
 	});
 });
