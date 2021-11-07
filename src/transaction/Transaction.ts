@@ -3,10 +3,10 @@ import { TransactionOutput } from './TransactionOutput';
 import { TransactionInput } from './TransactionInput';
 
 export class Transaction {
-	readonly id: string = nanoid();
 	constructor(
 		public readonly input: TransactionInput,
-		public readonly outputs: ReadonlyArray<TransactionOutput>
+		public readonly outputs: ReadonlyArray<TransactionOutput>,
+		readonly id: string = nanoid()
 	) {}
 
 	toString(): string {

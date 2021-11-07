@@ -84,7 +84,7 @@ export const updateTransaction = (
 		senderWallet,
 		newOutputs
 	);
-	return E.right(new Transaction(input, newOutputs));
+	return E.right(new Transaction(input, newOutputs, baseTransaction.id));
 };
 
 export const verifyTransaction = (transaction: Transaction): boolean =>

@@ -20,7 +20,7 @@ export class TransactionPool {
 			this.#transactions = [
 				...this.#transactions.slice(0, existingTransactionIndex),
 				transaction,
-				...this.#transactions.slice(existingTransactionIndex)
+				...this.#transactions.slice(existingTransactionIndex + 1)
 			];
 		} else {
 			this.#transactions = [...this.#transactions, transaction];

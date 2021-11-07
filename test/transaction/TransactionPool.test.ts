@@ -23,6 +23,7 @@ describe('TransactionPool', () => {
 				updateTransaction(transaction, wallet, recipient, 100)
 			);
 			pool.updateOrAddTransaction(transaction3);
+			expect(pool.transactions).toHaveLength(2);
 			expect(pool.transactions).toEqual([transaction3, transaction2]);
 		});
 
