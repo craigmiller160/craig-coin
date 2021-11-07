@@ -5,8 +5,8 @@ import { TransactionInput } from './TransactionInput';
 export class Transaction {
 	readonly id: string = nanoid();
 	constructor(
-		public input: TransactionInput,
-		public outputs: ReadonlyArray<TransactionOutput>
+		public readonly input: TransactionInput,
+		public readonly outputs: ReadonlyArray<TransactionOutput>
 	) {}
 
 	toString(): string {
