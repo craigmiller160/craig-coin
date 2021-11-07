@@ -1,6 +1,6 @@
 import { Block } from '../block/Block';
 import { genesisBlock, mineBlock } from '../block/blockUtils';
-import { BlockData } from '../types/blockTypes';
+import { BlockData } from '../types/restBodyTypes';
 import { isValidChain } from './blockchainUtils';
 import { logger } from '../logger';
 

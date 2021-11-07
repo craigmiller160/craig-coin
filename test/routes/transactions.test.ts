@@ -17,4 +17,8 @@ describe('transactions', () => {
 			.expect(200);
 		expect(response.body).toEqual(transactionPool.transactions);
 	});
+
+	it('POST /transactions', async () => {
+		throw new Error();
+	});
 });

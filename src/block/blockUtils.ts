@@ -1,6 +1,6 @@
 import { Block } from './Block';
 import { createTimestamp, timestampToMillis } from '../utils/dateUtils';
-import { BlockData } from '../types/blockTypes';
+import { BlockData } from '../types/restBodyTypes';
 import { DIFFICULTY, MINE_RATE } from '../config';
 import { hashText } from '../utils/cryptoUtils';
 
