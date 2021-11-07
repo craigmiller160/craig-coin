@@ -8,7 +8,7 @@ export class TransactionPool {
 	}
 
 	get transactions(): ReadonlyArray<Transaction> {
-		return this.transactions.slice();
+		return this.#transactions.slice();
 	}
 
 	updateOrAddTransaction(transaction: Transaction) {
