@@ -1,6 +1,6 @@
 import { Express, Request } from 'express';
 import { TransactionPool } from '../transaction/TransactionPool';
-import { TransactionRequest } from '../types/restBodyTypes';
+import { TransactionRequest } from '../types/restTypes';
 import { Wallet } from '../wallet/Wallet';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';

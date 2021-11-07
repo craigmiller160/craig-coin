@@ -1,6 +1,6 @@
 import { Blockchain } from '../chain/Blockchain';
 import { Express, Request } from 'express';
-import { MineRequest } from '../types/restBodyTypes';
+import { MineRequest } from '../types/restTypes';
 import { P2pServer } from '../p2p-server';
 import { logger } from '../logger';
 
