@@ -18,7 +18,7 @@ export const createTestServer = (): TestServer => {
 	const wallet = new Wallet();
 	const transactionPool = new TransactionPool();
 	const p2pServer = new P2pServer(blockchain);
-	const app = createServer(blockchain, transactionPool, p2pServer);
+	const app = createServer(blockchain, transactionPool, wallet, p2pServer);
 	return {
 		app,
 		blockchain,

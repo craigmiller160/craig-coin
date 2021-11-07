@@ -6,7 +6,11 @@ import { Blockchain } from './chain/Blockchain';
 import { P2pServer } from './p2p-server';
 import { logger } from './logger';
 import { TransactionPool } from './transaction/TransactionPool';
-import { configureGetTransactions } from './routes/transactions';
+import {
+	configureCreateTransaction,
+	configureGetTransactions
+} from './routes/transactions';
+import { Wallet } from './wallet/Wallet';
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)
@@ -15,6 +19,7 @@ const HTTP_PORT = process.env.HTTP_PORT
 export const createServer = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool,
+	wallet: Wallet,
 	p2pServer: P2pServer
 ): Express => {
 	const app = express();
@@ -23,15 +28,17 @@ export const createServer = (
 	configureGetBlocks(app, blockchain);
 	configureMine(app, blockchain, p2pServer);
 	configureGetTransactions(app, transactionPool);
+	configureCreateTransaction(app, wallet, transactionPool);
 	return app;
 };
 
 export const createAndStartRestServer = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool,
+	wallet: Wallet,
 	p2pServer: P2pServer
 ) => {
-	const app = createServer(blockchain, transactionPool, p2pServer);
+	const app = createServer(blockchain, transactionPool, wallet, p2pServer);
 	app.listen(HTTP_PORT, () => {
 		logger.info(`Listening on port ${HTTP_PORT}`);
 	});
