@@ -51,11 +51,23 @@ describe('TransactionPool', () => {
 
 	describe('getExistingTransaction', () => {
 		it('transaction does exist', () => {
-			throw new Error();
+			const transaction1 = unpackRight(
+				newTransaction(wallet, recipient, 100)
+			);
+			const pool = new TransactionPool([transaction1]);
+			const existingTransaction = pool.getExistingTransaction(
+				transaction1.input.address
+			);
+			expect(existingTransaction).toEqual(transaction1);
 		});
 
 		it('transaction does not exist', () => {
-			throw new Error();
+			const transaction1 = unpackRight(
+				newTransaction(wallet, recipient, 100)
+			);
+			const pool = new TransactionPool([transaction1]);
+			const existingTransaction = pool.getExistingTransaction('abc');
+			expect(existingTransaction).toBeUndefined();
 		});
 	});
 });

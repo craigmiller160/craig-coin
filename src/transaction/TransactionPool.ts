@@ -11,7 +11,6 @@ export class TransactionPool {
 		return this.#transactions.slice();
 	}
 
-	// TODO write tests
 	getExistingTransaction(senderAddress: string): Transaction | undefined {
 		return this.#transactions.find(
 			(txn) => txn.input.address === senderAddress
