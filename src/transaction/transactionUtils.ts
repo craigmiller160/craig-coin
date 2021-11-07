@@ -18,12 +18,12 @@ export const newTransaction = (
 	const outputs: ReadonlyArray<TransactionOutput> = [
 		{
 			// TODO wouldn't it just be -amount instead of the new balance?
-			amount: senderWallet.balance - amount,
-			address: senderWallet.publicKey
+			address: senderWallet.publicKey,
+			amount: senderWallet.balance - amount
 		},
 		{
-			amount,
-			address: recipientAddress
+			address: recipientAddress,
+			amount
 		}
 	];
 
@@ -69,12 +69,12 @@ export const updateTransaction = (
 
 	const newSenderAmount = senderOutput.amount - amount;
 	const newOutputs: ReadonlyArray<TransactionOutput> = [
-		...baseTransaction.outputs.slice(0, senderOutputIndex),
-		...baseTransaction.outputs.slice(senderOutputIndex + 1),
 		{
 			address: senderWallet.publicKey,
 			amount: newSenderAmount
 		},
+		...baseTransaction.outputs.slice(0, senderOutputIndex),
+		...baseTransaction.outputs.slice(senderOutputIndex + 1),
 		{
 			address: recipientAddress,
 			amount: amount
