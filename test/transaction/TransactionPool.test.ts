@@ -48,4 +48,14 @@ describe('TransactionPool', () => {
 			]);
 		});
 	});
+
+	describe('getExistingTransaction', () => {
+		it('transaction does exist', () => {
+			throw new Error();
+		});
+
+		it('transaction does not exist', () => {
+			throw new Error();
+		});
+	});
 });

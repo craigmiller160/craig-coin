@@ -7,3 +7,4 @@ Things to Change
 5) Understand multi-output transactions. Why?
 6) Understand wallet balance management.
 7) Replace all timestamp stuff with epoch millis
+8) Wallet.sign() needs to return an Either due to error risk
