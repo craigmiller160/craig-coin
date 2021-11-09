@@ -7,6 +7,16 @@ import { Transaction } from './transaction/Transaction';
 
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
+const CHAIN_MESSAGE_TYPE = 'CHAIN';
+const TRANSACTION_MESSAGE_TYPE = 'TRANSACTION';
+
+interface Message<T> {
+	type: string;
+	data: T;
+}
+type ChainMessage = Message<ReadonlyArray<Block>>;
+type TransactionMessage = Message<Transaction>;
+type ReceivedMessage = Message<unknown>;
 
 // TODO need to automatically lookup available peers
 // TODO need to handle peer going down and coming back up
@@ -30,11 +40,19 @@ export class P2pServer {
 	}
 
 	#sendChain(socket: WebSocket) {
-		socket.send(JSON.stringify(this.blockchain.chain));
+		const chainMessage: ChainMessage = {
+			type: CHAIN_MESSAGE_TYPE,
+			data: this.blockchain.chain
+		};
+		socket.send(JSON.stringify(chainMessage));
 	}
 
 	#sendTransaction(socket: WebSocket, transaction: Transaction) {
-		socket.send(JSON.stringify(transaction));
+		const transactionMessage: TransactionMessage = {
+			type: TRANSACTION_MESSAGE_TYPE,
+			data: transaction
+		};
+		socket.send(JSON.stringify(transactionMessage));
 	}
 
 	#connectSocket(socket: WebSocket) {
@@ -47,8 +65,20 @@ export class P2pServer {
 
 	#messageHandler(socket: WebSocket) {
 		socket.on('message', (message: string) => {
-			const chain = JSON.parse(message) as ReadonlyArray<Block>;
-			this.blockchain.replaceChain(chain);
+			const receivedMessage = JSON.parse(message) as ReceivedMessage;
+			switch (receivedMessage.type) {
+				case CHAIN_MESSAGE_TYPE:
+					this.blockchain.replaceChain(
+						(receivedMessage as ChainMessage).data
+					);
+					break;
+				case TRANSACTION_MESSAGE_TYPE:
+					break;
+				default:
+					logger.error(
+						`Invalid message received. Type: ${receivedMessage.type}`
+					);
+			}
 		});
 	}
 

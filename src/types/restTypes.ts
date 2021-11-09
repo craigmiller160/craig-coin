@@ -1,5 +1,7 @@
 export type BlockData = string[];
 
+// TODO clean up this file
+
 export interface MineRequest {
 	readonly data: BlockData;
 }
