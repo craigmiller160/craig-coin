@@ -61,12 +61,12 @@ describe('Wallet', () => {
 				input: expect.any(Object),
 				outputs: [
 					{
-						address: recipient,
-						amount: 100
-					},
-					{
 						address: wallet.publicKey,
 						amount: INITIAL_BALANCE - 300
+					},
+					{
+						address: recipient,
+						amount: 100
 					},
 					{
 						address: recipient,
