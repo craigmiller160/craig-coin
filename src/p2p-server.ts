@@ -3,6 +3,7 @@ import { Blockchain } from './chain/Blockchain';
 import { Block } from './block/Block';
 import { logger } from './logger';
 import { TransactionPool } from './transaction/TransactionPool';
+import { Transaction } from './transaction/Transaction';
 
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
@@ -32,6 +33,10 @@ export class P2pServer {
 		socket.send(JSON.stringify(this.blockchain.chain));
 	}
 
+	#sendTransaction(socket: WebSocket, transaction: Transaction) {
+		socket.send(JSON.stringify(transaction));
+	}
+
 	#connectSocket(socket: WebSocket) {
 		this.#messageHandler(socket);
 		this.#sockets = [...this.#sockets, socket];
@@ -42,13 +47,19 @@ export class P2pServer {
 
 	#messageHandler(socket: WebSocket) {
 		socket.on('message', (message: string) => {
-			const chain = JSON.parse(message) as Block[];
+			const chain = JSON.parse(message) as ReadonlyArray<Block>;
 			this.blockchain.replaceChain(chain);
 		});
 	}
 
 	syncChains() {
 		this.#sockets.forEach((socket) => this.#sendChain(socket));
+	}
+
+	broadcastTransaction(transaction: Transaction) {
+		this.#sockets.forEach((socket) => {
+			this.#sendTransaction(socket, transaction);
+		});
 	}
 
 	#connectToPeers() {
