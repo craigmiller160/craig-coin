@@ -21,12 +21,12 @@ describe('transactionUtils', () => {
 			const transaction = newTransaction(wallet, recipientAddress, 200);
 			const outputs = [
 				{
-					amount: 300,
-					address: wallet.publicKey
+					address: wallet.publicKey,
+					amount: 300
 				},
 				{
-					amount: 200,
-					address: recipientAddress
+					address: recipientAddress,
+					amount: 200
 				}
 			];
 			const input: TransactionInput = {
@@ -99,11 +99,11 @@ describe('transactionUtils', () => {
 			);
 			const outputs: ReadonlyArray<TransactionOutput> = [
 				{
-					amount: 200,
-					address: recipientAddress
+					address: wallet.publicKey,
+					amount: 200
 				},
 				{
-					address: wallet.publicKey,
+					address: recipientAddress,
 					amount: 200
 				},
 				{
