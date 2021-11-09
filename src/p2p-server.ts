@@ -10,8 +10,13 @@ const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 const CHAIN_MESSAGE_TYPE = 'CHAIN';
 const TRANSACTION_MESSAGE_TYPE = 'TRANSACTION';
 
+enum MessageType {
+	CHAIN,
+	TRANSACTION
+}
+
 interface Message<T> {
-	type: string; // TODO restrict this to the available types
+	type: MessageType;
 	data: T;
 }
 type ChainMessage = Message<ReadonlyArray<Block>>; // TODO set the type
@@ -41,7 +46,7 @@ export class P2pServer {
 
 	#sendChain(socket: WebSocket) {
 		const chainMessage: ChainMessage = {
-			type: CHAIN_MESSAGE_TYPE,
+			type: MessageType.CHAIN,
 			data: this.blockchain.chain
 		};
 		socket.send(JSON.stringify(chainMessage));
@@ -49,7 +54,7 @@ export class P2pServer {
 
 	#sendTransaction(socket: WebSocket, transaction: Transaction) {
 		const transactionMessage: TransactionMessage = {
-			type: TRANSACTION_MESSAGE_TYPE,
+			type: MessageType.TRANSACTION,
 			data: transaction
 		};
 		socket.send(JSON.stringify(transactionMessage));
