@@ -73,6 +73,9 @@ export class P2pServer {
 					);
 					break;
 				case TRANSACTION_MESSAGE_TYPE:
+					this.transactionPool.updateOrAddTransaction(
+						(receivedMessage as TransactionMessage).data
+					);
 					break;
 				default:
 					logger.error(
