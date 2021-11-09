@@ -11,11 +11,11 @@ const CHAIN_MESSAGE_TYPE = 'CHAIN';
 const TRANSACTION_MESSAGE_TYPE = 'TRANSACTION';
 
 interface Message<T> {
-	type: string;
+	type: string; // TODO restrict this to the available types
 	data: T;
 }
-type ChainMessage = Message<ReadonlyArray<Block>>;
-type TransactionMessage = Message<Transaction>;
+type ChainMessage = Message<ReadonlyArray<Block>>; // TODO set the type
+type TransactionMessage = Message<Transaction>; // TODO set the type
 type ReceivedMessage = Message<unknown>;
 
 // TODO need to automatically lookup available peers
