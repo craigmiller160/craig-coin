@@ -8,6 +8,6 @@ const wallet = new Wallet();
 const transactionPool = new TransactionPool();
 const blockchain = new Blockchain();
 
-const p2pServer = new P2pServer(blockchain);
+const p2pServer = new P2pServer(blockchain, transactionPool);
 p2pServer.listen();
 createAndStartRestServer(blockchain, transactionPool, wallet, p2pServer);
