@@ -7,8 +7,6 @@ import { Transaction } from './transaction/Transaction';
 
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
-const CHAIN_MESSAGE_TYPE = 'CHAIN';
-const TRANSACTION_MESSAGE_TYPE = 'TRANSACTION';
 
 enum MessageType {
 	CHAIN,
@@ -19,8 +17,12 @@ interface Message<T> {
 	type: MessageType;
 	data: T;
 }
-type ChainMessage = Message<ReadonlyArray<Block>>; // TODO set the type
-type TransactionMessage = Message<Transaction>; // TODO set the type
+interface ChainMessage extends Message<ReadonlyArray<Block>> {
+	type: MessageType.CHAIN;
+}
+interface TransactionMessage extends Message<Transaction> {
+	type: MessageType.TRANSACTION;
+}
 type ReceivedMessage = Message<unknown>;
 
 // TODO need to automatically lookup available peers
@@ -72,12 +74,12 @@ export class P2pServer {
 		socket.on('message', (message: string) => {
 			const receivedMessage = JSON.parse(message) as ReceivedMessage;
 			switch (receivedMessage.type) {
-				case CHAIN_MESSAGE_TYPE:
+				case MessageType.CHAIN:
 					this.blockchain.replaceChain(
 						(receivedMessage as ChainMessage).data
 					);
 					break;
-				case TRANSACTION_MESSAGE_TYPE:
+				case MessageType.TRANSACTION:
 					this.transactionPool.updateOrAddTransaction(
 						(receivedMessage as TransactionMessage).data
 					);
