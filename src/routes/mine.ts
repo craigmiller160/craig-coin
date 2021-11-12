@@ -1,8 +1,12 @@
 import { Blockchain } from '../chain/Blockchain';
 import { Express, Request } from 'express';
-import { MineRequest } from '../types/restTypes';
+import { BlockData } from '../types/restTypes';
 import { P2pServer } from '../p2p-server';
 import { logger } from '../logger';
+
+interface MineRequest {
+	readonly data: BlockData;
+}
 
 export const configureMine = (
 	app: Express,

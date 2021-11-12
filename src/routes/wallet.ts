@@ -1,6 +1,10 @@
 import { Express, Response } from 'express';
 import { Wallet } from '../wallet/Wallet';
-import { WalletResponse } from '../types/restTypes';
+
+interface WalletResponse {
+	readonly balance: number;
+	readonly publicKey: string;
+}
 
 export const configureGetWallet = (app: Express, wallet: Wallet) =>
 	app.get('/wallet', (req, res: Response<WalletResponse>) => {

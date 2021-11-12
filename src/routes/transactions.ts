@@ -1,10 +1,14 @@
 import { Express, Request } from 'express';
 import { TransactionPool } from '../transaction/TransactionPool';
-import { TransactionRequest } from '../types/restTypes';
 import { Wallet } from '../wallet/Wallet';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
 import { logger } from '../logger';
+
+interface TransactionRequest {
+	readonly recipient: string;
+	readonly amount: number;
+}
 
 export const configureGetTransactions = (
 	app: Express,
