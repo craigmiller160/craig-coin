@@ -18,7 +18,17 @@ describe('transactions', () => {
 		expect(response.body).toEqual(transactionPool.transactions);
 	});
 
-	it('POST /transactions', async () => {
-		throw new Error();
+	describe('POST /transactions', () => {
+		it('body missing properties', () => {
+			throw new Error();
+		});
+
+		it('creates and broadcasts transaction', () => {
+			throw new Error();
+		});
+
+		it('has error creating transaction', () => {
+			throw new Error();
+		});
 	});
 });
