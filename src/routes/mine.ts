@@ -1,8 +1,8 @@
 import { Blockchain } from '../chain/Blockchain';
 import { Express, Request } from 'express';
-import { BlockData } from '../types/restTypes';
 import { P2pServer } from '../p2p-server';
 import { logger } from '../logger';
+import { BlockData } from '../block/BlockData';
 
 interface MineRequest {
 	readonly data: BlockData;

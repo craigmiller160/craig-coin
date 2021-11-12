@@ -1,8 +1,8 @@
 import { Block } from '../block/Block';
 import { genesisBlock, mineBlock } from '../block/blockUtils';
-import { BlockData } from '../types/restTypes';
 import { isValidChain } from './blockchainUtils';
 import { logger } from '../logger';
+import { BlockData } from '../block/BlockData';
 
 export class Blockchain {
 	#chain: ReadonlyArray<Block> = [genesisBlock()];

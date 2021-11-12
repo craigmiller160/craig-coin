@@ -1,8 +1,8 @@
 import { Block } from './Block';
 import { createTimestamp, timestampToMillis } from '../utils/dateUtils';
-import { BlockData } from '../types/restTypes';
 import { DIFFICULTY, MINE_RATE } from '../config';
 import { hashText } from '../utils/cryptoUtils';
+import { BlockData } from './BlockData';
 
 export const genesisBlock = (): Block => {
 	const timestamp = '0';
