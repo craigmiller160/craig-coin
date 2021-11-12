@@ -1,4 +1,4 @@
-import { BlockData } from '../types/restTypes';
+import { BlockData } from './BlockData';
 
 export class Block {
 	constructor(
