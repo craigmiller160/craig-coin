@@ -8,7 +8,6 @@ import {
 	updateTransaction
 } from '../transaction/transactionUtils';
 import * as E from 'fp-ts/Either';
-import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
 
 export class Wallet {
@@ -25,7 +24,6 @@ export class Wallet {
 		amount: number,
 		transactionPool: TransactionPool
 	): E.Either<Error, Transaction> {
-		// TODO refactor this to avoid looking up the existing transaction twice
 		if (amount > this.balance) {
 			return E.left(
 				new Error(
@@ -34,15 +32,21 @@ export class Wallet {
 			);
 		}
 
+		const existingIndex = transactionPool.getExistingTransactionIndex(
+			this.publicKey
+		);
+		const transactionEither =
+			existingIndex >= 0
+				? updateTransaction(
+						transactionPool.transactions[existingIndex],
+						this,
+						recipient,
+						amount
+				  )
+				: newTransaction(this, recipient, amount);
+
 		return pipe(
-			O.fromNullable(
-				transactionPool.getExistingTransaction(this.publicKey)
-			),
-			O.fold(
-				() => newTransaction(this, recipient, amount),
-				(transaction: Transaction) =>
-					updateTransaction(transaction, this, recipient, amount)
-			),
+			transactionEither,
 			E.map((theNewTransaction) => {
 				transactionPool.updateOrAddTransaction(theNewTransaction);
 				return theNewTransaction;
