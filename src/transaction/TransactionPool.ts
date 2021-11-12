@@ -17,6 +17,24 @@ export class TransactionPool {
 		);
 	}
 
+	getExistingTransactionIndex(senderAddress: string): number {
+		return this.#transactions.findIndex(
+			(txn) => txn.input.address === senderAddress
+		);
+	}
+
+	updateTransaction(index: number, transaction: Transaction) {
+		this.#transactions = [
+			...this.#transactions.slice(0, index),
+			transaction,
+			...this.#transactions.slice(index + 1)
+		];
+	}
+
+	addTransaction(transaction: Transaction) {
+		this.#transactions = [...this.#transactions, transaction];
+	}
+
 	updateOrAddTransaction(transaction: Transaction) {
 		const existingTransactionIndex = this.#transactions.findIndex(
 			(txn) => txn.id === transaction.id

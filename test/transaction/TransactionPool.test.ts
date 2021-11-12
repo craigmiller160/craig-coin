@@ -70,4 +70,38 @@ describe('TransactionPool', () => {
 			expect(existingTransaction).toBeUndefined();
 		});
 	});
+
+	it('getExistingTransactionIndex', () => {
+		const transaction1 = unpackRight(
+			newTransaction(wallet, recipient, 100)
+		);
+		const pool = new TransactionPool([transaction1]);
+		const index = pool.getExistingTransactionIndex(recipient);
+		expect(index).toEqual(0);
+	});
+
+	it('updateTransaction', () => {
+		const transaction1 = unpackRight(
+			newTransaction(wallet, recipient, 100)
+		);
+		const pool = new TransactionPool([transaction1]);
+		const transaction2 = unpackRight(
+			updateTransaction(transaction1, wallet, recipient, 100)
+		);
+		const oldTransactions = pool.transactions;
+		pool.updateTransaction(0, transaction2);
+		expect(oldTransactions).toEqual([transaction1]);
+		expect(pool.transactions).toEqual([transaction2]);
+	});
+
+	it('addTransaction', () => {
+		const transaction1 = unpackRight(
+			newTransaction(wallet, recipient, 100)
+		);
+		const pool = new TransactionPool();
+		const oldTransactions = pool.transactions;
+		pool.addTransaction(transaction1);
+		expect(oldTransactions).toEqual([]);
+		expect(pool.transactions).toEqual([transaction1]);
+	});
 });
