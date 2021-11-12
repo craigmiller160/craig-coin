@@ -76,7 +76,7 @@ describe('TransactionPool', () => {
 			newTransaction(wallet, recipient, 100)
 		);
 		const pool = new TransactionPool([transaction1]);
-		const index = pool.getExistingTransactionIndex(recipient);
+		const index = pool.getExistingTransactionIndex(wallet.publicKey);
 		expect(index).toEqual(0);
 	});
 
