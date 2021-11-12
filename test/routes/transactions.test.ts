@@ -19,16 +19,48 @@ describe('transactions', () => {
 	});
 
 	describe('POST /transactions', () => {
-		it('body missing properties', () => {
-			throw new Error();
+		it('body missing properties', async () => {
+			const { app } = createTestServer();
+			const missingRecipient = {
+				amount: 100
+			};
+			await request(app)
+				.post('/transactions')
+				.send(missingRecipient)
+				.expect(400);
+
+			const missingAmount = {
+				recipient: 'abc'
+			};
+			await request(app)
+				.post('/transactions')
+				.send(missingAmount)
+				.expect(400);
 		});
 
-		it('creates and broadcasts transaction', () => {
-			throw new Error();
+		it('creates and broadcasts transaction', async () => {
+			const body = {
+				recipient: 'abc',
+				amount: 100
+			};
+			const { app, p2pServer, transactionPool } = createTestServer();
+			await request(app).post('/transactions').send(body).expect(302);
+			expect(transactionPool.transactions).toHaveLength(1);
+			expect(p2pServer.broadcastTransaction).toHaveBeenCalled();
 		});
 
-		it('has error creating transaction', () => {
-			throw new Error();
+		it('has error creating transaction', async () => {
+			const body = {
+				recipient: 'abc',
+				amount: 100
+			};
+			const { app, p2pServer } = createTestServer();
+			(p2pServer.broadcastTransaction as jest.Mock).mockImplementation(
+				() => {
+					throw new Error('Dying');
+				}
+			);
+			await request(app).post('/transactions').send(body).expect(500);
 		});
 	});
 });

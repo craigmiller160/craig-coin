@@ -1,8 +1,6 @@
 import request from 'supertest';
 import { createTestServer } from '../testutils/createTestServer';
 
-jest.mock('../../src/p2p-server');
-
 describe('mine', () => {
 	it('POST /mine', async () => {
 		const body = {

@@ -5,6 +5,8 @@ import { createServer } from '../../src/rest-server';
 import { Express } from 'express';
 import { Wallet } from '../../src/wallet/Wallet';
 
+jest.mock('../../src/p2p-server');
+
 export interface TestServer {
 	app: Express;
 	blockchain: Blockchain;
