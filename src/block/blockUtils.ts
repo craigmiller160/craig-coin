@@ -19,7 +19,6 @@ export const adjustDifficulty = (
 	const { difficulty, timestamp: lastBlockTimestamp } = lastBlock;
 	const lastBlockMillis = timestampToMillis(lastBlockTimestamp);
 	const currentMillis = timestampToMillis(currentTimestamp);
-	// TODO this seems like it would make things too easy?
 	return lastBlockMillis + MINE_RATE > currentMillis
 		? difficulty + 1
 		: difficulty - 1;
