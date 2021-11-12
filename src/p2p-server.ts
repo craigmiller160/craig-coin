@@ -30,6 +30,7 @@ type ReceivedMessage = Message<unknown>;
 // TODO figure out how to unit test this
 
 export class P2pServer {
+	// TODO on all sockets.forEach calls prevent propagation of socket exceptions
 	#sockets: ReadonlyArray<WebSocket> = [];
 	constructor(
 		public readonly blockchain: Blockchain,

@@ -4,6 +4,7 @@ import { Wallet } from '../wallet/Wallet';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
 import { logger } from '../logger';
+import { P2pServer } from '../p2p-server';
 
 interface TransactionRequest {
 	readonly recipient: string;
@@ -21,6 +22,7 @@ export const configureGetTransactions = (
 export const configureCreateTransaction = (
 	app: Express,
 	wallet: Wallet,
+	p2pServer: P2pServer,
 	transactionPool: TransactionPool
 ) =>
 	app.post(
@@ -34,6 +36,12 @@ export const configureCreateTransaction = (
 			}
 			pipe(
 				wallet.createTransaction(recipient, amount, transactionPool),
+				E.chain((transaction) =>
+					E.tryCatch(
+						() => p2pServer.broadcastTransaction(transaction),
+						(error) => error as Error
+					)
+				),
 				E.fold(
 					(error) => {
 						logger.error('Error creating a transaction');
