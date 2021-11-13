@@ -14,6 +14,7 @@ import { hashData } from '../../src/utils/cryptoUtils';
 import { TransactionOutput } from '../../src/transaction/TransactionOutput';
 import { signData } from '../../src/wallet/walletUtils';
 import { nanoid } from 'nanoid';
+import { unpackRight } from '../testutils/utilityFunctions';
 
 const recipientAddress = 'recipient';
 const wallet = new Wallet();
@@ -60,9 +61,8 @@ describe('transactionUtils', () => {
 				timestamp: expect.any(String),
 				amount: wallet.balance,
 				address: wallet.publicKey,
-				signature: signData(
-					wallet,
-					SHA256(JSON.stringify(outputs)).toString()
+				signature: unpackRight(
+					signData(wallet, SHA256(JSON.stringify(outputs)).toString())
 				)
 			};
 			expect(transaction).toEqualRight({
@@ -147,7 +147,7 @@ describe('transactionUtils', () => {
 				timestamp: expect.any(String),
 				amount: wallet.balance,
 				address: wallet.publicKey,
-				signature: signData(wallet, hashData(outputs))
+				signature: unpackRight(signData(wallet, hashData(outputs)))
 			};
 			expect(updatedTransaction).toEqualRight({
 				id: expect.any(String),
