@@ -13,9 +13,14 @@ export const walletToString = (wallet: Wallet): string =>
 		publicKey: ${wallet.publicKey}
 		balance  : ${wallet.balance}`;
 
-// TODO return an Either
-export const signData = (wallet: Wallet, dataHash: string): string =>
-	wallet.keyPair.sign(dataHash).toDER('hex');
+export const signData = (
+	wallet: Wallet,
+	dataHash: string
+): E.Either<Error, string> =>
+	E.tryCatch(
+		() => wallet.keyPair.sign(dataHash).toDER('hex'),
+		(error: unknown) => error as Error
+	);
 
 export const createTransaction = (
 	wallet: Wallet,
