@@ -11,6 +11,7 @@ import * as E from 'fp-ts/Either';
 import { Transaction } from '../../src/transaction/Transaction';
 import { hashData } from '../../src/utils/cryptoUtils';
 import { TransactionOutput } from '../../src/transaction/TransactionOutput';
+import { signData } from '../../src/wallet/walletUtils';
 
 const recipientAddress = 'recipient';
 const wallet = new Wallet();
@@ -33,7 +34,8 @@ describe('transactionUtils', () => {
 				timestamp: expect.any(String),
 				amount: wallet.balance,
 				address: wallet.publicKey,
-				signature: wallet.sign(
+				signature: signData(
+					wallet,
 					SHA256(JSON.stringify(outputs)).toString()
 				)
 			};
@@ -115,7 +117,7 @@ describe('transactionUtils', () => {
 				timestamp: expect.any(String),
 				amount: wallet.balance,
 				address: wallet.publicKey,
-				signature: wallet.sign(hashData(outputs))
+				signature: signData(wallet, hashData(outputs))
 			};
 			expect(updatedTransaction).toEqualRight({
 				id: expect.any(String),
