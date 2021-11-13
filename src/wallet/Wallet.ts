@@ -53,10 +53,4 @@ export class Wallet {
 			})
 		);
 	}
-
-	toString(): string {
-		return `Wallet - 
-		publicKey: ${this.publicKey}
-		balance  : ${this.balance}`;
-	}
 }
