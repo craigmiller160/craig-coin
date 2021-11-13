@@ -22,7 +22,7 @@ describe('walletUtils', () => {
 		const dataHash = 'abcdefg';
 		const wallet = new Wallet();
 		const result = signData(wallet, dataHash);
-		expect(result).toEqual(wallet.keyPair.sign(dataHash).toDER('hex'));
+		expect(result).toEqualRight(wallet.keyPair.sign(dataHash).toDER('hex'));
 	});
 
 	describe('createTransaction', () => {
