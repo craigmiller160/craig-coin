@@ -13,14 +13,14 @@ import { millisToTimestamp } from '../../src/utils/dateUtils';
 
 describe('blockUtils', () => {
 	it('blockToString', () => {
-		const block = new Block(
-			[],
-			'timestamp',
-			'lastHash',
-			1,
-			DIFFICULTY,
-			'hash'
-		);
+		const block: Block = {
+			data: [],
+			timestamp: 'timestamp',
+			lastHash: 'lastHash',
+			nonce: 1,
+			difficulty: DIFFICULTY,
+			hash: 'hash'
+		};
 		expect(blockToString(block)).toEqual(
 			`Block - 
 		Data      : []
@@ -46,14 +46,14 @@ describe('blockUtils', () => {
 	describe('adjustDifficulty', () => {
 		it('lowers difficulty for slowly mined blocks', () => {
 			const lastMillis = Date.now();
-			const lastBlock = new Block(
-				[],
-				millisToTimestamp(lastMillis),
-				'lastHash',
-				0,
-				DIFFICULTY,
-				'hash'
-			);
+			const lastBlock: Block = {
+				data: [],
+				timestamp: millisToTimestamp(lastMillis),
+				lastHash: 'lastHash',
+				nonce: 0,
+				difficulty: DIFFICULTY,
+				hash: 'hash'
+			};
 
 			const newDifficulty = adjustDifficulty(
 				lastBlock,
@@ -64,14 +64,14 @@ describe('blockUtils', () => {
 
 		it('raises difficulty for quickly mined blocks', () => {
 			const lastMillis = Date.now();
-			const lastBlock = new Block(
-				[],
-				millisToTimestamp(lastMillis),
-				'lastHash',
-				0,
-				DIFFICULTY,
-				'hash'
-			);
+			const lastBlock: Block = {
+				data: [],
+				timestamp: millisToTimestamp(lastMillis),
+				lastHash: 'lastHash',
+				nonce: 0,
+				difficulty: DIFFICULTY,
+				hash: 'hash'
+			};
 
 			const newDifficulty = adjustDifficulty(
 				lastBlock,
@@ -82,7 +82,14 @@ describe('blockUtils', () => {
 	});
 
 	it('mineBlock', () => {
-		const lastBlock = new Block([], '0', 'lastHash', 0, DIFFICULTY, 'hash');
+		const lastBlock: Block = {
+			data: [],
+			timestamp: '0',
+			lastHash: 'lastHash',
+			nonce: 0,
+			difficulty: DIFFICULTY,
+			hash: 'hash'
+		};
 		const block = mineBlock(lastBlock, []);
 		verifyTimestamp(block.timestamp);
 		expect(block.lastHash).toEqual(lastBlock.hash);
@@ -101,14 +108,14 @@ describe('blockUtils', () => {
 	});
 
 	it('hashBlock', () => {
-		const block = new Block(
-			[],
-			'timestamp',
-			'lastHash',
-			0,
-			DIFFICULTY,
-			'hash'
-		);
+		const block: Block = {
+			data: [],
+			timestamp: 'timestamp',
+			lastHash: 'lastHash',
+			nonce: 0,
+			difficulty: DIFFICULTY,
+			hash: 'hash'
+		};
 		const hash = hashBlock(block);
 		expect(hash).toEqual(
 			'6ab8514cad967fd6d5d3bb4e925c3a781659b47800ed52baea9176e5881ed3c3'
