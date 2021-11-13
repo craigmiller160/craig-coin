@@ -5,6 +5,7 @@ import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
 import { logger } from '../logger';
 import { P2pServer } from '../p2p-server';
+import { createTransaction } from '../wallet/walletUtils';
 
 interface TransactionRequest {
 	readonly recipient: string;
@@ -35,7 +36,7 @@ export const configureCreateTransaction = (
 				return;
 			}
 			pipe(
-				wallet.createTransaction(recipient, amount, transactionPool),
+				createTransaction(wallet, transactionPool, recipient, amount),
 				E.chain((transaction) =>
 					E.tryCatch(
 						() => p2pServer.broadcastTransaction(transaction),
