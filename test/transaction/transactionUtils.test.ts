@@ -13,6 +13,7 @@ import { Transaction } from '../../src/transaction/Transaction';
 import { hashData } from '../../src/utils/cryptoUtils';
 import { TransactionOutput } from '../../src/transaction/TransactionOutput';
 import { signData } from '../../src/wallet/walletUtils';
+import { nanoid } from 'nanoid';
 
 const recipientAddress = 'recipient';
 const wallet = new Wallet();
@@ -31,7 +32,11 @@ describe('transactionUtils', () => {
 				address: 'a'
 			}
 		];
-		const transaction = new Transaction(input, outputs);
+		const transaction: Transaction = {
+			input,
+			outputs,
+			id: nanoid()
+		};
 		expect(transactionToString(transaction)).toEqual(`Transaction - 
 		id     : ${transaction.id}
 		input  : ${JSON.stringify(input, null, 2)}
@@ -87,13 +92,17 @@ describe('transactionUtils', () => {
 			expect(transaction1Either).toBeRight();
 			transaction1 = (transaction1Either as E.Right<Transaction>).right;
 
-			transaction2 = new Transaction(transaction1.input, [
-				...transaction1.outputs,
-				{
-					address: '123',
-					amount: 456
-				}
-			]);
+			transaction2 = {
+				input: transaction1.input,
+				outputs: [
+					...transaction1.outputs,
+					{
+						address: '123',
+						amount: 456
+					}
+				],
+				id: nanoid()
+			};
 		});
 
 		it('valid transaction', () => {
