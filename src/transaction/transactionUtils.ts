@@ -5,6 +5,7 @@ import { createTimestamp } from '../utils/dateUtils';
 import { TransactionInput } from './TransactionInput';
 import { TransactionOutput } from './TransactionOutput';
 import { hashData, verifySignature } from '../utils/cryptoUtils';
+import { signData } from '../wallet/walletUtils';
 
 export const newTransaction = (
 	senderWallet: Wallet,
@@ -42,7 +43,7 @@ const createTransactionInput = (
 	amount: senderWallet.balance,
 	address: senderWallet.publicKey,
 	// TODO why does the input signature sign the outputs?
-	signature: senderWallet.sign(hashData(outputs))
+	signature: signData(senderWallet, hashData(outputs))
 });
 
 export const updateTransaction = (
