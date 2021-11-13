@@ -2,8 +2,6 @@ Things to Change
 
 1) Improve p2p error handling.
 2) Implement p2p discovery.
-3) Replace classes with functions & interfaces (except for p2p)
-4) Consider replacing p2p class with function
 5) Understand multi-output transactions. Why?
 6) Understand wallet balance management.
 7) Replace all timestamp stuff with epoch millis
