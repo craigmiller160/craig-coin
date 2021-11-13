@@ -9,7 +9,7 @@ describe('walletUtils', () => {
 		balance  : ${wallet.balance}`);
 	});
 
-	it('sign', () => {
+	it('signData', () => {
 		const dataHash = 'abcdefg';
 		const wallet = new Wallet();
 		const result = signData(wallet, dataHash);
