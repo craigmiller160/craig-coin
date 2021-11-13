@@ -18,7 +18,14 @@ export const genesisBlock = (): Block => {
 	const data: BlockData = [];
 	const lastHash = '----';
 	const theHash = hash(data, timestamp, lastHash, 0, DIFFICULTY);
-	return new Block(data, timestamp, lastHash, 0, DIFFICULTY, theHash);
+	return {
+		data,
+		timestamp,
+		lastHash,
+		nonce: 0,
+		difficulty: DIFFICULTY,
+		hash: theHash
+	};
 };
 
 export const adjustDifficulty = (
@@ -46,14 +53,14 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 		theHash = hash(data, timestamp, lastBlock.hash, nonce, difficulty);
 	} while (theHash.substring(0, difficulty) !== '0'.repeat(difficulty));
 
-	return new Block(
+	return {
 		data,
 		timestamp,
-		lastBlock.hash,
+		lastHash: lastBlock.hash,
 		nonce,
 		difficulty,
-		theHash
-	);
+		hash: theHash
+	};
 };
 
 export const hash = (
