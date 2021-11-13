@@ -1,5 +1,6 @@
 import {
 	adjustDifficulty,
+	blockToString,
 	genesisBlock,
 	hash,
 	hashBlock,
@@ -11,6 +12,26 @@ import { DIFFICULTY } from '../../src/config';
 import { millisToTimestamp } from '../../src/utils/dateUtils';
 
 describe('blockUtils', () => {
+	it('blockToString', () => {
+		const block = new Block(
+			[],
+			'timestamp',
+			'lastHash',
+			1,
+			DIFFICULTY,
+			'hash'
+		);
+		expect(blockToString(block)).toEqual(
+			`Block - 
+		Data      : []
+		Timestamp : timestamp
+		Last Hash : lastHash
+		Nonce     : 1
+		Difficulty: ${DIFFICULTY}
+		Hash      : hash`
+		);
+	});
+
 	it('genesisBlock', () => {
 		const block = genesisBlock();
 

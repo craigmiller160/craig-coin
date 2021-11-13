@@ -4,6 +4,15 @@ import { DIFFICULTY, MINE_RATE } from '../config';
 import { hashText } from '../utils/cryptoUtils';
 import { BlockData } from './BlockData';
 
+export const blockToString = (block: Block): string =>
+	`Block - 
+		Data      : ${JSON.stringify(block.data)}
+		Timestamp : ${block.timestamp}
+		Last Hash : ${block.lastHash}
+		Nonce     : ${block.nonce}
+		Difficulty: ${block.difficulty}
+		Hash      : ${block.hash}`;
+
 export const genesisBlock = (): Block => {
 	const timestamp = '0';
 	const data: BlockData = [];
