@@ -1,6 +1,7 @@
 import { Wallet } from '../../src/wallet/Wallet';
 import {
 	newTransaction,
+	transactionToString,
 	updateTransaction,
 	verifyTransaction
 } from '../../src/transaction/transactionUtils';
@@ -17,6 +18,26 @@ const recipientAddress = 'recipient';
 const wallet = new Wallet();
 
 describe('transactionUtils', () => {
+	it('transactionToString', () => {
+		const input: TransactionInput = {
+			timestamp: expect.any(String),
+			amount: 10,
+			address: 'address',
+			signature: 'signature'
+		};
+		const outputs = [
+			{
+				amount: 1,
+				address: 'a'
+			}
+		];
+		const transaction = new Transaction(input, outputs);
+		expect(transactionToString(transaction)).toEqual(`Transaction - 
+		id     : ${transaction.id}
+		input  : ${JSON.stringify(input, null, 2)}
+		outputs: ${JSON.stringify(outputs, null, 2)}`);
+	});
+
 	describe('newTransaction', () => {
 		it('creates transaction', () => {
 			const transaction = newTransaction(wallet, recipientAddress, 200);

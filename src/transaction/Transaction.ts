@@ -8,11 +8,4 @@ export class Transaction {
 		public readonly outputs: ReadonlyArray<TransactionOutput>,
 		readonly id: string = nanoid()
 	) {}
-
-	toString(): string {
-		return `Transaction - 
-		id     : ${this.id}
-		input  : ${JSON.stringify(this.input, null, 2)}
-		outputs: ${JSON.stringify(this.outputs, null, 2)}`;
-	}
 }

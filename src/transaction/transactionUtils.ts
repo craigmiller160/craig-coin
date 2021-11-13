@@ -7,6 +7,12 @@ import { TransactionOutput } from './TransactionOutput';
 import { hashData, verifySignature } from '../utils/cryptoUtils';
 import { signData } from '../wallet/walletUtils';
 
+export const transactionToString = (transaction: Transaction): string =>
+	`Transaction - 
+		id     : ${transaction.id}
+		input  : ${JSON.stringify(transaction.input, null, 2)}
+		outputs: ${JSON.stringify(transaction.outputs, null, 2)}`;
+
 export const newTransaction = (
 	senderWallet: Wallet,
 	recipientAddress: string,
