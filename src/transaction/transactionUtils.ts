@@ -7,6 +7,7 @@ import { TransactionOutput } from './TransactionOutput';
 import { hashData, verifySignature } from '../utils/cryptoUtils';
 import { nanoid } from 'nanoid';
 import { pipe } from 'fp-ts/function';
+import { signData } from '../wallet/walletUtils';
 
 export const transactionToString = (transaction: Transaction): string =>
 	`Transaction - 
@@ -35,15 +36,14 @@ export const newTransaction = (
 		}
 	];
 
-	const input: TransactionInput = createTransactionInput(
-		senderWallet,
-		outputs
+	return pipe(
+		createTransactionInput(senderWallet, outputs),
+		E.map((input) => ({
+			input,
+			outputs,
+			id: nanoid()
+		}))
 	);
-	return E.right({
-		input,
-		outputs,
-		id: nanoid()
-	});
 };
 
 const createTransactionInput = (
