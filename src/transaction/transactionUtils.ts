@@ -6,6 +6,7 @@ import { TransactionInput } from './TransactionInput';
 import { TransactionOutput } from './TransactionOutput';
 import { hashData, verifySignature } from '../utils/cryptoUtils';
 import { signData } from '../wallet/walletUtils';
+import { nanoid } from 'nanoid';
 
 export const transactionToString = (transaction: Transaction): string =>
 	`Transaction - 
@@ -38,7 +39,11 @@ export const newTransaction = (
 		senderWallet,
 		outputs
 	);
-	return E.right(new Transaction(input, outputs));
+	return E.right({
+		input,
+		outputs,
+		id: nanoid()
+	});
 };
 
 const createTransactionInput = (
@@ -91,7 +96,11 @@ export const updateTransaction = (
 		senderWallet,
 		newOutputs
 	);
-	return E.right(new Transaction(input, newOutputs, baseTransaction.id));
+	return E.right({
+		id: baseTransaction.id,
+		input,
+		outputs: newOutputs
+	});
 };
 
 export const verifyTransaction = (transaction: Transaction): boolean =>
