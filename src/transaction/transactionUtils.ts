@@ -5,8 +5,8 @@ import { createTimestamp } from '../utils/dateUtils';
 import { TransactionInput } from './TransactionInput';
 import { TransactionOutput } from './TransactionOutput';
 import { hashData, verifySignature } from '../utils/cryptoUtils';
-import { signData } from '../wallet/walletUtils';
 import { nanoid } from 'nanoid';
+import { pipe } from 'fp-ts/function';
 
 export const transactionToString = (transaction: Transaction): string =>
 	`Transaction - 
@@ -49,13 +49,16 @@ export const newTransaction = (
 const createTransactionInput = (
 	senderWallet: Wallet,
 	outputs: ReadonlyArray<TransactionOutput>
-): TransactionInput => ({
-	timestamp: createTimestamp(),
-	amount: senderWallet.balance,
-	address: senderWallet.publicKey,
-	// TODO why does the input signature sign the outputs?
-	signature: signData(senderWallet, hashData(outputs))
-});
+): E.Either<Error, TransactionInput> =>
+	pipe(
+		signData(senderWallet, hashData(outputs)),
+		E.map((signature) => ({
+			timestamp: createTimestamp(),
+			amount: senderWallet.balance,
+			address: senderWallet.publicKey,
+			signature
+		}))
+	);
 
 export const updateTransaction = (
 	baseTransaction: Transaction,
@@ -92,15 +95,15 @@ export const updateTransaction = (
 			amount: amount
 		}
 	];
-	const input: TransactionInput = createTransactionInput(
-		senderWallet,
-		newOutputs
+
+	return pipe(
+		createTransactionInput(senderWallet, newOutputs),
+		E.map((input) => ({
+			id: baseTransaction.id,
+			input,
+			outputs: newOutputs
+		}))
 	);
-	return E.right({
-		id: baseTransaction.id,
-		input,
-		outputs: newOutputs
-	});
 };
 
 export const verifyTransaction = (transaction: Transaction): boolean =>
