@@ -22,10 +22,7 @@ export const mine = (
 			...validTransactions,
 			rewardTxn
 		])),
-		E.chain((transactions) => E.tryCatch(
-			() => blockchain.addBlock(transactions),
-			(error: unknown) => error as Error
-		))
+		E.chain((transactions) => blockchain.addBlock(transactions))
 	);
 
 
