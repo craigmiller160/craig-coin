@@ -151,7 +151,9 @@ describe('transactionUtils', () => {
 				timestamp: expect.any(String),
 				amount: wallet.balance,
 				address: wallet.publicKey,
-				signature: unpackRight(signData(wallet, hashData(outputs)))
+				signature: unpackRight(
+					signData(wallet, unpackRight(hashData(outputs)))
+				)
 			};
 			expect(updatedTransaction).toEqualRight({
 				id: expect.any(String),
