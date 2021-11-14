@@ -5,7 +5,21 @@ import * as E from 'fp-ts/Either';
 import { logger } from '../logger';
 
 export const isValidChain = (chain: ReadonlyArray<Block>): boolean => {
-	if (JSON.stringify(genesisBlock()) !== JSON.stringify(chain[0])) {
+	const genesisBlockString = pipe(
+		genesisBlock(),
+		E.fold(
+			(error) => {
+				logger.error(
+					'Error generating genesis block for chain validation'
+				);
+				logger.error(error);
+				return '';
+			},
+			(block) => JSON.stringify(block)
+		)
+	);
+
+	if (genesisBlockString !== JSON.stringify(chain[0])) {
 		return false;
 	}
 
