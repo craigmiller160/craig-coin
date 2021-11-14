@@ -49,37 +49,6 @@ describe('TransactionPool', () => {
 		});
 	});
 
-	describe('getExistingTransaction', () => {
-		it('transaction does exist', () => {
-			const transaction1 = unpackRight(
-				newTransaction(wallet, recipient, 100)
-			);
-			const pool = new TransactionPool([transaction1]);
-			const existingTransaction = pool.getExistingTransaction(
-				transaction1.input.address
-			);
-			expect(existingTransaction).toEqual(transaction1);
-		});
-
-		it('transaction does not exist', () => {
-			const transaction1 = unpackRight(
-				newTransaction(wallet, recipient, 100)
-			);
-			const pool = new TransactionPool([transaction1]);
-			const existingTransaction = pool.getExistingTransaction('abc');
-			expect(existingTransaction).toBeUndefined();
-		});
-	});
-
-	it('getExistingTransactionIndex', () => {
-		const transaction1 = unpackRight(
-			newTransaction(wallet, recipient, 100)
-		);
-		const pool = new TransactionPool([transaction1]);
-		const index = pool.getExistingTransactionIndex(wallet.publicKey);
-		expect(index).toEqual(0);
-	});
-
 	it('updateTransaction', () => {
 		const transaction1 = unpackRight(
 			newTransaction(wallet, recipient, 100)

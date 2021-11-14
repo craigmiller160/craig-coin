@@ -9,5 +9,5 @@ export const mine = (
 	wallet: Wallet,
 	p2pServer: P2pServer
 ) => {
-    // const validTransactions = transactionPool.
+	// const validTransactions = transactionPool.
 };
