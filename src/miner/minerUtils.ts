@@ -7,8 +7,6 @@ import { rewardTransaction } from '../transaction/transactionUtils';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
 
-// TODO delete this eslint-disable
-/* eslint-disable */
 export const mine = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool,
@@ -18,16 +16,11 @@ export const mine = (
 	const validTransactions = getValidTransactions(transactionPool);
 	pipe(
 		rewardTransaction(wallet, blockchain.wallet),
-		E.map((rewardTxn) => ([
-			...validTransactions,
-			rewardTxn
-		])),
-		E.chain((transactions) => blockchain.addBlock(transactions))
+		E.map((rewardTxn) => [...validTransactions, rewardTxn]),
+		E.chain((transactions) => blockchain.addBlock(transactions)),
+		E.map(() => p2pServer.syncChains())
 	);
 
-
-	// create a block consisting of the valid transactions
-	// synchronize chains in the peer-to-peer server
 	// clear the transaction pool
 	// broadcast to every miner to clear their transaction pools as well
 };
