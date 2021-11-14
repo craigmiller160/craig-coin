@@ -4,6 +4,8 @@ import { P2pServer } from '../../src/p2p-server';
 import { createServer } from '../../src/rest-server';
 import { Express } from 'express';
 import { Wallet } from '../../src/wallet/Wallet';
+import { unpackRight } from './utilityFunctions';
+import { genesisBlock } from '../../src/block/blockUtils';
 
 jest.mock('../../src/p2p-server');
 
@@ -16,7 +18,7 @@ export interface TestServer {
 }
 
 export const createTestServer = (): TestServer => {
-	const blockchain = new Blockchain();
+	const blockchain = new Blockchain(unpackRight(genesisBlock()));
 	const wallet = new Wallet();
 	const transactionPool = new TransactionPool();
 	const p2pServer = new P2pServer(blockchain, transactionPool);

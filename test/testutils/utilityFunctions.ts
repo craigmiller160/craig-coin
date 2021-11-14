@@ -24,10 +24,10 @@ export const createChain = (): Block[] =>
 				newTransaction(new Wallet(), 'abc', 100)
 			);
 			const lastBlock = newArray[index];
-			const newBlock = mineBlock(lastBlock, [transaction]);
+			const newBlock = unpackRight(mineBlock(lastBlock, [transaction]));
 			return [...newArray, newBlock];
 		},
-		[genesisBlock()]
+		[unpackRight(genesisBlock())]
 	);
 
 export const unpackRight = <T>(either: E.Either<Error, T>) =>
