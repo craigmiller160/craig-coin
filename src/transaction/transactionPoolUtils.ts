@@ -16,3 +16,8 @@ export const getExistingTransactionIndex = (
 	transactionPool.transactions.findIndex(
 		(txn) => txn.input.address === senderAddress
 	);
+
+export const getValidTransactions = (transactionPool: TransactionPool): ReadonlyArray<Transaction> => {
+	// TODO finish this
+	throw new Error();
+};

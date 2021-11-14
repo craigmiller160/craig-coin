@@ -53,4 +53,8 @@ describe('transactionPoolUtils', () => {
 			expect(index).toEqual(-1);
 		});
 	});
+
+	it('getValidTransactions', () => {
+		throw new Error();
+	});
 });
