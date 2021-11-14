@@ -3,9 +3,11 @@ import { genesisBlock, mineBlock } from '../block/blockUtils';
 import { isValidChain } from './blockchainUtils';
 import { logger } from '../logger';
 import { BlockData } from '../block/BlockData';
+import { Wallet } from '../wallet/Wallet';
 
 export class Blockchain {
 	#chain: ReadonlyArray<Block> = [genesisBlock()];
+	readonly wallet = new Wallet();
 
 	get chain(): ReadonlyArray<Block> {
 		return this.#chain.slice();

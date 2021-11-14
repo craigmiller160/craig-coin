@@ -7,3 +7,8 @@ Things to Change
 7) Replace all timestamp stuff with epoch millis
 9) TLS. Both for REST and Sockets. Or... do sockets need it?
 10) Transaction verification needs to include confirming that sender wallet has funds for input.
+11) Persist data between runs
+    a) Personal wallet keys
+    b) Blockchain wallet keys
+    c) Blockchain data
+    d) Transaction data

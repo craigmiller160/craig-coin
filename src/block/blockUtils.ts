@@ -40,6 +40,7 @@ export const adjustDifficulty = (
 		: difficulty - 1;
 };
 
+// TODO wrap this with error handling logic
 export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 	let nonce = 0;
 	let theHash = '';
@@ -63,6 +64,7 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 	};
 };
 
+// TODO wrap this with error handling logic
 export const hash = (
 	data: BlockData,
 	timestamp: string,
@@ -72,6 +74,7 @@ export const hash = (
 ): string =>
 	hashText(nonce + timestamp + lastHash + JSON.stringify(data) + difficulty);
 
+// TODO wrap this with error handling logic
 export const hashBlock = (block: Block): string =>
 	hash(
 		block.data,
