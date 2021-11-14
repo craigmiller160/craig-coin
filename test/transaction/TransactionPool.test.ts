@@ -37,7 +37,7 @@ describe('TransactionPool', () => {
 
 			const pool = new TransactionPool([transaction, transaction2]);
 			const transaction3 = unpackRight(
-				newTransaction(wallet, recipient, 300)
+				newTransaction(new Wallet(), recipient, 300)
 			);
 			pool.updateOrAddTransaction(transaction3);
 			expect(pool.transactions).toHaveLength(3);
