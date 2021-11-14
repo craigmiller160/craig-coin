@@ -1,5 +1,5 @@
 import { Transaction } from './Transaction';
-import {getExistingTransactionIndex} from './transactionPoolUtils';
+import { getExistingTransactionIndex } from './transactionPoolUtils';
 
 export class TransactionPool {
 	#transactions: ReadonlyArray<Transaction>;
@@ -25,7 +25,10 @@ export class TransactionPool {
 	}
 
 	updateOrAddTransaction(transaction: Transaction) {
-		const existingTransactionIndex = getExistingTransactionIndex(this, transaction.input.address);
+		const existingTransactionIndex = getExistingTransactionIndex(
+			this,
+			transaction.input.address
+		);
 
 		if (existingTransactionIndex >= 0) {
 			this.#transactions = [
