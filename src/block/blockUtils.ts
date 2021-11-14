@@ -3,6 +3,9 @@ import { createTimestamp, timestampToMillis } from '../utils/dateUtils';
 import { DIFFICULTY, MINE_RATE } from '../config';
 import { hashText } from '../utils/cryptoUtils';
 import { BlockData } from './BlockData';
+import * as E from 'fp-ts/Either';
+import { pipe } from 'fp-ts/function';
+import { logger } from '../logger';
 
 export const blockToString = (block: Block): string =>
 	`Block - 
@@ -13,19 +16,22 @@ export const blockToString = (block: Block): string =>
 		Difficulty: ${block.difficulty}
 		Hash      : ${block.hash}`;
 
-export const genesisBlock = (): Block => {
+export const genesisBlock = (): E.Either<Error, Block> => {
 	const timestamp = '0';
 	const data: BlockData = [];
 	const lastHash = '----';
-	const theHash = hash(data, timestamp, lastHash, 0, DIFFICULTY);
-	return {
-		data,
-		timestamp,
-		lastHash,
-		nonce: 0,
-		difficulty: DIFFICULTY,
-		hash: theHash
-	};
+
+	return pipe(
+		hash(data, timestamp, lastHash, 0, DIFFICULTY),
+		E.map((hash) => ({
+			data,
+			timestamp,
+			lastHash,
+			nonce: 0,
+			difficulty: DIFFICULTY,
+			hash
+		}))
+	);
 };
 
 export const adjustDifficulty = (
@@ -40,10 +46,12 @@ export const adjustDifficulty = (
 		: difficulty - 1;
 };
 
-// TODO wrap this with error handling logic
-export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
+export const mineBlock = (
+	lastBlock: Block,
+	data: BlockData
+): E.Either<Error, Block> => {
 	let nonce = 0;
-	let theHash = '';
+	let theHash: E.Either<Error, string> = E.right('');
 	let timestamp = '';
 	let { difficulty } = lastBlock;
 
@@ -52,30 +60,44 @@ export const mineBlock = (lastBlock: Block, data: BlockData): Block => {
 		timestamp = createTimestamp();
 		difficulty = adjustDifficulty(lastBlock, timestamp);
 		theHash = hash(data, timestamp, lastBlock.hash, nonce, difficulty);
-	} while (theHash.substring(0, difficulty) !== '0'.repeat(difficulty));
+	} while (
+		pipe(
+			theHash,
+			E.fold(
+				(error) => {
+					logger.error('Error mining block');
+					logger.error(error);
+					return false;
+				},
+				(hash: string) =>
+					hash.substring(0, difficulty) !== '0'.repeat(difficulty)
+			)
+		)
+	);
 
-	return {
-		data,
-		timestamp,
-		lastHash: lastBlock.hash,
-		nonce,
-		difficulty,
-		hash: theHash
-	};
+	return pipe(
+		theHash,
+		E.map((hash) => ({
+			data,
+			timestamp,
+			lastHash: lastBlock.hash,
+			nonce,
+			difficulty,
+			hash
+		}))
+	);
 };
 
-// TODO wrap this with error handling logic
 export const hash = (
 	data: BlockData,
 	timestamp: string,
 	lastHash: string,
 	nonce: number,
 	difficulty: number
-): string =>
+): E.Either<Error, string> =>
 	hashText(nonce + timestamp + lastHash + JSON.stringify(data) + difficulty);
 
-// TODO wrap this with error handling logic
-export const hashBlock = (block: Block): string =>
+export const hashBlock = (block: Block): E.Either<Error, string> =>
 	hash(
 		block.data,
 		block.timestamp,
