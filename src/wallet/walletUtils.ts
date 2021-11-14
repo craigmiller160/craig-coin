@@ -7,6 +7,7 @@ import {
 	updateTransaction
 } from '../transaction/transactionUtils';
 import { pipe } from 'fp-ts/function';
+import {getExistingTransactionIndex} from '../transaction/transactionPoolUtils';
 
 export const walletToString = (wallet: Wallet): string =>
 	`Wallet - 
@@ -36,7 +37,8 @@ export const createTransaction = (
 		);
 	}
 
-	const existingIndex = transactionPool.getExistingTransactionIndex(
+	const existingIndex = getExistingTransactionIndex(
+		transactionPool,
 		wallet.publicKey
 	);
 	const transactionEither =
