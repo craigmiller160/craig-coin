@@ -24,6 +24,10 @@ export class TransactionPool {
 		this.#transactions = [...this.#transactions, transaction];
 	}
 
+	clear() {
+		this.#transactions = [];
+	}
+
 	updateOrAddTransaction(transaction: Transaction) {
 		const existingTransactionIndex = getExistingTransactionIndex(
 			this,

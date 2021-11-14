@@ -49,6 +49,10 @@ describe('TransactionPool', () => {
 		});
 	});
 
+	it('clear', () => {
+		throw new Error();
+	});
+
 	it('updateTransaction', () => {
 		const transaction1 = unpackRight(
 			newTransaction(wallet, recipient, 100)
