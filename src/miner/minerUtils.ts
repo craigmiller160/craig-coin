@@ -4,6 +4,8 @@ import { Wallet } from '../wallet/Wallet';
 import { P2pServer } from '../p2p-server';
 import { getValidTransactions } from '../transaction/transactionPoolUtils';
 
+// TODO delete this eslint-disable
+/* eslint-disable */
 export const mine = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool,

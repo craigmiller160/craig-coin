@@ -1,14 +1,14 @@
-import {Wallet} from '../wallet/Wallet';
-import {Transaction} from './Transaction';
+import { Wallet } from '../wallet/Wallet';
+import { Transaction } from './Transaction';
 import * as E from 'fp-ts/Either';
-import {createTimestamp} from '../utils/dateUtils';
-import {TransactionInput} from './TransactionInput';
-import {TransactionOutput} from './TransactionOutput';
-import {hashData, verifySignature} from '../utils/cryptoUtils';
-import {nanoid} from 'nanoid';
-import {pipe} from 'fp-ts/function';
-import {signData} from '../wallet/walletUtils';
-import {MINING_REWARD} from '../config';
+import { createTimestamp } from '../utils/dateUtils';
+import { TransactionInput } from './TransactionInput';
+import { TransactionOutput } from './TransactionOutput';
+import { hashData, verifySignature } from '../utils/cryptoUtils';
+import { nanoid } from 'nanoid';
+import { pipe } from 'fp-ts/function';
+import { signData } from '../wallet/walletUtils';
+import { MINING_REWARD } from '../config';
 
 export const transactionToString = (transaction: Transaction): string =>
 	`Transaction - 
@@ -47,7 +47,10 @@ export const newTransaction = (
 	);
 };
 
-export const rewardTransaction = (minerWallet: Wallet, blockchainWallet: Wallet): E.Either<Error, Transaction> => {
+export const rewardTransaction = (
+	minerWallet: Wallet,
+	blockchainWallet: Wallet
+): E.Either<Error, Transaction> => {
 	const outputs: ReadonlyArray<TransactionOutput> = [
 		{
 			amount: MINING_REWARD,
