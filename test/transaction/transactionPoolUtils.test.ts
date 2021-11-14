@@ -4,10 +4,11 @@ import { TransactionPool } from '../../src/transaction/TransactionPool';
 import { Wallet } from '../../src/wallet/Wallet';
 import {
 	getExistingTransaction,
-	getExistingTransactionIndex, getValidTransactions
+	getExistingTransactionIndex,
+	getValidTransactions
 } from '../../src/transaction/transactionPoolUtils';
-import {Transaction} from '../../src/transaction/Transaction';
-import {nanoid} from 'nanoid';
+import { Transaction } from '../../src/transaction/Transaction';
+import { nanoid } from 'nanoid';
 
 const wallet = new Wallet();
 const recipient = 'recipient';
@@ -76,7 +77,11 @@ describe('transactionPoolUtils', () => {
 			},
 			id: nanoid()
 		};
-		const pool = new TransactionPool([validTransaction, invalidInputAmountTransaction, invalidSignatureTransaction]);
+		const pool = new TransactionPool([
+			validTransaction,
+			invalidInputAmountTransaction,
+			invalidSignatureTransaction
+		]);
 		const validTransactions = getValidTransactions(pool);
 		expect(validTransactions).toEqual([validTransaction]);
 	});
