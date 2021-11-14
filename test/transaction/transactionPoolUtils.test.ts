@@ -42,7 +42,12 @@ describe('transactionPoolUtils', () => {
         });
 
         it('transaction does not exist', () => {
-            throw new Error();
+            const transaction1 = unpackRight(
+                newTransaction(wallet, recipient, 100)
+            );
+            const pool = new TransactionPool([transaction1]);
+            const index = getExistingTransactionIndex(pool, 'abc');
+            expect(index).toEqual(-1);
         });
     });
 });
