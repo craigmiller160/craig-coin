@@ -1,22 +1,32 @@
 import { Block } from '../block/Block';
-import { genesisBlock, mineBlock } from '../block/blockUtils';
+import { mineBlock } from '../block/blockUtils';
 import { isValidChain } from './blockchainUtils';
 import { logger } from '../logger';
 import { BlockData } from '../block/BlockData';
 import { Wallet } from '../wallet/Wallet';
+import * as E from 'fp-ts/Either';
+import { pipe } from 'fp-ts/function';
 
 export class Blockchain {
-	#chain: ReadonlyArray<Block> = [genesisBlock()];
+	#chain: ReadonlyArray<Block>;
 	readonly wallet = new Wallet();
+
+	constructor(genesisBlock: Block) {
+		this.#chain = [genesisBlock];
+	}
 
 	get chain(): ReadonlyArray<Block> {
 		return this.#chain.slice();
 	}
 
-	addBlock(data: BlockData): Block {
-		const block = mineBlock(this.chain[this.chain.length - 1], data);
-		this.#chain = [...this.#chain, block];
-		return block;
+	addBlock(data: BlockData): E.Either<Error, Block> {
+		return pipe(
+			mineBlock(this.chain[this.chain.length - 1], data),
+			E.map((block) => {
+				this.#chain = [...this.#chain, block];
+				return block;
+			})
+		);
 	}
 
 	replaceChain(newChain: ReadonlyArray<Block>) {
