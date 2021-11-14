@@ -18,9 +18,10 @@ export const mine = (
 		rewardTransaction(wallet, blockchain.wallet),
 		E.map((rewardTxn) => [...validTransactions, rewardTxn]),
 		E.chain((transactions) => blockchain.addBlock(transactions)),
-		E.map(() => p2pServer.syncChains())
+		E.map(() => {
+			p2pServer.syncChains();
+			transactionPool.clear();
+		})
 	);
-
-	// clear the transaction pool
 	// broadcast to every miner to clear their transaction pools as well
 };
