@@ -9,6 +9,7 @@ import { nanoid } from 'nanoid';
 import { pipe } from 'fp-ts/function';
 import { signData } from '../wallet/walletUtils';
 import { MINING_REWARD } from '../config';
+import { logger } from '../logger';
 
 export const transactionToString = (transaction: Transaction): string =>
 	`Transaction - 
@@ -73,7 +74,8 @@ const createTransactionInput = (
 	outputs: ReadonlyArray<TransactionOutput>
 ): E.Either<Error, TransactionInput> =>
 	pipe(
-		signData(senderWallet, hashData(outputs)),
+		hashData(outputs),
+		E.chain((hash) => signData(senderWallet, hash)),
 		E.map((signature) => ({
 			timestamp: createTimestamp(),
 			amount: senderWallet.balance,
@@ -129,8 +131,21 @@ export const updateTransaction = (
 };
 
 export const verifyTransaction = (transaction: Transaction): boolean =>
-	verifySignature(
-		transaction.input.address,
-		transaction.input.signature,
-		hashData(transaction.outputs)
+	pipe(
+		hashData(transaction.outputs),
+		E.map((hash) =>
+			verifySignature(
+				transaction.input.address,
+				transaction.input.signature,
+				hash
+			)
+		),
+		E.fold(
+			(error) => {
+				logger.error('Error creating hash for verifying transaction');
+				logger.error(error);
+				return false;
+			},
+			(verified) => verified
+		)
 	);
