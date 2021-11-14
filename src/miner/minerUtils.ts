@@ -11,4 +11,9 @@ export const mine = (
 	p2pServer: P2pServer
 ) => {
 	const validTransactions = getValidTransactions(transactionPool);
+	// include a reward for the miner
+	// create a block consisting of the valid transactions
+	// synchronize chains in the peer-to-peer server
+	// clear the transaction pool
+	// broadcast to every miner to clear their transaction pools as well
 };
