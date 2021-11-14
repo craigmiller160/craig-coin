@@ -7,7 +7,7 @@ import {
 	mineBlock
 } from '../../src/block/blockUtils';
 import { Block } from '../../src/block/Block';
-import { verifyTimestamp } from '../testutils/utilityFunctions';
+import { unpackRight, verifyTimestamp } from '../testutils/utilityFunctions';
 import { DIFFICULTY } from '../../src/config';
 import { millisToTimestamp } from '../../src/utils/dateUtils';
 
@@ -33,7 +33,7 @@ describe('blockUtils', () => {
 	});
 
 	it('genesisBlock', () => {
-		const block = genesisBlock();
+		const block = unpackRight(genesisBlock());
 
 		expect(block.timestamp).toEqual('0');
 		expect(block.lastHash).toEqual('----');
@@ -90,7 +90,7 @@ describe('blockUtils', () => {
 			difficulty: DIFFICULTY,
 			hash: 'hash'
 		};
-		const block = mineBlock(lastBlock, []);
+		const block = unpackRight(mineBlock(lastBlock, []));
 		verifyTimestamp(block.timestamp);
 		expect(block.lastHash).toEqual(lastBlock.hash);
 		expect(block.data).toEqual([]);
@@ -101,7 +101,9 @@ describe('blockUtils', () => {
 	});
 
 	it('hash', () => {
-		const theHash = hash([], 'timestamp', 'lastHash', 0, DIFFICULTY);
+		const theHash = unpackRight(
+			hash([], 'timestamp', 'lastHash', 0, DIFFICULTY)
+		);
 		expect(theHash).toEqual(
 			'6ab8514cad967fd6d5d3bb4e925c3a781659b47800ed52baea9176e5881ed3c3'
 		);
@@ -116,7 +118,7 @@ describe('blockUtils', () => {
 			difficulty: DIFFICULTY,
 			hash: 'hash'
 		};
-		const hash = hashBlock(block);
+		const hash = unpackRight(hashBlock(block));
 		expect(hash).toEqual(
 			'6ab8514cad967fd6d5d3bb4e925c3a781659b47800ed52baea9176e5881ed3c3'
 		);
