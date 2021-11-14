@@ -34,7 +34,14 @@ export const verifySignature = (
 	);
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const hashData = (data: object | any[]): string =>
-	SHA256(JSON.stringify(data)).toString();
+export const hashData = (data: object | any[]): E.Either<Error, string> =>
+	E.tryCatch(
+		() => SHA256(JSON.stringify(data)).toString(),
+		(error: unknown) => error as Error
+	);
 
-export const hashText = (text: string): string => SHA256(text).toString();
+export const hashText = (text: string): E.Either<Error, string> =>
+	E.tryCatch(
+		() => SHA256(text).toString(),
+		(error: unknown) => error as Error
+	);

@@ -3,6 +3,8 @@ import { Block } from '../../src/block/Block';
 import { genesisBlock, mineBlock } from '../../src/block/blockUtils';
 import * as E from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
+import { newTransaction } from '../../src/transaction/transactionUtils';
+import { Wallet } from '../../src/wallet/Wallet';
 
 export const getExpectedTimestamp = () =>
 	format(utcToZonedTime(new Date(), 'UTC'), 'yyyyMMddHHmmssSSSXX', {
@@ -18,8 +20,11 @@ export const verifyTimestamp = (timestamp: string) => {
 export const createChain = (): Block[] =>
 	[...new Array(3).keys()].reduce(
 		(newArray, index) => {
+			const transaction = unpackRight(
+				newTransaction(new Wallet(), 'abc', 100)
+			);
 			const lastBlock = newArray[index];
-			const newBlock = mineBlock(lastBlock, [`${index}`]);
+			const newBlock = mineBlock(lastBlock, [transaction]);
 			return [...newArray, newBlock];
 		},
 		[genesisBlock()]
