@@ -80,6 +80,10 @@ describe('transactionUtils', () => {
 		});
 	});
 
+	it('rewardTransaction', () => {
+		throw new Error();
+	});
+
 	describe('verifyTransaction', () => {
 		let transaction1: Transaction;
 		let transaction2: Transaction;
