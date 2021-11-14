@@ -1,7 +1,7 @@
 export {};
 
 describe('minerUtils', () => {
-    it('mine', () => {
-        throw new Error();
-    });
+	it('mine', () => {
+		throw new Error();
+	});
 });
