@@ -11,18 +11,6 @@ export class TransactionPool {
 		return this.#transactions.slice();
 	}
 
-	getExistingTransaction(senderAddress: string): Transaction | undefined {
-		return this.#transactions.find(
-			(txn) => txn.input.address === senderAddress
-		);
-	}
-
-	getExistingTransactionIndex(senderAddress: string): number {
-		return this.#transactions.findIndex(
-			(txn) => txn.input.address === senderAddress
-		);
-	}
-
 	updateTransaction(index: number, transaction: Transaction) {
 		this.#transactions = [
 			...this.#transactions.slice(0, index),
