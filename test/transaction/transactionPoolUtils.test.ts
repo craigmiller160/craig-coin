@@ -4,8 +4,10 @@ import { TransactionPool } from '../../src/transaction/TransactionPool';
 import { Wallet } from '../../src/wallet/Wallet';
 import {
 	getExistingTransaction,
-	getExistingTransactionIndex
+	getExistingTransactionIndex, getValidTransactions
 } from '../../src/transaction/transactionPoolUtils';
+import {Transaction} from '../../src/transaction/Transaction';
+import {nanoid} from 'nanoid';
 
 const wallet = new Wallet();
 const recipient = 'recipient';
@@ -55,6 +57,27 @@ describe('transactionPoolUtils', () => {
 	});
 
 	it('getValidTransactions', () => {
-		throw new Error();
+		const validTransaction = unpackRight(
+			newTransaction(wallet, recipient, 100)
+		);
+		const invalidInputAmountTransaction: Transaction = {
+			...validTransaction,
+			input: {
+				...validTransaction.input,
+				amount: 0
+			},
+			id: nanoid()
+		};
+		const invalidSignatureTransaction: Transaction = {
+			...validTransaction,
+			input: {
+				...validTransaction.input,
+				signature: 'abc'
+			},
+			id: nanoid()
+		};
+		const pool = new TransactionPool([validTransaction, invalidInputAmountTransaction, invalidSignatureTransaction]);
+		const validTransactions = getValidTransactions(pool);
+		expect(validTransactions).toEqual([validTransaction]);
 	});
 });
