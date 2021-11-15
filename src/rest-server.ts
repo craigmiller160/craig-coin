@@ -27,7 +27,7 @@ export const createServer = (
 	app.disable('x-powered-by');
 	app.use(bodyParser.json());
 	configureGetBlocks(app, blockchain);
-	configureMine(app, blockchain, p2pServer);
+	configureMine(app, blockchain, transactionPool, wallet, p2pServer);
 	configureGetTransactions(app, transactionPool);
 	configureCreateTransaction(app, wallet, p2pServer, transactionPool);
 	configureGetWallet(app, wallet);
