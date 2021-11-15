@@ -48,6 +48,7 @@ export const newTransaction = (
 	);
 };
 
+// TODO shouldn't this output the new total balance of the miner wallet?
 export const rewardTransaction = (
 	minerWallet: Wallet,
 	blockchainWallet: Wallet

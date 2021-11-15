@@ -1,6 +1,7 @@
 import { Wallet } from '../../src/wallet/Wallet';
 import {
 	newTransaction,
+	rewardTransaction,
 	transactionToString,
 	updateTransaction,
 	verifyTransaction
@@ -81,7 +82,25 @@ describe('transactionUtils', () => {
 	});
 
 	it('rewardTransaction', () => {
-		throw new Error();
+		const blockchainWallet = new Wallet();
+		const transaction = unpackRight(
+			rewardTransaction(wallet, blockchainWallet)
+		);
+		expect(transaction).toEqual({
+			input: {
+				timestamp: expect.any(String),
+				amount: 500,
+				address: blockchainWallet.publicKey,
+				signature: expect.any(String)
+			},
+			outputs: [
+				{
+					amount: 50,
+					address: wallet.publicKey
+				}
+			],
+			id: expect.any(String)
+		});
 	});
 
 	describe('verifyTransaction', () => {
