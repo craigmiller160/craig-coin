@@ -12,6 +12,7 @@ describe('minerUtils', () => {
 		mine(blockchain, transactionPool, wallet, p2pServer);
 		expect(transactionPool.transactions).toHaveLength(0);
 		expect(p2pServer.syncChains).toHaveBeenCalled();
+		expect(p2pServer.broadcastClearTransactions).toHaveBeenCalled();
 		expect(blockchain.chain).toEqual([
 			{
 				data: [],

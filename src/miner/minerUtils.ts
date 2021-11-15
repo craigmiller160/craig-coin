@@ -21,8 +21,8 @@ export const mine = (
 		E.map(() => {
 			p2pServer.syncChains();
 			transactionPool.clear();
+			p2pServer.broadcastClearTransactions();
 		})
 	);
-	// broadcast to every miner to clear their transaction pools as well
 	// TODO what to do with any errors here? don't want to just suppress them
 };

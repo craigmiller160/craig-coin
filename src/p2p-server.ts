@@ -10,7 +10,8 @@ const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
 enum MessageType {
 	CHAIN,
-	TRANSACTION
+	TRANSACTION,
+	CLEAR_TRANSACTIONS
 }
 
 interface Message<T> {
@@ -22,6 +23,9 @@ interface ChainMessage extends Message<ReadonlyArray<Block>> {
 }
 interface TransactionMessage extends Message<Transaction> {
 	type: MessageType.TRANSACTION;
+}
+interface ClearTransactionsMessage extends Message<null> {
+	type: MessageType.CLEAR_TRANSACTIONS;
 }
 type ReceivedMessage = Message<unknown>;
 
@@ -85,6 +89,9 @@ export class P2pServer {
 						(receivedMessage as TransactionMessage).data
 					);
 					break;
+				case MessageType.CLEAR_TRANSACTIONS:
+					this.transactionPool.clear();
+					break;
 				default:
 					logger.error(
 						`Invalid message received. Type: ${receivedMessage.type}`
@@ -100,6 +107,16 @@ export class P2pServer {
 	broadcastTransaction(transaction: Transaction) {
 		this.#sockets.forEach((socket) => {
 			this.#sendTransaction(socket, transaction);
+		});
+	}
+
+	broadcastClearTransactions() {
+		this.#sockets.forEach((socket) => {
+			const message: ClearTransactionsMessage = {
+				type: MessageType.CLEAR_TRANSACTIONS,
+				data: null
+			};
+			socket.send(JSON.stringify(message));
 		});
 	}
 
