@@ -16,6 +16,7 @@ export const blockToString = (block: Block): string =>
 		Difficulty: ${block.difficulty}
 		Hash      : ${block.hash}`;
 
+// TODO generate hash based on difficulty
 export const genesisBlock = (): E.Either<Error, Block> => {
 	const timestamp = '0';
 	const data: BlockData = [];

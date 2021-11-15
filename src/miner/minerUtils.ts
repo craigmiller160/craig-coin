@@ -24,4 +24,5 @@ export const mine = (
 		})
 	);
 	// broadcast to every miner to clear their transaction pools as well
+	// TODO what to do with any errors here? don't want to just suppress them
 };
