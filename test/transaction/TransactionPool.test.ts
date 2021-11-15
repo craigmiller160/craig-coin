@@ -50,7 +50,10 @@ describe('TransactionPool', () => {
 	});
 
 	it('clear', () => {
-		throw new Error();
+		const transaction = unpackRight(newTransaction(wallet, recipient, 100));
+		const pool = new TransactionPool([transaction]);
+		pool.clear();
+		expect(pool.transactions).toHaveLength(0);
 	});
 
 	it('updateTransaction', () => {
