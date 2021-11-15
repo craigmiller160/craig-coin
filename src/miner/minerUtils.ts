@@ -6,23 +6,24 @@ import { getValidTransactions } from '../transaction/transactionPoolUtils';
 import { rewardTransaction } from '../transaction/transactionUtils';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
+import { Block } from '../block/Block';
 
 export const mine = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool,
 	wallet: Wallet,
 	p2pServer: P2pServer
-) => {
+): E.Either<Error, Block> => {
 	const validTransactions = getValidTransactions(transactionPool);
-	pipe(
+	return pipe(
 		rewardTransaction(wallet, blockchain.wallet),
 		E.map((rewardTxn) => [...validTransactions, rewardTxn]),
 		E.chain((transactions) => blockchain.addBlock(transactions)),
-		E.map(() => {
+		E.map((block: Block) => {
 			p2pServer.syncChains();
 			transactionPool.clear();
 			p2pServer.broadcastClearTransactions();
+			return block;
 		})
 	);
-	// TODO what to do with any errors here? don't want to just suppress them
 };
