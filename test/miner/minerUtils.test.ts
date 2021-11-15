@@ -3,8 +3,16 @@ import { unpackRight } from '../testutils/utilityFunctions';
 import { newTransaction } from '../../src/transaction/transactionUtils';
 import { mine } from '../../src/miner/minerUtils';
 import { genesisBlock } from '../../src/block/blockUtils';
+import '@relmify/jest-fp-ts';
 
 describe('minerUtils', () => {
+	it('mine, but no transactions to mine', () => {
+		const { blockchain, transactionPool, wallet, p2pServer } =
+			createTestServer();
+		const result = mine(blockchain, transactionPool, wallet, p2pServer);
+		expect(result).toEqualLeft(new Error('No transactions to mine'));
+	});
+
 	it('mine', () => {
 		const { blockchain, transactionPool, wallet, p2pServer } =
 			createTestServer();

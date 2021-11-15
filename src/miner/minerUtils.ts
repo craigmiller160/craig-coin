@@ -15,6 +15,10 @@ export const mine = (
 	p2pServer: P2pServer
 ): E.Either<Error, Block> => {
 	const validTransactions = getValidTransactions(transactionPool);
+	if (validTransactions.length === 0) {
+		return E.left(new Error('No transactions to mine'));
+	}
+
 	return pipe(
 		rewardTransaction(wallet, blockchain.wallet),
 		E.map((rewardTxn) => [...validTransactions, rewardTxn]),
