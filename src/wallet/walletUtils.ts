@@ -43,7 +43,7 @@ export const calculateBalance = (
 	 * 5) If input with wallet address is not found, add existing wallet balance
 	 */
 
-	[...new Array(blockchain.chain.length).keys()]
+	const walletOutputSum: WalletSum = [...new Array(blockchain.chain.length).keys()]
 		.reduce((blockSum: WalletSum, baseBlockIndex) => {
 			if (blockSum.inputFound) {
 				return blockSum;
@@ -61,59 +61,67 @@ export const calculateBalance = (
 					const txnIndex = block.data.length - baseTxnIndex - 1;
 					const txn = block.data[txnIndex];
 
-					// TODO this is where checking goes
+					const outputSum = txn.outputs
+						.reduce((outputSum, output) =>
+							outputSum + output.amount
+						, 0);
 
-					return txnSum;
+					return {
+						inputFound: txn.input.address === wallet.publicKey,
+						amount: txnSum.amount + outputSum
+					}
 				}, blockSum);
 		}, { amount: 0, inputFound: false });
 
-
-	// TODO delete everything after here
-
-
-	let balance = wallet.balance;
-	const transactions: Transaction[] = [];
-	blockchain.chain.forEach((block) => {
-		block.data.forEach((txn) => {
-			transactions.push(txn);
-		});
-	});
-
-	const walletInputTxns = transactions.filter(
-		(txn) => txn.input.address === wallet.publicKey
-	);
-
-	let startTimestamp = millisToTimestamp(0);
-	if (walletInputTxns.length > 0) {
-		const recentInputTxn = walletInputTxns.reduce((prev, current) => {
-			// There should never be equal timestamps
-			if (
-				compareTimestamps(
-					prev.input.timestamp,
-					current.input.timestamp
-				) > 0
-			) {
-				return current;
-			}
-			return prev;
-		});
-		balance =
-			recentInputTxn.outputs.find(
-				(output) => output.address === wallet.publicKey
-			)?.amount ?? 0;
-		startTimestamp = recentInputTxn.input.timestamp;
-	}
-
-	transactions.forEach((txn) => {
-		if (compareTimestamps(startTimestamp, txn.input.timestamp) > 0) {
-			txn.outputs.forEach((output) => {
-				if (output.address === wallet.publicKey) {
-					balance += output.amount;
-				}
-			});
-		}
-	});
-	return balance;
+	return walletOutputSum.inputFound ? walletOutputSum.amount : walletOutputSum.amount + wallet.balance;
+	//
+	//
+	// // TODO delete everything after here
+	//
+	//
+	// let balance = wallet.balance;
+	// const transactions: Transaction[] = [];
+	// blockchain.chain.forEach((block) => {
+	// 	block.data.forEach((txn) => {
+	// 		transactions.push(txn);
+	// 	});
+	// });
+	//
+	// const walletInputTxns = transactions.filter(
+	// 	(txn) => txn.input.address === wallet.publicKey
+	// );
+	//
+	// let startTimestamp = millisToTimestamp(0);
+	// if (walletInputTxns.length > 0) {
+	// 	const recentInputTxn = walletInputTxns.reduce((prev, current) => {
+	// 		// There should never be equal timestamps
+	// 		if (
+	// 			compareTimestamps(
+	// 				prev.input.timestamp,
+	// 				current.input.timestamp
+	// 			) > 0
+	// 		) {
+	// 			return current;
+	// 		}
+	// 		return prev;
+	// 	});
+	// 	balance =
+	// 		recentInputTxn.outputs.find(
+	// 			(output) => output.address === wallet.publicKey
+	// 		)?.amount ?? 0;
+	// 	startTimestamp = recentInputTxn.input.timestamp;
+	// }
+	//
+	// transactions.forEach((txn) => {
+	// 	if (compareTimestamps(startTimestamp, txn.input.timestamp) > 0) {
+	// 		txn.outputs.forEach((output) => {
+	// 			if (output.address === wallet.publicKey) {
+	// 				balance += output.amount;
+	// 			}
+	// 		});
+	// 	}
+	// });
+	// return balance;
 };
 
 export const createTransaction = (
