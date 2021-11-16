@@ -29,7 +29,7 @@ export const calculateBalance = (
 	wallet: Wallet,
 	blockchain: Blockchain
 ): number => {
-	const balance = wallet.balance;
+	let balance = wallet.balance;
 	const transactions: Transaction[] = [];
 	blockchain.chain.forEach((block) => {
 		block.data.forEach((txn) => {
@@ -41,6 +41,7 @@ export const calculateBalance = (
 		(txn) => txn.input.address === wallet.publicKey
 	);
 
+	let startTimestamp = ''; // TODO what do I want the default value to be here?
 	if (walletInputTxns.length > 0) {
 		const recentInputTxn = walletInputTxns.reduce((prev, current) => {
 			// There should never be equal timestamps
@@ -49,7 +50,20 @@ export const calculateBalance = (
 			}
 			return prev;
 		});
+		balance = recentInputTxn.outputs.find((output) => output.address === wallet.publicKey)?.amount ?? 0;
+		startTimestamp = recentInputTxn.input.timestamp;
 	}
+
+	transactions.forEach((txn) => {
+		if (compareTimestamps(startTimestamp, txn.input.timestamp) > 0) {
+			txn.outputs.forEach((output) => {
+				if (output.address === wallet.publicKey) {
+					balance += output.amount;
+				}
+			});
+		}
+	});
+	return balance;
 };
 
 export const createTransaction = (
