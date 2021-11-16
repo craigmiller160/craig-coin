@@ -45,6 +45,11 @@ const validateAllBlocks = (chain: ReadonlyArray<Block>): boolean =>
 		const lastBlock = currentChain[index - 1];
 		const newHash = createNewBlockHash(block);
 
+		// TODO go through all transactions
+		// TODO verify the input signature
+		// TODO verify the outputs all add up to the input
+		// TODO track the balance of every wallet to make sure the input amount is correct
+
 		return (
 			block.lastHash === lastBlock.hash &&
 			block.hash === newHash &&
