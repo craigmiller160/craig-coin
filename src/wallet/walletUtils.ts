@@ -9,7 +9,7 @@ import {
 import { pipe } from 'fp-ts/function';
 import { getExistingTransactionIndex } from '../transaction/transactionPoolUtils';
 import { Blockchain } from '../chain/Blockchain';
-import {compareTimestamps} from '../utils/dateUtils';
+import {compareTimestamps, millisToTimestamp} from '../utils/dateUtils';
 
 export const walletToString = (wallet: Wallet): string =>
 	`Wallet - 
@@ -41,7 +41,7 @@ export const calculateBalance = (
 		(txn) => txn.input.address === wallet.publicKey
 	);
 
-	let startTimestamp = ''; // TODO what do I want the default value to be here?
+	let startTimestamp = millisToTimestamp(0);
 	if (walletInputTxns.length > 0) {
 		const recentInputTxn = walletInputTxns.reduce((prev, current) => {
 			// There should never be equal timestamps
