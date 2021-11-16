@@ -19,6 +19,19 @@ const getGenesisBlockString = (): string =>
 		)
 	);
 
+const createNewBlockHash = (block: Block): string =>
+	pipe(
+		hashBlock(block),
+		E.fold(
+			(error) => {
+				logger.error('Error creating block hash for verification');
+				logger.error(error);
+				return '';
+			},
+			(hash) => hash
+		)
+	);
+
 const validateAllBlocks = (chain: ReadonlyArray<Block>): boolean =>
 	chain.reduce((valid: boolean, block, index, currentChain) => {
 		if (index === 0) {
@@ -30,17 +43,7 @@ const validateAllBlocks = (chain: ReadonlyArray<Block>): boolean =>
 		}
 
 		const lastBlock = currentChain[index - 1];
-		const newHash = pipe(
-			hashBlock(block),
-			E.fold(
-				(error) => {
-					logger.error('Error creating block hash for verification');
-					logger.error(error);
-					return '';
-				},
-				(hash) => hash
-			)
-		);
+		const newHash = createNewBlockHash(block);
 
 		return (
 			block.lastHash === lastBlock.hash &&
