@@ -8,7 +8,7 @@ import {
 } from '../transaction/transactionUtils';
 import { pipe } from 'fp-ts/function';
 import { getExistingTransactionIndex } from '../transaction/transactionPoolUtils';
-import {Blockchain} from '../chain/Blockchain';
+import { Blockchain } from '../chain/Blockchain';
 
 export const walletToString = (wallet: Wallet): string =>
 	`Wallet - 
@@ -24,17 +24,21 @@ export const signData = (
 		(error: unknown) => error as Error
 	);
 
-export const calculateBalance = (wallet: Wallet, blockchain: Blockchain): number => {
-	let balance = wallet.balance;
-	let transactions: Transaction[] = [];
+export const calculateBalance = (
+	wallet: Wallet,
+	blockchain: Blockchain
+): number => {
+	const balance = wallet.balance;
+	const transactions: Transaction[] = [];
 	blockchain.chain.forEach((block) => {
 		block.data.forEach((txn) => {
 			transactions.push(txn);
 		});
 	});
 
-	const walletInputTxns = transactions
-		.filter((txn) => txn.input.address === wallet.publicKey);
+	const walletInputTxns = transactions.filter(
+		(txn) => txn.input.address === wallet.publicKey
+	);
 };
 
 export const createTransaction = (

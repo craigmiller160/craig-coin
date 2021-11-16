@@ -1,4 +1,5 @@
 import {
+	compareTimestamps,
 	createTimestamp,
 	millisToTimestamp,
 	timestampToMillis
@@ -27,5 +28,25 @@ describe('dateUtils', () => {
 	it('millisToTimestamp', () => {
 		const timestamp = millisToTimestamp(1636127055066);
 		expect(timestamp).toEqual('20211105154415066Z');
+	});
+
+	describe('compareTimestamps', () => {
+		const ts1 = '20211105154415066Z';
+		const ts2 = '20211105154415099Z';
+
+		it('greater than', () => {
+			const result = compareTimestamps(ts2, ts1);
+			expect(result).toEqual(1);
+		});
+
+		it('equal to', () => {
+			const result = compareTimestamps(ts1, ts1);
+			expect(result).toEqual(0);
+		});
+
+		it('less than', () => {
+			const result = compareTimestamps(ts1, ts2);
+			expect(result).toEqual(-1);
+		});
 	});
 });
