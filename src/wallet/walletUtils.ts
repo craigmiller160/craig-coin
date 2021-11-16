@@ -9,7 +9,6 @@ import {
 import { pipe } from 'fp-ts/function';
 import { getExistingTransactionIndex } from '../transaction/transactionPoolUtils';
 import { Blockchain } from '../chain/Blockchain';
-import { compareTimestamps, millisToTimestamp } from '../utils/dateUtils';
 
 export const walletToString = (wallet: Wallet): string =>
 	`Wallet - 
@@ -35,16 +34,10 @@ export const calculateBalance = (
 	wallet: Wallet,
 	blockchain: Blockchain
 ): number => {
-	/*
-	 * 1) Iterate over blocks in reverse
-	 * 2) Iterate over transactions in reverse
-	 * 3) Check input for wallet address, stop all iterations after this point
-	 * 4) Check outputs for wallet address, sum all amounts
-	 * 5) If input with wallet address is not found, add existing wallet balance
-	 */
-
-	const walletOutputSum: WalletSum = [...new Array(blockchain.chain.length).keys()]
-		.reduce((blockSum: WalletSum, baseBlockIndex) => {
+	const walletOutputSum: WalletSum = [
+		...new Array(blockchain.chain.length).keys()
+	].reduce(
+		(blockSum: WalletSum, baseBlockIndex) => {
 			if (blockSum.inputFound) {
 				return blockSum;
 			}
@@ -52,8 +45,8 @@ export const calculateBalance = (
 			const blockIndex = blockchain.chain.length - baseBlockIndex - 1;
 			const block = blockchain.chain[blockIndex];
 
-			return [...new Array(block.data.length).keys()]
-				.reduce((txnSum: WalletSum, baseTxnIndex) => {
+			return [...new Array(block.data.length).keys()].reduce(
+				(txnSum: WalletSum, baseTxnIndex) => {
 					if (txnSum.inputFound) {
 						return txnSum;
 					}
@@ -61,67 +54,30 @@ export const calculateBalance = (
 					const txnIndex = block.data.length - baseTxnIndex - 1;
 					const txn = block.data[txnIndex];
 
-					const outputSum = txn.outputs
-						.reduce((outputSum, output) =>
-							outputSum + output.amount
-						, 0);
+					const outputSum = txn.outputs.reduce(
+						(outputSum, output) => {
+							if (output.address === wallet.publicKey) {
+								return outputSum + output.amount;
+							}
+							return outputSum;
+						},
+						0
+					);
 
 					return {
 						inputFound: txn.input.address === wallet.publicKey,
 						amount: txnSum.amount + outputSum
-					}
-				}, blockSum);
-		}, { amount: 0, inputFound: false });
+					};
+				},
+				blockSum
+			);
+		},
+		{ amount: 0, inputFound: false }
+	);
 
-	return walletOutputSum.inputFound ? walletOutputSum.amount : walletOutputSum.amount + wallet.balance;
-	//
-	//
-	// // TODO delete everything after here
-	//
-	//
-	// let balance = wallet.balance;
-	// const transactions: Transaction[] = [];
-	// blockchain.chain.forEach((block) => {
-	// 	block.data.forEach((txn) => {
-	// 		transactions.push(txn);
-	// 	});
-	// });
-	//
-	// const walletInputTxns = transactions.filter(
-	// 	(txn) => txn.input.address === wallet.publicKey
-	// );
-	//
-	// let startTimestamp = millisToTimestamp(0);
-	// if (walletInputTxns.length > 0) {
-	// 	const recentInputTxn = walletInputTxns.reduce((prev, current) => {
-	// 		// There should never be equal timestamps
-	// 		if (
-	// 			compareTimestamps(
-	// 				prev.input.timestamp,
-	// 				current.input.timestamp
-	// 			) > 0
-	// 		) {
-	// 			return current;
-	// 		}
-	// 		return prev;
-	// 	});
-	// 	balance =
-	// 		recentInputTxn.outputs.find(
-	// 			(output) => output.address === wallet.publicKey
-	// 		)?.amount ?? 0;
-	// 	startTimestamp = recentInputTxn.input.timestamp;
-	// }
-	//
-	// transactions.forEach((txn) => {
-	// 	if (compareTimestamps(startTimestamp, txn.input.timestamp) > 0) {
-	// 		txn.outputs.forEach((output) => {
-	// 			if (output.address === wallet.publicKey) {
-	// 				balance += output.amount;
-	// 			}
-	// 		});
-	// 	}
-	// });
-	// return balance;
+	return walletOutputSum.inputFound
+		? walletOutputSum.amount
+		: walletOutputSum.amount + wallet.balance;
 };
 
 export const createTransaction = (
