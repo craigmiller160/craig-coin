@@ -49,6 +49,7 @@ const validateAllBlocks = (chain: ReadonlyArray<Block>): boolean =>
 		// TODO verify the input signature
 		// TODO verify the outputs all add up to the input
 		// TODO track the balance of every wallet to make sure the input amount is correct
+		// TODO check that new transactions are in the pool... not sure how to know this though
 
 		return (
 			block.lastHash === lastBlock.hash &&
