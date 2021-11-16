@@ -8,7 +8,10 @@ import {
 import { unpackRight } from '../testutils/utilityFunctions';
 import { TransactionPool } from '../../src/transaction/TransactionPool';
 import { INITIAL_BALANCE } from '../../src/config';
-import { newTransaction } from '../../src/transaction/transactionUtils';
+import {
+	newTransaction,
+	updateTransaction
+} from '../../src/transaction/transactionUtils';
 import '@relmify/jest-fp-ts';
 import { genesisBlock } from '../../src/block/blockUtils';
 import { Blockchain } from '../../src/chain/Blockchain';
@@ -33,7 +36,14 @@ describe('walletUtils', () => {
 			const recipient = 'recipient';
 			const wallet = new Wallet();
 			const pool = new TransactionPool();
-			const transaction = createTransaction(wallet, pool, recipient, 100);
+			const blockchain = new Blockchain(unpackRight(genesisBlock()));
+			const transaction = createTransaction(
+				wallet,
+				blockchain,
+				pool,
+				recipient,
+				100
+			);
 			expect(transaction).toEqualRight({
 				id: expect.any(String),
 				input: expect.any(Object),
@@ -55,12 +65,14 @@ describe('walletUtils', () => {
 		it('updates existing transaction', () => {
 			const recipient = 'recipient';
 			const wallet = new Wallet();
+			const blockchain = new Blockchain(unpackRight(genesisBlock()));
 			const transaction1 = unpackRight(
 				newTransaction(wallet, recipient, 100)
 			);
 			const pool = new TransactionPool([transaction1]);
 			const createdTransaction = createTransaction(
 				wallet,
+				blockchain,
 				pool,
 				recipient,
 				200
@@ -94,26 +106,28 @@ describe('walletUtils', () => {
 		const wallet1 = new Wallet();
 		const wallet2 = new Wallet();
 		const wallet3 = new Wallet();
-		const txnPool = new TransactionPool();
 		const blockchain = new Blockchain(unpackRight(genesisBlock()));
-		unpackRight(
-			createTransaction(wallet1, txnPool, wallet2.publicKey, 100)
+		const txn1 = unpackRight(
+			newTransaction(wallet1, wallet2.publicKey, 100)
 		);
-		unpackRight(createTransaction(wallet2, txnPool, wallet1.publicKey, 50));
-		blockchain.addBlock(txnPool.transactions);
-		txnPool.clear();
-		unpackRight(
-			createTransaction(wallet2, txnPool, wallet3.publicKey, 100)
+		const txn2 = unpackRight(
+			newTransaction(wallet2, wallet1.publicKey, 50)
 		);
-		unpackRight(createTransaction(wallet1, txnPool, wallet2.publicKey, 50));
-		blockchain.addBlock(txnPool.transactions);
-		txnPool.clear();
-		unpackRight(
-			createTransaction(wallet1, txnPool, wallet3.publicKey, 100)
+		blockchain.addBlock([txn1, txn2]);
+		const txn3 = unpackRight(
+			newTransaction(wallet2, wallet3.publicKey, 100)
 		);
-		unpackRight(createTransaction(wallet1, txnPool, wallet2.publicKey, 50));
-		blockchain.addBlock(txnPool.transactions);
-		txnPool.clear();
+		const txn4 = unpackRight(
+			newTransaction(wallet1, wallet2.publicKey, 50)
+		);
+		blockchain.addBlock([txn3, txn4]);
+		const txn5 = unpackRight(
+			newTransaction(wallet1, wallet3.publicKey, 100)
+		);
+		const txn6 = unpackRight(
+			updateTransaction(txn5, wallet1, wallet2.publicKey, 50)
+		);
+		blockchain.addBlock([txn6]);
 
 		it('has existing input for wallet', () => {
 			const balance = calculateBalance(wallet2, blockchain);
