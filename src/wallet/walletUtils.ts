@@ -9,7 +9,7 @@ import {
 import { pipe } from 'fp-ts/function';
 import { getExistingTransactionIndex } from '../transaction/transactionPoolUtils';
 import { Blockchain } from '../chain/Blockchain';
-import {compareTimestamps, millisToTimestamp} from '../utils/dateUtils';
+import { compareTimestamps, millisToTimestamp } from '../utils/dateUtils';
 
 export const walletToString = (wallet: Wallet): string =>
 	`Wallet - 
@@ -45,12 +45,20 @@ export const calculateBalance = (
 	if (walletInputTxns.length > 0) {
 		const recentInputTxn = walletInputTxns.reduce((prev, current) => {
 			// There should never be equal timestamps
-			if (compareTimestamps(prev.input.timestamp, current.input.timestamp) > 0) {
+			if (
+				compareTimestamps(
+					prev.input.timestamp,
+					current.input.timestamp
+				) > 0
+			) {
 				return current;
 			}
 			return prev;
 		});
-		balance = recentInputTxn.outputs.find((output) => output.address === wallet.publicKey)?.amount ?? 0;
+		balance =
+			recentInputTxn.outputs.find(
+				(output) => output.address === wallet.publicKey
+			)?.amount ?? 0;
 		startTimestamp = recentInputTxn.input.timestamp;
 	}
 
