@@ -77,11 +77,13 @@ export const calculateBalance = (
 
 export const createTransaction = (
 	wallet: Wallet,
+	blockchain: Blockchain,
 	transactionPool: TransactionPool,
 	recipient: string,
 	amount: number
 ): E.Either<Error, Transaction> => {
-	if (amount > wallet.balance) {
+	const balance = calculateBalance(wallet, blockchain);
+	if (amount > balance) {
 		return E.left(
 			new Error(
 				`Amount ${amount} exceeds the current balance ${wallet.balance}`

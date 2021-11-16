@@ -29,7 +29,13 @@ export const createServer = (
 	configureGetBlocks(app, blockchain);
 	configureMine(app, blockchain, transactionPool, wallet, p2pServer);
 	configureGetTransactions(app, transactionPool);
-	configureCreateTransaction(app, wallet, p2pServer, transactionPool);
+	configureCreateTransaction(
+		app,
+		wallet,
+		p2pServer,
+		blockchain,
+		transactionPool
+	);
 	configureGetWallet(app, wallet);
 	return app;
 };

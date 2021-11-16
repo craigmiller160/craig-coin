@@ -6,6 +6,7 @@ import * as E from 'fp-ts/Either';
 import { logger } from '../logger';
 import { P2pServer } from '../p2p-server';
 import { createTransaction } from '../wallet/walletUtils';
+import { Blockchain } from '../chain/Blockchain';
 
 interface TransactionRequest {
 	readonly recipient: string;
@@ -24,6 +25,7 @@ export const configureCreateTransaction = (
 	app: Express,
 	wallet: Wallet,
 	p2pServer: P2pServer,
+	blockchain: Blockchain,
 	transactionPool: TransactionPool
 ) =>
 	app.post(
@@ -36,7 +38,13 @@ export const configureCreateTransaction = (
 				return;
 			}
 			pipe(
-				createTransaction(wallet, transactionPool, recipient, amount),
+				createTransaction(
+					wallet,
+					blockchain,
+					transactionPool,
+					recipient,
+					amount
+				),
 				E.chain((transaction) =>
 					E.tryCatch(
 						() => p2pServer.broadcastTransaction(transaction),
