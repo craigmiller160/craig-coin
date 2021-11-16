@@ -1,5 +1,6 @@
 import { Wallet } from '../../src/wallet/Wallet';
 import {
+	calculateBalance,
 	createTransaction,
 	signData,
 	walletToString
@@ -9,6 +10,8 @@ import { TransactionPool } from '../../src/transaction/TransactionPool';
 import { INITIAL_BALANCE } from '../../src/config';
 import { newTransaction } from '../../src/transaction/transactionUtils';
 import '@relmify/jest-fp-ts';
+import { genesisBlock, mineBlock } from '../../src/block/blockUtils';
+import { Blockchain } from '../../src/chain/Blockchain';
 
 describe('walletUtils', () => {
 	it('walletToString', () => {
@@ -88,8 +91,40 @@ describe('walletUtils', () => {
 	});
 
 	describe('calculateBalance', () => {
+		const wallet1 = new Wallet();
+		const wallet2 = new Wallet();
+		const wallet3 = new Wallet();
+		const txnPool = new TransactionPool();
+		const blockchain = new Blockchain(unpackRight(genesisBlock()));
+		unpackRight(
+			createTransaction(wallet1, txnPool, wallet2.publicKey, 100)
+		);
+		unpackRight(createTransaction(wallet2, txnPool, wallet1.publicKey, 50));
+		blockchain.addBlock(txnPool.transactions);
+		let transactions = [...txnPool.transactions];
+		txnPool.clear();
+		unpackRight(
+			createTransaction(wallet2, txnPool, wallet3.publicKey, 100)
+		);
+		unpackRight(createTransaction(wallet1, txnPool, wallet2.publicKey, 50));
+		blockchain.addBlock(txnPool.transactions);
+		transactions = [...transactions, ...txnPool.transactions];
+		txnPool.clear();
+		unpackRight(
+			createTransaction(wallet1, txnPool, wallet3.publicKey, 100)
+		);
+		unpackRight(createTransaction(wallet3, txnPool, wallet2.publicKey, 50));
+		blockchain.addBlock(txnPool.transactions);
+		transactions = [...transactions, ...txnPool.transactions];
+		txnPool.clear();
+		console.log('Wallet1', wallet1.publicKey);
+		console.log('Wallet2', wallet2.publicKey);
+		console.log('Wallet3', wallet3.publicKey);
+		console.log(JSON.stringify(blockchain.chain, null, 2));
+
 		it('has existing input for wallet', () => {
-			throw new Error();
+			const balance = calculateBalance(wallet2, blockchain);
+			expect(balance).toEqual(500);
 		});
 
 		it('no existing input for wallet', () => {

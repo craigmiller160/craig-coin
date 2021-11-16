@@ -51,9 +51,9 @@ export const calculateBalance = (
 					current.input.timestamp
 				) > 0
 			) {
-				return current;
+				return prev;
 			}
-			return prev;
+			return current;
 		});
 		balance =
 			recentInputTxn.outputs.find(
@@ -63,7 +63,7 @@ export const calculateBalance = (
 	}
 
 	transactions.forEach((txn) => {
-		if (compareTimestamps(startTimestamp, txn.input.timestamp) > 0) {
+		if (compareTimestamps(txn.input.timestamp, startTimestamp) > 0) {
 			txn.outputs.forEach((output) => {
 				if (output.address === wallet.publicKey) {
 					balance += output.amount;
