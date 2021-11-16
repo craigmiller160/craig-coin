@@ -87,7 +87,13 @@ describe('walletUtils', () => {
 		});
 	});
 
-	it('calculateBalance', () => {
-		throw new Error();
+	describe('calculateBalance', () => {
+		it('has existing input for wallet', () => {
+			throw new Error();
+		});
+
+		it('no existing input for wallet', () => {
+			throw new Error();
+		});
 	});
 });
