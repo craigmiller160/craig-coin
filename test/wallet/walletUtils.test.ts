@@ -86,4 +86,8 @@ describe('walletUtils', () => {
 			);
 		});
 	});
+
+	it('calculateBalance', () => {
+		throw new Error();
+	});
 });
