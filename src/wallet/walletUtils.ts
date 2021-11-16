@@ -25,10 +25,52 @@ export const signData = (
 		(error: unknown) => error as Error
 	);
 
+// TODO move to another file
+interface WalletSum {
+	amount: number;
+	inputFound: boolean;
+}
+
 export const calculateBalance = (
 	wallet: Wallet,
 	blockchain: Blockchain
 ): number => {
+	/*
+	 * 1) Iterate over blocks in reverse
+	 * 2) Iterate over transactions in reverse
+	 * 3) Check input for wallet address, stop all iterations after this point
+	 * 4) Check outputs for wallet address, sum all amounts
+	 * 5) If input with wallet address is not found, add existing wallet balance
+	 */
+
+	[...new Array(blockchain.chain.length).keys()]
+		.reduce((blockSum: WalletSum, baseBlockIndex) => {
+			if (blockSum.inputFound) {
+				return blockSum;
+			}
+
+			const blockIndex = blockchain.chain.length - baseBlockIndex - 1;
+			const block = blockchain.chain[blockIndex];
+
+			return [...new Array(block.data.length).keys()]
+				.reduce((txnSum: WalletSum, baseTxnIndex) => {
+					if (txnSum.inputFound) {
+						return txnSum;
+					}
+
+					const txnIndex = block.data.length - baseTxnIndex - 1;
+					const txn = block.data[txnIndex];
+
+					// TODO this is where checking goes
+
+					return txnSum;
+				}, blockSum);
+		}, { amount: 0, inputFound: false });
+
+
+	// TODO delete everything after here
+
+
 	let balance = wallet.balance;
 	const transactions: Transaction[] = [];
 	blockchain.chain.forEach((block) => {
