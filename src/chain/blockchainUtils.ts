@@ -4,8 +4,8 @@ import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
 import { logger } from '../logger';
 
-export const isValidChain = (chain: ReadonlyArray<Block>): boolean => {
-	const genesisBlockString = pipe(
+const getGenesisBlockString = (): string =>
+	pipe(
 		genesisBlock(),
 		E.fold(
 			(error) => {
@@ -19,11 +19,8 @@ export const isValidChain = (chain: ReadonlyArray<Block>): boolean => {
 		)
 	);
 
-	if (genesisBlockString !== JSON.stringify(chain[0])) {
-		return false;
-	}
-
-	return chain.reduce((valid: boolean, block, index, currentChain) => {
+const validateAllBlocks = (chain: ReadonlyArray<Block>): boolean =>
+	chain.reduce((valid: boolean, block, index, currentChain) => {
 		if (index === 0) {
 			return true;
 		}
@@ -51,4 +48,12 @@ export const isValidChain = (chain: ReadonlyArray<Block>): boolean => {
 			block.hash.startsWith('0'.repeat(block.difficulty))
 		);
 	}, true);
+
+export const isValidChain = (chain: ReadonlyArray<Block>): boolean => {
+	const genesisBlockString = getGenesisBlockString();
+	if (genesisBlockString !== JSON.stringify(chain[0])) {
+		return false;
+	}
+
+	return validateAllBlocks(chain);
 };
