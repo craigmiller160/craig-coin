@@ -9,6 +9,7 @@ import {
 import { pipe } from 'fp-ts/function';
 import { getExistingTransactionIndex } from '../transaction/transactionPoolUtils';
 import { Blockchain } from '../chain/Blockchain';
+import { WalletSum } from './WalletSum';
 
 export const walletToString = (wallet: Wallet): string =>
 	`Wallet - 
@@ -23,12 +24,6 @@ export const signData = (
 		() => wallet.keyPair.sign(dataHash).toDER('hex'),
 		(error: unknown) => error as Error
 	);
-
-// TODO move to another file
-interface WalletSum {
-	amount: number;
-	inputFound: boolean;
-}
 
 export const calculateBalance = (
 	wallet: Wallet,
