@@ -35,7 +35,7 @@ describe('dateUtils', () => {
 		const ts2 = '20211105154415099Z';
 
 		it('greater than', () => {
-			const result = compareTimestamps(ts2, ts1);
+			const result = compareTimestamps(ts1, ts2);
 			expect(result).toEqual(1);
 		});
 
@@ -45,7 +45,7 @@ describe('dateUtils', () => {
 		});
 
 		it('less than', () => {
-			const result = compareTimestamps(ts1, ts2);
+			const result = compareTimestamps(ts2, ts1);
 			expect(result).toEqual(-1);
 		});
 	});
