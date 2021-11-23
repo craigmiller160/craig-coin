@@ -29,12 +29,9 @@ interface ClearTransactionsMessage extends Message<null> {
 }
 type ReceivedMessage = Message<unknown>;
 
-// TODO need to automatically lookup available peers
-// TODO need to handle peer going down and coming back up
 // TODO figure out how to unit test this
 
 export class P2pServer {
-	// TODO on all sockets.forEach calls prevent propagation of socket exceptions
 	#sockets: ReadonlyArray<WebSocket> = [];
 	constructor(
 		public readonly blockchain: Blockchain,

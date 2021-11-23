@@ -1,10 +1,6 @@
 Things to Change
 
-1) Improve p2p error handling.
 2) Implement p2p discovery.
-5) Understand multi-output transactions. Why?
-6) Understand wallet balance management.
-7) Replace all timestamp stuff with epoch millis
 9) TLS. Both for REST and Sockets. Or... do sockets need it?
 10) Transaction verification needs to include confirming that sender wallet has funds for input.
 11) Persist data between runs
