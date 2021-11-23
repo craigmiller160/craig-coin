@@ -16,6 +16,7 @@ import https, { ServerOptions } from 'https';
 import fs from 'fs';
 import path from 'path';
 import nocache from 'nocache';
+import { constants } from 'crypto';
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)
@@ -41,7 +42,12 @@ const tlsProps: ServerOptions = {
 	cert: fs.readFileSync(
 		path.resolve(__dirname, '..', 'certs', 'craigcoin.cert.pem')
 	),
-	ciphers: ciphers.join(';')
+	ciphers: ciphers.join(';'),
+	secureOptions:
+		constants.SSL_OP_NO_TLSv1_1 |
+		constants.SSL_OP_NO_TLSv1 |
+		constants.SSL_OP_NO_SSLv3 |
+		constants.SSL_OP_NO_SSLv2
 };
 
 export const createServerApplication = (
