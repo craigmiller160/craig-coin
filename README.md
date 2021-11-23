@@ -1,3 +1,3 @@
-# udemy-crypto
+# craig-coin
 
-My Udemy project learning blockchain and cryptocurrency.
+A simple cryptocurrency for the purpose of learning blockchain.
