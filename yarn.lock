@@ -1131,6 +1131,13 @@ balanced-match@^1.0.0:
   resolved "https://craigmiller160.ddns.net:30003/repository/npm-group/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
+basic-auth@^2.0.1:
+  version "2.0.1"
+  resolved "https://craigmiller160.ddns.net:30003/repository/npm-group/basic-auth/-/basic-auth-2.0.1.tgz#b998279bf47ce38344b4f3cf916d4679bbf51e3a"
+  integrity sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==
+  dependencies:
+    safe-buffer "5.1.2"
+
 binary-extensions@^2.0.0:
   version "2.2.0"
   resolved "https://craigmiller160.ddns.net:30003/repository/npm-group/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
@@ -1940,6 +1947,13 @@ expect@^27.3.1:
     jest-matcher-utils "^27.3.1"
     jest-message-util "^27.3.1"
     jest-regex-util "^27.0.6"
+
+express-basic-auth@^1.2.0:
+  version "1.2.0"
+  resolved "https://craigmiller160.ddns.net:30003/repository/npm-group/express-basic-auth/-/express-basic-auth-1.2.0.tgz#a1d40b07721376ba916e73571a60969211224808"
+  integrity sha512-iJ0h1Gk6fZRrFmO7tP9nIbxwNgCUJASfNj5fb0Hy15lGtbqqsxpt7609+wq+0XlByZjXmC/rslWQtnuSTVRIcg==
+  dependencies:
+    basic-auth "^2.0.1"
 
 express@^4.17.1:
   version "4.17.1"
