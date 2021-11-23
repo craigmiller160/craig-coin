@@ -28,7 +28,6 @@ export const newTransaction = (
 
 	const outputs: ReadonlyArray<TransactionOutput> = [
 		{
-			// TODO wouldn't it just be -amount instead of the new balance?
 			address: senderWallet.publicKey,
 			amount: senderWallet.balance - amount
 		},
@@ -48,7 +47,6 @@ export const newTransaction = (
 	);
 };
 
-// TODO shouldn't this output the new total balance of the miner wallet?
 export const rewardTransaction = (
 	minerWallet: Wallet,
 	blockchainWallet: Wallet

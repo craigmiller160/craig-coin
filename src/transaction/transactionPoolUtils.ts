@@ -29,7 +29,6 @@ export const getValidTransactions = (
 		);
 
 		if (txn.input.amount !== totalOutputAmount) {
-			// TODO do I want an error here? Maybe throw errors where transaction is created?
 			logger.warn(
 				`Invalid transaction from ${txn.input.address}. Total output amount does not equal input amount. Input: ${txn.input.amount} Output Total: ${totalOutputAmount}`
 			);
@@ -37,7 +36,6 @@ export const getValidTransactions = (
 		}
 
 		if (!verifyTransaction(txn)) {
-			// TODO same thing here
 			logger.warn(
 				`Invalid transaction from ${txn.input.amount}. Invalid signature`
 			);
