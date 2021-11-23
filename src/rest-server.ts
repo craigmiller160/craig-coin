@@ -17,6 +17,7 @@ import fs from 'fs';
 import path from 'path';
 import nocache from 'nocache';
 import { constants } from 'crypto';
+import basicAuth from 'express-basic-auth';
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)
@@ -51,6 +52,16 @@ const tlsProps: ServerOptions = {
 		constants.SSL_OP_NO_SSLv2
 };
 
+const basicAuthUser = process.env.BASIC_AUTH_USER;
+if (!basicAuthUser) {
+	throw new Error('Cannot run application without BASIC_AUTH_USER');
+}
+
+const basicAuthPassword = process.env.BASIC_AUTH_PASSWORD;
+if (!basicAuthPassword) {
+	throw new Error('Cannot run application without BASIC_AUTH_PASSWORD');
+}
+
 export const createServerApplication = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool,
@@ -59,7 +70,15 @@ export const createServerApplication = (
 ): Express => {
 	const app = express();
 	app.disable('x-powered-by');
+	app.use(
+		basicAuth({
+			users: {
+				[basicAuthUser]: basicAuthPassword
+			}
+		})
+	);
 	app.use(bodyParser.json());
+	app.use(nocache());
 	configureGetBlocks(app, blockchain);
 	configureMine(app, blockchain, transactionPool, wallet, p2pServer);
 	configureGetTransactions(app, transactionPool);
@@ -71,8 +90,6 @@ export const createServerApplication = (
 		transactionPool
 	);
 	configureGetWallet(app, wallet);
-	app.use(nocache());
-	app.disable('x-powered-by');
 	return app;
 };
 
