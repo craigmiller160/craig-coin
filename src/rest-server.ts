@@ -43,6 +43,7 @@ const tlsProps: ServerOptions = {
 		path.resolve(__dirname, '..', 'certs', 'craigcoin.cert.pem')
 	),
 	ciphers: ciphers.join(';'),
+	passphrase: process.env.TLS_KEY_PASSWORD,
 	secureOptions:
 		constants.SSL_OP_NO_TLSv1_1 |
 		constants.SSL_OP_NO_TLSv1 |
