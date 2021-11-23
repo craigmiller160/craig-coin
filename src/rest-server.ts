@@ -12,12 +12,13 @@ import {
 } from './routes/transactions';
 import { Wallet } from './wallet/Wallet';
 import { configureGetWallet } from './routes/wallet';
+import https from 'https';
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)
 	: 3001;
 
-export const createServer = (
+export const createServerApplication = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool,
 	wallet: Wallet,
@@ -46,8 +47,14 @@ export const createAndStartRestServer = (
 	wallet: Wallet,
 	p2pServer: P2pServer
 ) => {
-	const app = createServer(blockchain, transactionPool, wallet, p2pServer);
-	app.listen(HTTP_PORT, () => {
+	const app = createServerApplication(
+		blockchain,
+		transactionPool,
+		wallet,
+		p2pServer
+	);
+	const server = https.createServer(app);
+	server.listen(HTTP_PORT, () => {
 		logger.info(`Listening on port ${HTTP_PORT}`);
 	});
 };

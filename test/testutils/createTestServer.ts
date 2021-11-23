@@ -1,7 +1,7 @@
 import { Blockchain } from '../../src/chain/Blockchain';
 import { TransactionPool } from '../../src/transaction/TransactionPool';
 import { P2pServer } from '../../src/p2p-server';
-import { createServer } from '../../src/rest-server';
+import { createServerApplication } from '../../src/rest-server';
 import { Express } from 'express';
 import { Wallet } from '../../src/wallet/Wallet';
 import { unpackRight } from './utilityFunctions';
@@ -22,7 +22,12 @@ export const createTestServer = (): TestServer => {
 	const wallet = new Wallet();
 	const transactionPool = new TransactionPool();
 	const p2pServer = new P2pServer(blockchain, transactionPool);
-	const app = createServer(blockchain, transactionPool, wallet, p2pServer);
+	const app = createServerApplication(
+		blockchain,
+		transactionPool,
+		wallet,
+		p2pServer
+	);
 	return {
 		app,
 		blockchain,
