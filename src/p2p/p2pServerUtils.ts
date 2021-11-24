@@ -174,18 +174,25 @@ export const connectToPeers = (
 	transactionPool: TransactionPool
 ) => {
 	PEERS.forEach((peer) => {
-		// TODO error handling here
-		const socket = new WebSocket(peer, {
-			rejectUnauthorized: false
-		});
-		socket.on('open', () =>
-			handleSocketConnection(
-				socket,
-				p2pServer,
-				blockchain,
-				transactionPool
-			)
+		E.tryCatch(
+			() => {
+				const socket = new WebSocket(peer, {
+					rejectUnauthorized: false
+				});
+				socket.on('open', () =>
+					handleSocketConnection(
+						socket,
+						p2pServer,
+						blockchain,
+						transactionPool
+					)
+				);
+				logger.debug(`Opening socket to peer: ${peer}`);
+			},
+			(error) => {
+				logger.error(`Error opening connection to peer: ${peer}`);
+				logger.error(error);
+			}
 		);
-		logger.debug(`Opening socket to peer: ${peer}`);
 	});
 };
