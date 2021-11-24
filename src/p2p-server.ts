@@ -4,6 +4,7 @@ import { Block } from './block/Block';
 import { logger } from './logger';
 import { TransactionPool } from './transaction/TransactionPool';
 import { Transaction } from './transaction/Transaction';
+import { createHttpsServer } from './tls';
 
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
@@ -29,8 +30,6 @@ interface ClearTransactionsMessage extends Message<null> {
 }
 type ReceivedMessage = Message<unknown>;
 
-// TODO figure out how to unit test this
-
 export class P2pServer {
 	#sockets: ReadonlyArray<WebSocket> = [];
 	constructor(
@@ -39,11 +38,15 @@ export class P2pServer {
 	) {}
 
 	listen() {
-		const server = new Server({
-			port: P2P_PORT
+		const httpsServer = createHttpsServer();
+		const webSocketServer = new Server({
+			server: httpsServer
 		});
-		server.on('connection', (socket) => this.#connectSocket(socket));
+		webSocketServer.on('connection', (socket) =>
+			this.#connectSocket(socket)
+		);
 		logger.info(`Listening for peer-to-peer connections on: ${P2P_PORT}`);
+		httpsServer.listen(P2P_PORT);
 
 		this.#connectToPeers();
 	}
@@ -119,7 +122,9 @@ export class P2pServer {
 
 	#connectToPeers() {
 		PEERS.forEach((peer) => {
-			const socket = new WebSocket(peer);
+			const socket = new WebSocket(peer, {
+				rejectUnauthorized: false
+			});
 			socket.on('open', () => this.#connectSocket(socket));
 			logger.debug(`Opening socket to peer: ${peer}`);
 		});
