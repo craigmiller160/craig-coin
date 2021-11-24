@@ -1,8 +1,5 @@
 import WebSocket, { Server as WsServer } from 'ws';
-import { Blockchain } from '../chain/Blockchain';
-import { TransactionPool } from '../transaction/TransactionPool';
 import { Server as HttpsServer } from 'https';
-import { createHttpsServer } from '../tls';
 import { logger } from '../logger';
 import * as E from 'fp-ts/Either';
 import { unknownToError } from '../utils/unknownToError';
@@ -13,16 +10,14 @@ export class P2pServer {
 	#connectedSockets: ReadonlyArray<WebSocket> = [];
 	readonly #webSocketServer: WsServer;
 	readonly #httpsServer: HttpsServer;
-	constructor(
-		// TODO see if these dependencies can be eliminated
-		public readonly blockchain: Blockchain,
-		public readonly transactionPool: TransactionPool
-	) {
-		this.#httpsServer = createHttpsServer();
-		this.#webSocketServer = new WsServer({
-			server: this.#httpsServer
-		});
-		// TODO need to configure the on() callback
+
+	constructor(webSocketServer: WsServer, httpsServer: HttpsServer) {
+		this.#webSocketServer = webSocketServer;
+		this.#httpsServer = httpsServer;
+	}
+
+	addConnectedSocket(socket: WebSocket) {
+		this.#connectedSockets = [...this.#connectedSockets, socket];
 	}
 
 	listen(): E.Either<Error, void> {

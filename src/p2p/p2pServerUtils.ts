@@ -1,4 +1,4 @@
-import WebSocket from 'ws';
+import WebSocket, { Server } from 'ws';
 import { Blockchain } from '../chain/Blockchain';
 import { TransactionPool } from '../transaction/TransactionPool';
 import {
@@ -8,6 +8,35 @@ import {
 	TransactionSocketMessage
 } from './SocketMessages';
 import { logger } from '../logger';
+import { createHttpsServer } from '../tls';
+import { P2pServer } from './P2pServer';
+
+export const createP2pServer = (
+	blockchain: Blockchain,
+	transactionPool: TransactionPool
+): P2pServer => {
+	const httpsServer = createHttpsServer();
+	const webSocketServer = new Server({
+		server: httpsServer
+	});
+	const p2pServer = new P2pServer(webSocketServer, httpsServer);
+	webSocketServer.on('connection', (socket: WebSocket) =>
+		handleSocketConnection(socket, p2pServer, blockchain, transactionPool)
+	);
+	return p2pServer;
+};
+
+export const handleSocketConnection = (
+	socket: WebSocket,
+	p2pServer: P2pServer,
+	blockchain: Blockchain,
+	transactionPool: TransactionPool
+) => {
+	socketMessageHandler(socket, blockchain, transactionPool);
+	p2pServer.addConnectedSocket(socket);
+	logger.debug('Socket connected');
+	// TODO do I want to send the blockchain immediately upon connection?
+};
 
 export const socketMessageHandler = (
 	socket: WebSocket,
@@ -15,6 +44,7 @@ export const socketMessageHandler = (
 	transactionPool: TransactionPool
 ) => {
 	socket.on('message', (message: string) => {
+		// TODO what about errors here?
 		const receivedMessage = JSON.parse(message) as ReceivedSocketMessage;
 		switch (receivedMessage.type) {
 			case MessageType.CHAIN:
