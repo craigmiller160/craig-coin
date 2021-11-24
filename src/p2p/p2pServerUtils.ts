@@ -134,6 +134,7 @@ export const connectToPeers = (
 	transactionPool: TransactionPool
 ) => {
 	PEERS.forEach((peer) => {
+		// TODO error handling here
 		const socket = new WebSocket(peer, {
 			rejectUnauthorized: false
 		});
