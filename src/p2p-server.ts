@@ -122,7 +122,9 @@ export class P2pServer {
 
 	#connectToPeers() {
 		PEERS.forEach((peer) => {
-			const socket = new WebSocket(peer);
+			const socket = new WebSocket(peer, {
+				rejectUnauthorized: false
+			});
 			socket.on('open', () => this.#connectSocket(socket));
 			logger.debug(`Opening socket to peer: ${peer}`);
 		});
