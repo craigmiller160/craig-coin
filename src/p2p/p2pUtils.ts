@@ -52,7 +52,7 @@ export const handleSocketConnection = (
 	// TODO do I want to send pending transactions right away?
 };
 
-export const sendBlockchain = (socket: WebSocket, blockchain: Blockchain) => {
+const sendBlockchain = (socket: WebSocket, blockchain: Blockchain) => {
 	const chainMessage: ChainSocketMessage = {
 		type: MessageType.CHAIN,
 		data: blockchain.chain
@@ -67,10 +67,7 @@ export const sendBlockchain = (socket: WebSocket, blockchain: Blockchain) => {
 	);
 };
 
-export const sendTransaction = (
-	socket: WebSocket,
-	transaction: Transaction
-) => {
+const sendTransaction = (socket: WebSocket, transaction: Transaction) => {
 	const transactionMessage: TransactionSocketMessage = {
 		type: MessageType.TRANSACTION,
 		data: transaction
@@ -84,7 +81,7 @@ export const sendTransaction = (
 	);
 };
 
-export const sendClearTransactions = (socket: WebSocket) => {
+const sendClearTransactions = (socket: WebSocket) => {
 	const clearTransactionsMessage: ClearTransactionsSocketMessage = {
 		type: MessageType.CLEAR_TRANSACTIONS,
 		data: null
