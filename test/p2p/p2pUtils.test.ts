@@ -2,7 +2,12 @@ import { Blockchain } from '../../src/chain/Blockchain';
 import { unpackRight } from '../testutils/utilityFunctions';
 import { genesisBlock } from '../../src/block/blockUtils';
 import { TransactionPool } from '../../src/transaction/TransactionPool';
-import { broadcastBlockchain, createP2pServer } from '../../src/p2p/p2pUtils';
+import {
+	broadcastBlockchain,
+	broadcastClearTransactions,
+	broadcastTransaction,
+	createP2pServer
+} from '../../src/p2p/p2pUtils';
 import '@relmify/jest-fp-ts';
 import { P2pServer } from '../../src/p2p/P2pServer';
 import {
@@ -11,6 +16,8 @@ import {
 	TestWebSocketWrapper
 } from './TestWebSocketWrappers';
 import { MessageType } from '../../src/p2p/SocketMessages';
+import { newTransaction } from '../../src/transaction/transactionUtils';
+import { Wallet } from '../../src/wallet/Wallet';
 
 jest.mock('../../src/p2p/webSocketWrapperUtils', () => {
 	return jest.requireActual('./testWebSocketWrapperUtils');
@@ -33,6 +40,8 @@ const validateHandleSocketConnection = (
 		})
 	);
 };
+
+const wallet = new Wallet();
 
 describe('p2pUtils', () => {
 	let blockchain: Blockchain;
@@ -76,11 +85,32 @@ describe('p2pUtils', () => {
 	});
 
 	it('broadcastTransaction', () => {
-		throw new Error();
+		const socket = new TestWebSocketWrapper('address');
+		p2pServer.addConnectedSocket(socket);
+		const transaction = unpackRight(newTransaction(wallet, 'address', 100));
+		broadcastTransaction(p2pServer, transaction);
+
+		expect(socket.sentData).toHaveLength(1);
+		expect(socket.sentData[0]).toEqual(
+			JSON.stringify({
+				type: MessageType.TRANSACTION,
+				data: transaction
+			})
+		);
 	});
 
 	it('broadcastClearTransactions', () => {
-		throw new Error();
+		const socket = new TestWebSocketWrapper('address');
+		p2pServer.addConnectedSocket(socket);
+		broadcastClearTransactions(p2pServer);
+
+		expect(socket.sentData).toHaveLength(1);
+		expect(socket.sentData[0]).toEqual(
+			JSON.stringify({
+				type: MessageType.CLEAR_TRANSACTIONS,
+				data: null
+			})
+		);
 	});
 
 	describe('socketMessageHandler', () => {
