@@ -16,6 +16,10 @@ export class P2pServer {
 		this.#httpsServer = httpsServer;
 	}
 
+	get connectedSockets(): ReadonlyArray<WebSocket> {
+		return this.#connectedSockets;
+	}
+
 	addConnectedSocket(socket: WebSocket) {
 		this.#connectedSockets = [...this.#connectedSockets, socket];
 	}

@@ -3,6 +3,7 @@ import { Blockchain } from '../chain/Blockchain';
 import { TransactionPool } from '../transaction/TransactionPool';
 import {
 	ChainSocketMessage,
+	ClearTransactionsSocketMessage,
 	MessageType,
 	ReceivedSocketMessage,
 	TransactionSocketMessage
@@ -10,6 +11,9 @@ import {
 import { logger } from '../logger';
 import { createHttpsServer } from '../tls';
 import { P2pServer } from './P2pServer';
+import { Transaction } from '../transaction/Transaction';
+
+const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
 export const createP2pServer = (
 	blockchain: Blockchain,
@@ -35,7 +39,62 @@ export const handleSocketConnection = (
 	socketMessageHandler(socket, blockchain, transactionPool);
 	p2pServer.addConnectedSocket(socket);
 	logger.debug('Socket connected');
-	// TODO do I want to send the blockchain immediately upon connection?
+	sendBlockchain(socket, blockchain);
+	// TODO do I want to send pending transactions right away?
+};
+
+export const sendBlockchain = (socket: WebSocket, blockchain: Blockchain) => {
+	const chainMessage: ChainSocketMessage = {
+		type: MessageType.CHAIN,
+		data: blockchain.chain
+	};
+	// TODO error handling here
+	socket.send(JSON.stringify(chainMessage));
+};
+
+export const sendTransaction = (
+	socket: WebSocket,
+	transaction: Transaction
+) => {
+	const transactionMessage: TransactionSocketMessage = {
+		type: MessageType.TRANSACTION,
+		data: transaction
+	};
+	// TODO error handling here
+	socket.send(JSON.stringify(transactionMessage));
+};
+
+export const sendClearTransactions = (socket: WebSocket) => {
+	const clearTransactionsMessage: ClearTransactionsSocketMessage = {
+		type: MessageType.CLEAR_TRANSACTIONS,
+		data: null
+	};
+	// TODO error handling here
+	socket.send(JSON.stringify(clearTransactionsMessage));
+};
+
+export const broadcastBlockchain = (
+	p2pServer: P2pServer,
+	blockchain: Blockchain
+) => {
+	p2pServer.connectedSockets.forEach((socket) => {
+		sendBlockchain(socket, blockchain);
+	});
+};
+
+export const broadcastTransaction = (
+	p2pServer: P2pServer,
+	transaction: Transaction
+) => {
+	p2pServer.connectedSockets.forEach((socket) => {
+		sendTransaction(socket, transaction);
+	});
+};
+
+export const broadcastClearTransactions = (p2pServer: P2pServer) => {
+	p2pServer.connectedSockets.forEach((socket) => {
+		sendClearTransactions(socket);
+	});
 };
 
 export const socketMessageHandler = (
@@ -66,5 +125,15 @@ export const socketMessageHandler = (
 				);
 				break;
 		}
+	});
+};
+
+export const connectToPeers = () => {
+	PEERS.forEach((peer) => {
+		const socket = new WebSocket(peer, {
+			rejectUnauthorized: false
+		});
+		// TODO connect it on open
+		logger.debug(`Opening socket to peer: ${peer}`);
 	});
 };
