@@ -1,11 +1,15 @@
-import WebSocket from 'ws';
-import { Server } from 'https';
 import { Blockchain } from '../../src/chain/Blockchain';
 import { unpackRight } from '../testutils/utilityFunctions';
 import { genesisBlock } from '../../src/block/blockUtils';
 import { TransactionPool } from '../../src/transaction/TransactionPool';
 import { createP2pServer } from '../../src/p2p/p2pUtils';
-import { MockWebSocketServer } from './p2pUtilsTestResources';
+import {
+	clearOnConnectionFns,
+	MockWebSocket,
+	onConnectionFns
+} from './p2pUtilsTestResources';
+import '@relmify/jest-fp-ts';
+import { P2pServer } from '../../src/p2p/P2pServer';
 
 jest.mock('ws', () => {
 	const resources = jest.requireActual('./p2pUtilsTestResources');
@@ -28,11 +32,21 @@ describe('p2pUtils', () => {
 	beforeEach(() => {
 		blockchain = new Blockchain(unpackRight(genesisBlock()));
 		transactionPool = new TransactionPool();
+		clearOnConnectionFns();
+	});
+
+	afterEach(() => {
+		clearOnConnectionFns();
 	});
 
 	it('createP2pServer', () => {
 		const result = createP2pServer(blockchain, transactionPool);
-		console.log(result); // TODO delete this
+		expect(result).toBeRight();
+		const p2pServer = unpackRight(result);
+		expect(p2pServer instanceof P2pServer).toBeTruthy();
+		expect(onConnectionFns).toHaveLength(1);
+		const socket = new MockWebSocket();
+		onConnectionFns[0](socket);
 	});
 
 	it('handleSocketConnection', () => {
