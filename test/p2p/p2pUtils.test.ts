@@ -5,7 +5,7 @@ import { TransactionPool } from '../../src/transaction/TransactionPool';
 import {
 	broadcastBlockchain,
 	broadcastClearTransactions,
-	broadcastTransaction,
+	broadcastTransaction, connectToPeers,
 	createP2pServer
 } from '../../src/p2p/p2pUtils';
 import '@relmify/jest-fp-ts';
@@ -53,6 +53,10 @@ describe('p2pUtils', () => {
 		const httpsServer = new TestWebSocketHttpsServerWrapper();
 		const wsServer = new TestWebSocketServerWrapper();
 		p2pServer = new P2pServer(wsServer, httpsServer);
+	});
+
+	afterEach(() => {
+		process.env.PEERS = undefined;
 	});
 
 	it('createP2pServer', () => {
@@ -136,6 +140,11 @@ describe('p2pUtils', () => {
 	});
 
 	it('connectToPeers', () => {
-		throw new Error();
+		const address = 'address';
+		process.env.PEERS = address;
+		connectToPeers(p2pServer, blockchain, transactionPool);
+
+		expect(p2pServer.connectedSockets).toHaveLength(1);
+		const socket = p2pServer.connectedSockets[0];
 	});
 });

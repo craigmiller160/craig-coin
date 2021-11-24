@@ -19,7 +19,8 @@ import {
 } from './webSocketWrapperUtils';
 import { WebSocketWrapper } from './WebSocketWrappers';
 
-const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
+const getPeers = (): string[] =>
+	process.env.PEERS ? process.env.PEERS.split(',') : [];
 
 export const createP2pServer = (
 	blockchain: Blockchain,
@@ -178,7 +179,7 @@ export const connectToPeers = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool
 ) => {
-	PEERS.forEach((peer) => {
+	getPeers().forEach((peer) => {
 		E.tryCatch(
 			() => {
 				const socket = newWebSocketWrapper(peer, {
