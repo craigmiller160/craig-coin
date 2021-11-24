@@ -9,6 +9,8 @@ import { createHttpsServer } from './tls';
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
+// TODO delete this entire file
+
 enum MessageType {
 	CHAIN,
 	TRANSACTION,
