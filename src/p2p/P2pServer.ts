@@ -10,7 +10,7 @@ import { unknownToError } from '../utils/unknownToError';
 const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 
 export class P2pServer {
-	#sockets: ReadonlyArray<WebSocket> = [];
+	#connectedSockets: ReadonlyArray<WebSocket> = [];
 	readonly #webSocketServer: WsServer;
 	readonly #httpsServer: HttpsServer;
 	constructor(
