@@ -82,11 +82,27 @@ describe('blockUtils', () => {
 	});
 
 	describe('minBlock', () => {
-		it('lowers difficulty for mining block too slowly', () => {
-			throw new Error();
+		it('raises difficulty for mining block too quickly', () => {
+			const lastBlock: Block = {
+				data: [],
+				timestamp: '21000101000000000Z',
+				lastHash: 'lastHash',
+				nonce: 0,
+				difficulty: INITIAL_DIFFICULTY,
+				hash: 'hash'
+			};
+			const block = unpackRight(mineBlock(lastBlock, []));
+			verifyTimestamp(block.timestamp);
+			expect(block.difficulty).toEqual(INITIAL_DIFFICULTY + 1);
+			expect(block.lastHash).toEqual(lastBlock.hash);
+			expect(block.data).toEqual([]);
+			expect(block.hash).toHaveLength(64);
+			expect(block.hash.substring(0, block.difficulty)).toEqual(
+				'0'.repeat(block.difficulty)
+			);
 		});
 
-		it('raises difficulty for mining block too quickly', () => {
+		it('lowers difficulty for mining block too slowly', () => {
 			const lastBlock: Block = {
 				data: [],
 				timestamp: '0',
