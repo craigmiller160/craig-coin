@@ -5,24 +5,32 @@ import { TransactionPool } from '../../src/transaction/TransactionPool';
 import { createP2pServer } from '../../src/p2p/p2pUtils';
 import '@relmify/jest-fp-ts';
 import { P2pServer } from '../../src/p2p/P2pServer';
+import {
+	TestWebSocketServerWrapper,
+	TestWebSocketWrapper
+} from './TestWebSocketWrappers';
+import { MessageType } from '../../src/p2p/SocketMessages';
 
 jest.mock('../../src/p2p/webSocketWrapperUtils', () => {
 	return jest.requireActual('./testWebSocketWrapperUtils');
 });
 
 const validateHandleSocketConnection = (
+	socket: TestWebSocketWrapper,
 	p2pServer: P2pServer,
 	blockchain: Blockchain
 ) => {
-	// expect(p2pServer.connectedSockets).toHaveLength(1);
-	// expect(onMessageFns).toHaveLength(1);
-	// expect(messagesSent).toHaveLength(1);
-	// expect(messagesSent[0]).toEqual(
-	// 	JSON.stringify({
-	// 		type: MessageType.CHAIN,
-	// 		data: blockchain.chain
-	// 	})
-	// );
+	expect(p2pServer.connectedSockets).toHaveLength(1);
+	expect(p2pServer.connectedSockets[0]).toEqual(socket);
+
+	expect(socket.events['message']).toHaveLength(1);
+	expect(socket.sentData).toHaveLength(1);
+	expect(socket.sentData[0]).toEqual(
+		JSON.stringify({
+			type: MessageType.CHAIN,
+			data: blockchain.chain
+		})
+	);
 };
 
 describe('p2pUtils', () => {
@@ -31,22 +39,21 @@ describe('p2pUtils', () => {
 	beforeEach(() => {
 		blockchain = new Blockchain(unpackRight(genesisBlock()));
 		transactionPool = new TransactionPool();
-		// clearFnArrays();
-	});
-
-	afterEach(() => {
-		// clearFnArrays();
 	});
 
 	it('createP2pServer', () => {
 		const result = createP2pServer(blockchain, transactionPool);
 		expect(result).toBeRight();
 		const p2pServer = unpackRight(result);
-		// expect(p2pServer instanceof P2pServer).toBeTruthy();
-		// expect(onConnectionFns).toHaveLength(1);
-		// const socket = new MockWebSocket();
-		// onConnectionFns[0](socket);
-		// validateHandleSocketConnection(p2pServer, blockchain);
+		expect(p2pServer instanceof P2pServer).toBeTruthy();
+		const wsServer =
+			p2pServer.webSocketServer as TestWebSocketServerWrapper;
+		expect(wsServer.events['connection']).toHaveLength(1);
+
+		const socket = new TestWebSocketWrapper('address');
+
+		wsServer.events['connection'][0](socket);
+		validateHandleSocketConnection(socket, p2pServer, blockchain);
 	});
 
 	it('broadcastBlockchain', () => {
