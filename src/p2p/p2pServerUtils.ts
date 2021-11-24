@@ -128,12 +128,23 @@ export const socketMessageHandler = (
 	});
 };
 
-export const connectToPeers = () => {
+export const connectToPeers = (
+	p2pServer: P2pServer,
+	blockchain: Blockchain,
+	transactionPool: TransactionPool
+) => {
 	PEERS.forEach((peer) => {
 		const socket = new WebSocket(peer, {
 			rejectUnauthorized: false
 		});
-		// TODO connect it on open
+		socket.on('open', () =>
+			handleSocketConnection(
+				socket,
+				p2pServer,
+				blockchain,
+				transactionPool
+			)
+		);
 		logger.debug(`Opening socket to peer: ${peer}`);
 	});
 };
