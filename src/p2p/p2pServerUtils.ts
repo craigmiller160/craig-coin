@@ -12,23 +12,31 @@ import { logger } from '../logger';
 import { createHttpsServer } from '../tls';
 import { P2pServer } from './P2pServer';
 import { Transaction } from '../transaction/Transaction';
+import * as E from 'fp-ts/Either';
+import { unknownToError } from '../utils/unknownToError';
 
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
 export const createP2pServer = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool
-): P2pServer => {
-	const httpsServer = createHttpsServer();
-	const webSocketServer = new Server({
-		server: httpsServer
-	});
-	const p2pServer = new P2pServer(webSocketServer, httpsServer);
-	webSocketServer.on('connection', (socket: WebSocket) =>
-		handleSocketConnection(socket, p2pServer, blockchain, transactionPool)
-	);
-	return p2pServer;
-};
+): E.Either<Error, P2pServer> =>
+	E.tryCatch(() => {
+		const httpsServer = createHttpsServer();
+		const webSocketServer = new Server({
+			server: httpsServer
+		});
+		const p2pServer = new P2pServer(webSocketServer, httpsServer);
+		webSocketServer.on('connection', (socket: WebSocket) =>
+			handleSocketConnection(
+				socket,
+				p2pServer,
+				blockchain,
+				transactionPool
+			)
+		);
+		return p2pServer;
+	}, unknownToError);
 
 export const handleSocketConnection = (
 	socket: WebSocket,
