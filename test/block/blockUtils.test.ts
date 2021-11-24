@@ -87,28 +87,24 @@ describe('blockUtils', () => {
 		});
 
 		it('raises difficulty for mining block too quickly', () => {
-			throw new Error();
+			const lastBlock: Block = {
+				data: [],
+				timestamp: '0',
+				lastHash: 'lastHash',
+				nonce: 0,
+				difficulty: INITIAL_DIFFICULTY,
+				hash: 'hash'
+			};
+			const block = unpackRight(mineBlock(lastBlock, []));
+			verifyTimestamp(block.timestamp);
+			expect(block.difficulty).toEqual(INITIAL_DIFFICULTY - 1);
+			expect(block.lastHash).toEqual(lastBlock.hash);
+			expect(block.data).toEqual([]);
+			expect(block.hash).toHaveLength(64);
+			expect(block.hash.substring(0, block.difficulty)).toEqual(
+				'0'.repeat(block.difficulty)
+			);
 		});
-	});
-
-	it('mineBlock', () => {
-		const lastBlock: Block = {
-			data: [],
-			timestamp: '0',
-			lastHash: 'lastHash',
-			nonce: 0,
-			difficulty: INITIAL_DIFFICULTY,
-			hash: 'hash'
-		};
-		const block = unpackRight(mineBlock(lastBlock, []));
-		verifyTimestamp(block.timestamp);
-		expect(block.lastHash).toEqual(lastBlock.hash);
-		expect(block.data).toEqual([]);
-		expect(block.hash).toHaveLength(64);
-		expect(block.hash.substring(0, block.difficulty)).toEqual(
-			'0'.repeat(block.difficulty)
-		);
-		throw new Error('Delete this test');
 	});
 
 	it('hash', () => {
