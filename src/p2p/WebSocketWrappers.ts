@@ -1,16 +1,46 @@
-import WebSocket from 'ws';
+import WebSocket, { Server, ServerOptions } from 'ws';
+import { createHttpsServer } from '../tls';
 
 export interface WebSocketWrapper {
-	address: string;
-	options?: WebSocket.ClientOptions;
+	on: (event: string) => void;
+}
+
+export interface WebSocketHttpsServerWrapper {
+	listen: (port: number) => void;
+}
+
+export interface WebSocketServerWrapper {
+	on: (event: string, fn: (socket: WebSocketWrapper) => void) => void;
 }
 
 export class WebSocketWrapperImpl implements WebSocketWrapper {
 	#webSocket: WebSocket;
-	constructor(
-		public address: string,
-		public options?: WebSocket.ClientOptions
-	) {
-		this.#webSocket = new WebSocket(address, options);
+	constructor(webSocket: WebSocket) {
+		this.#webSocket = webSocket;
+	}
+
+	on(event: string) {
+		// TODO finish this
+	}
+}
+
+export class WebSocketHttpsServerWrapperImpl
+	implements WebSocketHttpsServerWrapper
+{
+	#httpsServer = createHttpsServer();
+	listen(port: number) {
+		this.#httpsServer.listen(port);
+	}
+}
+
+export class WebSocketServerWrapperImpl implements WebSocketServerWrapper {
+	#server: Server;
+	constructor(options?: ServerOptions) {
+		this.#server = new Server(options);
+	}
+	on(event: string, fn: (socket: WebSocketWrapper) => void) {
+		this.#server.on(event, (ws: WebSocket) =>
+			fn(new WebSocketWrapperImpl(ws))
+		);
 	}
 }
