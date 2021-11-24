@@ -81,6 +81,16 @@ describe('blockUtils', () => {
 		});
 	});
 
+	describe('minBlock', () => {
+		it('lowers difficulty for mining block too slowly', () => {
+			throw new Error();
+		});
+
+		it('raises difficulty for mining block too quickly', () => {
+			throw new Error();
+		});
+	});
+
 	it('mineBlock', () => {
 		const lastBlock: Block = {
 			data: [],
@@ -98,6 +108,7 @@ describe('blockUtils', () => {
 		expect(block.hash.substring(0, block.difficulty)).toEqual(
 			'0'.repeat(block.difficulty)
 		);
+		throw new Error('Delete this test');
 	});
 
 	it('hash', () => {
