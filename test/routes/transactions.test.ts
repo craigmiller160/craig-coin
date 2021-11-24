@@ -13,6 +13,10 @@ describe('transactions', () => {
 
 		const response = await request(app)
 			.get('/transactions')
+			.auth(
+				process.env.BASIC_AUTH_USER ?? '',
+				process.env.BASIC_AUTH_PASSWORD ?? ''
+			)
 			.expect('Content-Type', /application\/json/)
 			.expect(200);
 		expect(response.body).toEqual(transactionPool.transactions);
@@ -26,6 +30,10 @@ describe('transactions', () => {
 			};
 			await request(app)
 				.post('/transactions')
+				.auth(
+					process.env.BASIC_AUTH_USER ?? '',
+					process.env.BASIC_AUTH_PASSWORD ?? ''
+				)
 				.send(missingRecipient)
 				.expect(400);
 
@@ -34,6 +42,10 @@ describe('transactions', () => {
 			};
 			await request(app)
 				.post('/transactions')
+				.auth(
+					process.env.BASIC_AUTH_USER ?? '',
+					process.env.BASIC_AUTH_PASSWORD ?? ''
+				)
 				.send(missingAmount)
 				.expect(400);
 		});
@@ -44,7 +56,14 @@ describe('transactions', () => {
 				amount: 100
 			};
 			const { app, p2pServer, transactionPool } = createTestServer();
-			await request(app).post('/transactions').send(body).expect(302);
+			await request(app)
+				.post('/transactions')
+				.auth(
+					process.env.BASIC_AUTH_USER ?? '',
+					process.env.BASIC_AUTH_PASSWORD ?? ''
+				)
+				.send(body)
+				.expect(302);
 			expect(transactionPool.transactions).toHaveLength(1);
 			expect(p2pServer.broadcastTransaction).toHaveBeenCalled();
 		});
@@ -60,7 +79,14 @@ describe('transactions', () => {
 					throw new Error('Dying');
 				}
 			);
-			await request(app).post('/transactions').send(body).expect(500);
+			await request(app)
+				.post('/transactions')
+				.auth(
+					process.env.BASIC_AUTH_USER ?? '',
+					process.env.BASIC_AUTH_PASSWORD ?? ''
+				)
+				.send(body)
+				.expect(500);
 		});
 	});
 });
