@@ -30,8 +30,6 @@ interface ClearTransactionsMessage extends Message<null> {
 }
 type ReceivedMessage = Message<unknown>;
 
-// TODO figure out how to unit test this
-
 export class P2pServer {
 	#sockets: ReadonlyArray<WebSocket> = [];
 	constructor(
