@@ -1,4 +1,3 @@
-import WebSocket from 'ws';
 import { Blockchain } from '../chain/Blockchain';
 import { TransactionPool } from '../transaction/TransactionPool';
 import {
@@ -14,7 +13,11 @@ import { Transaction } from '../transaction/Transaction';
 import * as E from 'fp-ts/Either';
 import { unknownToError } from '../utils/unknownToError';
 import { pipe } from 'fp-ts/function';
-import { newWebSocketServerWrapper } from './webSocketWrapperUtils';
+import {
+	newWebSocketServerWrapper,
+	newWebSocketWrapper
+} from './webSocketWrapperUtils';
+import { WebSocketWrapper } from './WebSocketWrappers';
 
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
@@ -26,7 +29,7 @@ export const createP2pServer = (
 		const [webSocketServer, httpsServer] = newWebSocketServerWrapper();
 
 		const p2pServer = new P2pServer(webSocketServer, httpsServer);
-		webSocketServer.on('connection', (socket: WebSocket) =>
+		webSocketServer.on('connection', (socket: WebSocketWrapper) =>
 			handleSocketConnection(
 				socket,
 				p2pServer,
@@ -38,7 +41,7 @@ export const createP2pServer = (
 	}, unknownToError);
 
 const handleSocketConnection = (
-	socket: WebSocket,
+	socket: WebSocketWrapper,
 	p2pServer: P2pServer,
 	blockchain: Blockchain,
 	transactionPool: TransactionPool
@@ -50,7 +53,7 @@ const handleSocketConnection = (
 	// TODO do I want to send pending transactions right away?
 };
 
-const sendBlockchain = (socket: WebSocket, blockchain: Blockchain) => {
+const sendBlockchain = (socket: WebSocketWrapper, blockchain: Blockchain) => {
 	const chainMessage: ChainSocketMessage = {
 		type: MessageType.CHAIN,
 		data: blockchain.chain
@@ -65,7 +68,10 @@ const sendBlockchain = (socket: WebSocket, blockchain: Blockchain) => {
 	);
 };
 
-const sendTransaction = (socket: WebSocket, transaction: Transaction) => {
+const sendTransaction = (
+	socket: WebSocketWrapper,
+	transaction: Transaction
+) => {
 	const transactionMessage: TransactionSocketMessage = {
 		type: MessageType.TRANSACTION,
 		data: transaction
@@ -79,7 +85,7 @@ const sendTransaction = (socket: WebSocket, transaction: Transaction) => {
 	);
 };
 
-const sendClearTransactions = (socket: WebSocket) => {
+const sendClearTransactions = (socket: WebSocketWrapper) => {
 	const clearTransactionsMessage: ClearTransactionsSocketMessage = {
 		type: MessageType.CLEAR_TRANSACTIONS,
 		data: null
@@ -130,11 +136,15 @@ const parseSocketMessage = (
 	);
 
 export const socketMessageHandler = (
-	socket: WebSocket,
+	socket: WebSocketWrapper,
 	blockchain: Blockchain,
 	transactionPool: TransactionPool
 ) => {
-	socket.on('message', (message: string) => {
+	socket.on('message', (message?: string) => {
+		if (!message) {
+			return;
+		}
+
 		pipe(
 			parseSocketMessage(message),
 			E.map((receivedMessage) => {
@@ -171,7 +181,7 @@ export const connectToPeers = (
 	PEERS.forEach((peer) => {
 		E.tryCatch(
 			() => {
-				const socket = new WebSocket(peer, {
+				const socket = newWebSocketWrapper(peer, {
 					rejectUnauthorized: false
 				});
 				socket.on('open', () =>

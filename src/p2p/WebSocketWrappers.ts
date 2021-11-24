@@ -3,6 +3,7 @@ import { Server as HttpsServer } from 'https';
 
 export interface WebSocketWrapper {
 	on: (event: string, fn: (message?: string) => void) => void;
+	send: (data: string) => void;
 }
 
 export interface WebSocketHttpsServerWrapper {
