@@ -12,7 +12,7 @@ jest.mock('ws', () => {
 	return {
 		default: resources.MockWebSocket,
 		Server: resources.MockWebSocketServer
-	}
+	};
 });
 
 jest.mock('../../src/tls', () => ({
