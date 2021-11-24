@@ -128,7 +128,7 @@ describe('blockUtils', () => {
 			hash([], 'timestamp', 'lastHash', 0, INITIAL_DIFFICULTY)
 		);
 		expect(theHash).toEqual(
-			'6ab8514cad967fd6d5d3bb4e925c3a781659b47800ed52baea9176e5881ed3c3'
+			'4a31d1eb13c5b32eec67e80b78cbedd36901c77fcca865ab38bf6e036f47b228'
 		);
 	});
 
@@ -143,7 +143,7 @@ describe('blockUtils', () => {
 		};
 		const hash = unpackRight(hashBlock(block));
 		expect(hash).toEqual(
-			'6ab8514cad967fd6d5d3bb4e925c3a781659b47800ed52baea9176e5881ed3c3'
+			'4a31d1eb13c5b32eec67e80b78cbedd36901c77fcca865ab38bf6e036f47b228'
 		);
 	});
 });

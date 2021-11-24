@@ -47,7 +47,7 @@ describe('minerUtils', () => {
 			timestamp: expect.any(String),
 			lastHash: blockchain.chain[0].hash,
 			nonce: expect.any(Number),
-			difficulty: 2,
+			difficulty: 0,
 			hash: expect.any(String)
 		};
 		const theGenesisBlock = unpackRight(genesisBlock());
