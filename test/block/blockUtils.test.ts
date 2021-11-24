@@ -8,7 +8,7 @@ import {
 } from '../../src/block/blockUtils';
 import { Block } from '../../src/block/Block';
 import { unpackRight, verifyTimestamp } from '../testutils/utilityFunctions';
-import { DIFFICULTY } from '../../src/config';
+import { INITIAL_DIFFICULTY } from '../../src/config';
 import { millisToTimestamp } from '../../src/utils/dateUtils';
 
 describe('blockUtils', () => {
@@ -18,7 +18,7 @@ describe('blockUtils', () => {
 			timestamp: 'timestamp',
 			lastHash: 'lastHash',
 			nonce: 1,
-			difficulty: DIFFICULTY,
+			difficulty: INITIAL_DIFFICULTY,
 			hash: 'hash'
 		};
 		expect(blockToString(block)).toEqual(
@@ -27,7 +27,7 @@ describe('blockUtils', () => {
 		Timestamp : timestamp
 		Last Hash : lastHash
 		Nonce     : 1
-		Difficulty: ${DIFFICULTY}
+		Difficulty: ${INITIAL_DIFFICULTY}
 		Hash      : hash`
 		);
 	});
@@ -40,7 +40,7 @@ describe('blockUtils', () => {
 		expect(block.data).toEqual([]);
 		expect(block.hash).toHaveLength(64);
 		expect(block.nonce).toEqual(0);
-		expect(block.difficulty).toEqual(DIFFICULTY);
+		expect(block.difficulty).toEqual(INITIAL_DIFFICULTY);
 	});
 
 	describe('adjustDifficulty', () => {
@@ -51,7 +51,7 @@ describe('blockUtils', () => {
 				timestamp: millisToTimestamp(lastMillis),
 				lastHash: 'lastHash',
 				nonce: 0,
-				difficulty: DIFFICULTY,
+				difficulty: INITIAL_DIFFICULTY,
 				hash: 'hash'
 			};
 
@@ -59,7 +59,7 @@ describe('blockUtils', () => {
 				lastBlock,
 				millisToTimestamp(lastMillis + 36000)
 			);
-			expect(newDifficulty).toEqual(DIFFICULTY - 1);
+			expect(newDifficulty).toEqual(INITIAL_DIFFICULTY - 1);
 		});
 
 		it('raises difficulty for quickly mined blocks', () => {
@@ -69,7 +69,7 @@ describe('blockUtils', () => {
 				timestamp: millisToTimestamp(lastMillis),
 				lastHash: 'lastHash',
 				nonce: 0,
-				difficulty: DIFFICULTY,
+				difficulty: INITIAL_DIFFICULTY,
 				hash: 'hash'
 			};
 
@@ -77,7 +77,7 @@ describe('blockUtils', () => {
 				lastBlock,
 				millisToTimestamp(lastMillis - 36000)
 			);
-			expect(newDifficulty).toEqual(DIFFICULTY + 1);
+			expect(newDifficulty).toEqual(INITIAL_DIFFICULTY + 1);
 		});
 	});
 
@@ -87,7 +87,7 @@ describe('blockUtils', () => {
 			timestamp: '0',
 			lastHash: 'lastHash',
 			nonce: 0,
-			difficulty: DIFFICULTY,
+			difficulty: INITIAL_DIFFICULTY,
 			hash: 'hash'
 		};
 		const block = unpackRight(mineBlock(lastBlock, []));
@@ -102,7 +102,7 @@ describe('blockUtils', () => {
 
 	it('hash', () => {
 		const theHash = unpackRight(
-			hash([], 'timestamp', 'lastHash', 0, DIFFICULTY)
+			hash([], 'timestamp', 'lastHash', 0, INITIAL_DIFFICULTY)
 		);
 		expect(theHash).toEqual(
 			'6ab8514cad967fd6d5d3bb4e925c3a781659b47800ed52baea9176e5881ed3c3'
@@ -115,7 +115,7 @@ describe('blockUtils', () => {
 			timestamp: 'timestamp',
 			lastHash: 'lastHash',
 			nonce: 0,
-			difficulty: DIFFICULTY,
+			difficulty: INITIAL_DIFFICULTY,
 			hash: 'hash'
 		};
 		const hash = unpackRight(hashBlock(block));

@@ -1,7 +1,7 @@
 import { Block } from '../../src/block/Block';
 import { isValidChain } from '../../src/chain/blockchainUtils';
 import { createChain } from '../testutils/utilityFunctions';
-import { DIFFICULTY } from '../../src/config';
+import { INITIAL_DIFFICULTY } from '../../src/config';
 
 describe('blockchainUtils', () => {
 	describe('isValidChain', () => {
@@ -16,7 +16,7 @@ describe('blockchainUtils', () => {
 				timestamp: 'timestamp',
 				lastHash: 'lastHash',
 				nonce: 0,
-				difficulty: DIFFICULTY,
+				difficulty: INITIAL_DIFFICULTY,
 				hash: 'hash'
 			};
 			const chain = createChain();
@@ -30,7 +30,7 @@ describe('blockchainUtils', () => {
 				timestamp: 'timestamp',
 				lastHash: 'lastHash',
 				nonce: 0,
-				difficulty: DIFFICULTY,
+				difficulty: INITIAL_DIFFICULTY,
 				hash: 'hash'
 			};
 			const chain = createChain();

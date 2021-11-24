@@ -1,6 +1,6 @@
 import { Block } from './Block';
 import { createTimestamp, timestampToMillis } from '../utils/dateUtils';
-import { DIFFICULTY, MINE_RATE } from '../config';
+import { INITIAL_DIFFICULTY, MINE_RATE } from '../config';
 import { hashText } from '../utils/cryptoUtils';
 import { BlockData } from './BlockData';
 import * as E from 'fp-ts/Either';
@@ -22,13 +22,13 @@ export const genesisBlock = (): E.Either<Error, Block> => {
 	const lastHash = '----';
 
 	return pipe(
-		hash(data, timestamp, lastHash, 0, DIFFICULTY),
+		hash(data, timestamp, lastHash, 0, INITIAL_DIFFICULTY),
 		E.map((hash) => ({
 			data,
 			timestamp,
 			lastHash,
 			nonce: 0,
-			difficulty: DIFFICULTY,
+			difficulty: INITIAL_DIFFICULTY,
 			hash
 		}))
 	);
@@ -52,13 +52,12 @@ export const mineBlock = (
 ): E.Either<Error, Block> => {
 	let nonce = 0;
 	let theHash: E.Either<Error, string> = E.right('');
-	let timestamp = '';
-	let { difficulty } = lastBlock;
+	let timestamp = createTimestamp();
+	const difficulty = adjustDifficulty(lastBlock, timestamp);
 
 	do {
 		nonce++;
 		timestamp = createTimestamp();
-		difficulty = adjustDifficulty(lastBlock, timestamp);
 		theHash = hash(data, timestamp, lastBlock.hash, nonce, difficulty);
 	} while (
 		pipe(
