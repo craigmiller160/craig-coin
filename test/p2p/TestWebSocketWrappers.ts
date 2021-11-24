@@ -8,6 +8,8 @@ export class TestWebSocketWrapper implements WebSocketWrapper {
 	events: { [name: string]: [(message?: string) => void] } = {};
 	sentData: string[] = [];
 
+	constructor(public address: string) {}
+
 	on(event: string, fn: (message?: string) => void): void {
 		const existing = this.events[event] ?? [];
 		existing.push(fn);
