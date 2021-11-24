@@ -21,7 +21,7 @@ export type NewWebSocketServerResult = [
 	WebSocketServerWrapper,
 	WebSocketHttpsServerWrapper
 ];
-export const newWebSocketServer = (): NewWebSocketServerResult => {
+export const newWebSocketServerWrapper = (): NewWebSocketServerResult => {
 	const httpsServer = createHttpsServer();
 	const httpsServerWrapper = new WebSocketHttpsServerWrapperImpl(httpsServer);
 	const webSocketServer = new Server({

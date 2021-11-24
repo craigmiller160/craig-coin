@@ -1,4 +1,4 @@
-import WebSocket, { Server } from 'ws';
+import WebSocket from 'ws';
 import { Blockchain } from '../chain/Blockchain';
 import { TransactionPool } from '../transaction/TransactionPool';
 import {
@@ -9,12 +9,12 @@ import {
 	TransactionSocketMessage
 } from './SocketMessages';
 import { logger } from '../logger';
-import { createHttpsServer } from '../tls';
 import { P2pServer } from './P2pServer';
 import { Transaction } from '../transaction/Transaction';
 import * as E from 'fp-ts/Either';
 import { unknownToError } from '../utils/unknownToError';
 import { pipe } from 'fp-ts/function';
+import { newWebSocketServerWrapper } from './webSocketWrapperUtils';
 
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
@@ -23,10 +23,8 @@ export const createP2pServer = (
 	transactionPool: TransactionPool
 ): E.Either<Error, P2pServer> =>
 	E.tryCatch(() => {
-		const httpsServer = createHttpsServer();
-		const webSocketServer = new Server({
-			server: httpsServer
-		});
+		const [webSocketServer, httpsServer] = newWebSocketServerWrapper();
+
 		const p2pServer = new P2pServer(webSocketServer, httpsServer);
 		webSocketServer.on('connection', (socket: WebSocket) =>
 			handleSocketConnection(
