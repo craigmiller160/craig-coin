@@ -2,7 +2,7 @@ import WebSocket, { Server, ServerOptions } from 'ws';
 import { createHttpsServer } from '../tls';
 
 export interface WebSocketWrapper {
-	on: (event: string) => void;
+	on: (event: string, fn: (message?: string) => void) => void;
 }
 
 export interface WebSocketHttpsServerWrapper {
@@ -19,8 +19,8 @@ export class WebSocketWrapperImpl implements WebSocketWrapper {
 		this.#webSocket = webSocket;
 	}
 
-	on(event: string) {
-		// TODO finish this
+	on(event: string, fn: (message?: string) => void) {
+		this.#webSocket.on(event, fn);
 	}
 }
 
