@@ -29,6 +29,21 @@ jest.mock('../../src/tls', () => ({
 	}
 }));
 
+const validateHandleSocketConnection = (
+	p2pServer: P2pServer,
+	blockchain: Blockchain
+) => {
+	expect(p2pServer.connectedSockets).toHaveLength(1);
+	expect(onMessageFns).toHaveLength(1);
+	expect(messagesSent).toHaveLength(1);
+	expect(messagesSent[0]).toEqual(
+		JSON.stringify({
+			type: MessageType.CHAIN,
+			data: blockchain.chain
+		})
+	);
+};
+
 describe('p2pUtils', () => {
 	let blockchain: Blockchain;
 	let transactionPool: TransactionPool;
@@ -50,16 +65,7 @@ describe('p2pUtils', () => {
 		expect(onConnectionFns).toHaveLength(1);
 		const socket = new MockWebSocket();
 		onConnectionFns[0](socket);
-
-		expect(p2pServer.connectedSockets).toHaveLength(1);
-		expect(onMessageFns).toHaveLength(1);
-		expect(messagesSent).toHaveLength(1);
-		expect(messagesSent[0]).toEqual(
-			JSON.stringify({
-				type: MessageType.CHAIN,
-				data: blockchain.chain
-			})
-		);
+		validateHandleSocketConnection(p2pServer, blockchain);
 	});
 
 	it('broadcastBlockchain', () => {
