@@ -2,10 +2,11 @@ import { Blockchain } from '../../src/chain/Blockchain';
 import { unpackRight } from '../testutils/utilityFunctions';
 import { genesisBlock } from '../../src/block/blockUtils';
 import { TransactionPool } from '../../src/transaction/TransactionPool';
-import { createP2pServer } from '../../src/p2p/p2pUtils';
+import { broadcastBlockchain, createP2pServer } from '../../src/p2p/p2pUtils';
 import '@relmify/jest-fp-ts';
 import { P2pServer } from '../../src/p2p/P2pServer';
 import {
+	TestWebSocketHttpsServerWrapper,
 	TestWebSocketServerWrapper,
 	TestWebSocketWrapper
 } from './TestWebSocketWrappers';
@@ -36,28 +37,42 @@ const validateHandleSocketConnection = (
 describe('p2pUtils', () => {
 	let blockchain: Blockchain;
 	let transactionPool: TransactionPool;
+	let p2pServer: P2pServer;
 	beforeEach(() => {
 		blockchain = new Blockchain(unpackRight(genesisBlock()));
 		transactionPool = new TransactionPool();
+		const httpsServer = new TestWebSocketHttpsServerWrapper();
+		const wsServer = new TestWebSocketServerWrapper();
+		p2pServer = new P2pServer(wsServer, httpsServer);
 	});
 
 	it('createP2pServer', () => {
 		const result = createP2pServer(blockchain, transactionPool);
 		expect(result).toBeRight();
-		const p2pServer = unpackRight(result);
-		expect(p2pServer instanceof P2pServer).toBeTruthy();
+		const resultP2pServer = unpackRight(result);
+		expect(resultP2pServer instanceof P2pServer).toBeTruthy();
 		const wsServer =
-			p2pServer.webSocketServer as TestWebSocketServerWrapper;
+			resultP2pServer.webSocketServer as TestWebSocketServerWrapper;
 		expect(wsServer.events['connection']).toHaveLength(1);
 
 		const socket = new TestWebSocketWrapper('address');
 
 		wsServer.events['connection'][0](socket);
-		validateHandleSocketConnection(socket, p2pServer, blockchain);
+		validateHandleSocketConnection(socket, resultP2pServer, blockchain);
 	});
 
 	it('broadcastBlockchain', () => {
-		throw new Error();
+		const socket = new TestWebSocketWrapper('address');
+		p2pServer.addConnectedSocket(socket);
+		broadcastBlockchain(p2pServer, blockchain);
+
+		expect(socket.sentData).toHaveLength(1);
+		expect(socket.sentData[0]).toEqual(
+			JSON.stringify({
+				type: MessageType.CHAIN,
+				data: blockchain.chain
+			})
+		);
 	});
 
 	it('broadcastTransaction', () => {
