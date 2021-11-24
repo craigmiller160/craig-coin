@@ -23,6 +23,10 @@ export class WebSocketWrapperImpl implements WebSocketWrapper {
 	on(event: string, fn: (message?: string) => void) {
 		this.#webSocket.on(event, fn);
 	}
+
+	send(data: string) {
+		this.#webSocket.send(data);
+	}
 }
 
 export class WebSocketHttpsServerWrapperImpl
