@@ -11,16 +11,11 @@ const P2P_PORT = process.env.P2P_PORT ? parseInt(process.env.P2P_PORT) : 5001;
 
 export class P2pServer {
 	#connectedSockets: ReadonlyArray<WebSocketWrapper> = [];
-	readonly #webSocketServer: WebSocketServerWrapper;
-	readonly #httpsServer: WebSocketHttpsServerWrapper;
 
 	constructor(
-		webSocketServer: WebSocketServerWrapper,
-		httpsServer: WebSocketHttpsServerWrapper
-	) {
-		this.#webSocketServer = webSocketServer;
-		this.#httpsServer = httpsServer;
-	}
+		public readonly webSocketServer: WebSocketServerWrapper,
+		public readonly httpsServer: WebSocketHttpsServerWrapper
+	) {}
 
 	get connectedSockets(): ReadonlyArray<WebSocketWrapper> {
 		return this.#connectedSockets;
@@ -35,7 +30,7 @@ export class P2pServer {
 			logger.info(
 				`Listening for peer-to-peer connections on: ${P2P_PORT}`
 			);
-			this.#httpsServer.listen(P2P_PORT);
+			this.httpsServer.listen(P2P_PORT);
 		}, unknownToError);
 	}
 }
