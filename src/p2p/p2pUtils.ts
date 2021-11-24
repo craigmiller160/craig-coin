@@ -39,7 +39,7 @@ export const createP2pServer = (
 		return p2pServer;
 	}, unknownToError);
 
-export const handleSocketConnection = (
+const handleSocketConnection = (
 	socket: WebSocket,
 	p2pServer: P2pServer,
 	blockchain: Blockchain,

@@ -4,12 +4,15 @@ import { genesisBlock } from '../../src/block/blockUtils';
 import { TransactionPool } from '../../src/transaction/TransactionPool';
 import { createP2pServer } from '../../src/p2p/p2pUtils';
 import {
-	clearOnConnectionFns,
+	clearFnArrays,
+	messagesSent,
 	MockWebSocket,
-	onConnectionFns
+	onConnectionFns,
+	onMessageFns
 } from './p2pUtilsTestResources';
 import '@relmify/jest-fp-ts';
 import { P2pServer } from '../../src/p2p/P2pServer';
+import { MessageType } from '../../src/p2p/SocketMessages';
 
 jest.mock('ws', () => {
 	const resources = jest.requireActual('./p2pUtilsTestResources');
@@ -32,11 +35,11 @@ describe('p2pUtils', () => {
 	beforeEach(() => {
 		blockchain = new Blockchain(unpackRight(genesisBlock()));
 		transactionPool = new TransactionPool();
-		clearOnConnectionFns();
+		clearFnArrays();
 	});
 
 	afterEach(() => {
-		clearOnConnectionFns();
+		clearFnArrays();
 	});
 
 	it('createP2pServer', () => {
@@ -47,10 +50,16 @@ describe('p2pUtils', () => {
 		expect(onConnectionFns).toHaveLength(1);
 		const socket = new MockWebSocket();
 		onConnectionFns[0](socket);
-	});
 
-	it('handleSocketConnection', () => {
-		throw new Error();
+		expect(p2pServer.connectedSockets).toHaveLength(1);
+		expect(onMessageFns).toHaveLength(1);
+		expect(messagesSent).toHaveLength(1);
+		expect(messagesSent[0]).toEqual(
+			JSON.stringify({
+				type: MessageType.CHAIN,
+				data: blockchain.chain
+			})
+		);
 	});
 
 	it('broadcastBlockchain', () => {
