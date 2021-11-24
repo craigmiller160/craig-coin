@@ -79,6 +79,24 @@ describe('blockUtils', () => {
 			);
 			expect(newDifficulty).toEqual(INITIAL_DIFFICULTY + 1);
 		});
+
+		it('will not lower difficulty below 0', () => {
+			const lastMillis = Date.now();
+			const lastBlock: Block = {
+				data: [],
+				timestamp: millisToTimestamp(lastMillis),
+				lastHash: 'lastHash',
+				nonce: 0,
+				difficulty: 0,
+				hash: 'hash'
+			};
+
+			const newDifficulty = adjustDifficulty(
+				lastBlock,
+				millisToTimestamp(lastMillis + 3600000)
+			);
+			expect(newDifficulty).toEqual(0);
+		});
 	});
 
 	describe('minBlock', () => {

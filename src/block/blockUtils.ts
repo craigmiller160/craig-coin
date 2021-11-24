@@ -41,9 +41,14 @@ export const adjustDifficulty = (
 	const { difficulty, timestamp: lastBlockTimestamp } = lastBlock;
 	const lastBlockMillis = timestampToMillis(lastBlockTimestamp);
 	const currentMillis = timestampToMillis(currentTimestamp);
-	return lastBlockMillis + MINE_RATE > currentMillis
-		? difficulty + 1
-		: difficulty - 1;
+	const newDifficulty =
+		lastBlockMillis + MINE_RATE > currentMillis
+			? difficulty + 1
+			: difficulty - 1;
+	if (newDifficulty < 0) {
+		return 0;
+	}
+	return newDifficulty;
 };
 
 export const mineBlock = (
