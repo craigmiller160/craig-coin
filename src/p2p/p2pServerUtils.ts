@@ -14,6 +14,7 @@ import { P2pServer } from './P2pServer';
 import { Transaction } from '../transaction/Transaction';
 import * as E from 'fp-ts/Either';
 import { unknownToError } from '../utils/unknownToError';
+import { pipe } from 'fp-ts/function';
 
 const PEERS: string[] = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
@@ -56,8 +57,14 @@ export const sendBlockchain = (socket: WebSocket, blockchain: Blockchain) => {
 		type: MessageType.CHAIN,
 		data: blockchain.chain
 	};
-	// TODO error handling here
-	socket.send(JSON.stringify(chainMessage));
+
+	E.tryCatch(
+		() => socket.send(JSON.stringify(chainMessage)),
+		(error) => {
+			logger.error('Error sending Blockchain to socket');
+			logger.error(error);
+		}
+	);
 };
 
 export const sendTransaction = (
@@ -68,8 +75,13 @@ export const sendTransaction = (
 		type: MessageType.TRANSACTION,
 		data: transaction
 	};
-	// TODO error handling here
-	socket.send(JSON.stringify(transactionMessage));
+	E.tryCatch(
+		() => socket.send(JSON.stringify(transactionMessage)),
+		(error) => {
+			logger.error('Error sending Transaction to socket');
+			logger.error(error);
+		}
+	);
 };
 
 export const sendClearTransactions = (socket: WebSocket) => {
@@ -77,8 +89,13 @@ export const sendClearTransactions = (socket: WebSocket) => {
 		type: MessageType.CLEAR_TRANSACTIONS,
 		data: null
 	};
-	// TODO error handling here
-	socket.send(JSON.stringify(clearTransactionsMessage));
+	E.tryCatch(
+		() => socket.send(JSON.stringify(clearTransactionsMessage)),
+		(error) => {
+			logger.error('Error sending Clear Transactions to socket');
+			logger.error(error);
+		}
+	);
 };
 
 export const broadcastBlockchain = (
@@ -105,34 +122,49 @@ export const broadcastClearTransactions = (p2pServer: P2pServer) => {
 	});
 };
 
+const parseSocketMessage = (
+	message: string
+): E.Either<Error, ReceivedSocketMessage> =>
+	E.tryCatch(
+		() => JSON.parse(message) as ReceivedSocketMessage,
+		(error) => {
+			logger.error('Error parsing message from socket');
+			logger.error(error);
+			return unknownToError(error);
+		}
+	);
+
 export const socketMessageHandler = (
 	socket: WebSocket,
 	blockchain: Blockchain,
 	transactionPool: TransactionPool
 ) => {
 	socket.on('message', (message: string) => {
-		// TODO what about errors here?
-		const receivedMessage = JSON.parse(message) as ReceivedSocketMessage;
-		switch (receivedMessage.type) {
-			case MessageType.CHAIN:
-				blockchain.replaceChain(
-					(receivedMessage as ChainSocketMessage).data
-				);
-				break;
-			case MessageType.TRANSACTION:
-				transactionPool.updateOrAddTransaction(
-					(receivedMessage as TransactionSocketMessage).data
-				);
-				break;
-			case MessageType.CLEAR_TRANSACTIONS:
-				transactionPool.clear();
-				break;
-			default:
-				logger.error(
-					`Invalid message received. Type: ${receivedMessage.type}`
-				);
-				break;
-		}
+		pipe(
+			parseSocketMessage(message),
+			E.map((receivedMessage) => {
+				switch (receivedMessage.type) {
+					case MessageType.CHAIN:
+						blockchain.replaceChain(
+							(receivedMessage as ChainSocketMessage).data
+						);
+						break;
+					case MessageType.TRANSACTION:
+						transactionPool.updateOrAddTransaction(
+							(receivedMessage as TransactionSocketMessage).data
+						);
+						break;
+					case MessageType.CLEAR_TRANSACTIONS:
+						transactionPool.clear();
+						break;
+					default:
+						logger.error(
+							`Invalid message received. Type: ${receivedMessage.type}`
+						);
+						break;
+				}
+			})
+		);
 	});
 };
 
