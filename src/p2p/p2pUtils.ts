@@ -178,8 +178,9 @@ export const connectToPeers = (
 	p2pServer: P2pServer,
 	blockchain: Blockchain,
 	transactionPool: TransactionPool
-) => {
-	getPeers().forEach((peer) => {
+): E.Either<Error, WebSocketWrapper>[] => {
+	console.log(getPeers());
+	return getPeers().map((peer) =>
 		E.tryCatch(
 			() => {
 				const socket = newWebSocketWrapper(peer, {
@@ -194,11 +195,14 @@ export const connectToPeers = (
 					)
 				);
 				logger.debug(`Opening socket to peer: ${peer}`);
+				return socket;
 			},
 			(error) => {
+				console.log(error);
 				logger.error(`Error opening connection to peer: ${peer}`);
 				logger.error(error);
+				return unknownToError(error);
 			}
-		);
-	});
+		)
+	);
 };

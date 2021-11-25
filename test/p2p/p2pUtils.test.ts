@@ -5,7 +5,8 @@ import { TransactionPool } from '../../src/transaction/TransactionPool';
 import {
 	broadcastBlockchain,
 	broadcastClearTransactions,
-	broadcastTransaction, connectToPeers,
+	broadcastTransaction,
+	connectToPeers,
 	createP2pServer
 } from '../../src/p2p/p2pUtils';
 import '@relmify/jest-fp-ts';
