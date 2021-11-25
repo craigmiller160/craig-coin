@@ -125,9 +125,8 @@ describe('p2pUtils', () => {
 			socketMessageHandler(socket, blockchain, transactionPool);
 			expect(socket.events['message']).toHaveLength(1);
 			socket.events['message'][0]();
-			// TODO how to validate this
-			// TODO should mock Blockchain and TransactionPool for these tests
-			throw new Error();
+			expect(blockchain.chain).toHaveLength(1);
+			expect(transactionPool.transactions).toHaveLength(0);
 		});
 
 		it('MessageType.CHAIN', () => {
