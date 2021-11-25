@@ -6,7 +6,7 @@ import { pipe } from 'fp-ts/function';
 import { genesisBlock } from './block/blockUtils';
 import * as E from 'fp-ts/Either';
 import { logger } from './logger';
-import { createP2pServer } from './p2p/p2pUtils';
+import { connectToPeers, createP2pServer } from './p2p/p2pUtils';
 import { P2pServer } from './p2p/P2pServer';
 
 type ChainAndPool = [Blockchain, TransactionPool];
@@ -22,6 +22,10 @@ pipe(
 	E.chain(([blockchain, transactionPool]) =>
 		pipe(
 			createP2pServer(blockchain, transactionPool),
+			E.map((p2pServer) => {
+				connectToPeers(p2pServer, blockchain, transactionPool);
+				return p2pServer;
+			}),
 			E.map(
 				(p2pServer): ChainPoolAndServer => [
 					blockchain,
