@@ -19,6 +19,7 @@ import {
 	newWebSocketWrapper
 } from './webSocketWrapperUtils';
 import { WebSocketWrapper } from './WebSocketWrappers';
+import WebSocket from 'ws';
 
 const getPeers = (): string[] =>
 	process.env.PEERS ? process.env.PEERS.split(',') : [];
@@ -118,14 +119,31 @@ const sendClearTransactions = (socket: WebSocketWrapper) => {
 	);
 };
 
+export const broadcastToSockets = (
+	p2pServer: P2pServer,
+	broadcastAction: (socket: WebSocketWrapper) => void
+) => {
+	const activeSockets = p2pServer.connectedSockets.filter((socket) => {
+		if (
+			socket.readyState === WebSocket.CLOSING ||
+			socket.readyState === WebSocket.CLOSED
+		) {
+			return false;
+		}
+		broadcastAction(socket);
+		return true;
+	});
+	p2pServer.updateSockets(activeSockets);
+};
+
 export const broadcastBlockchain = (
 	p2pServer: P2pServer,
 	blockchain: Blockchain
 ) => {
 	logger.info('Broadcasting blockchain update to peers');
-	p2pServer.connectedSockets.forEach((socket) => {
-		sendBlockchain(socket, blockchain);
-	});
+	broadcastToSockets(p2pServer, (socket) =>
+		sendBlockchain(socket, blockchain)
+	);
 };
 
 export const broadcastTransaction = (
@@ -133,16 +151,14 @@ export const broadcastTransaction = (
 	transaction: Transaction
 ) => {
 	logger.info('Broadcasting new transaction to peers');
-	p2pServer.connectedSockets.forEach((socket) => {
-		sendTransaction(socket, transaction);
-	});
+	broadcastToSockets(p2pServer, (socket) =>
+		sendTransaction(socket, transaction)
+	);
 };
 
 export const broadcastClearTransactions = (p2pServer: P2pServer) => {
 	logger.info('Broadcasting clear transactions to peers');
-	p2pServer.connectedSockets.forEach((socket) => {
-		sendClearTransactions(socket);
-	});
+	broadcastToSockets(p2pServer, (socket) => sendClearTransactions(socket));
 };
 
 const parseSocketMessage = (

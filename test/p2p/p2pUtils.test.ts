@@ -5,6 +5,7 @@ import { TransactionPool } from '../../src/transaction/TransactionPool';
 import {
 	broadcastBlockchain,
 	broadcastClearTransactions,
+	broadcastToSockets,
 	broadcastTransaction,
 	connectToPeers,
 	createP2pServer,
@@ -26,6 +27,7 @@ import {
 } from '../../src/p2p/SocketMessages';
 import { newTransaction } from '../../src/transaction/transactionUtils';
 import { Wallet } from '../../src/wallet/Wallet';
+import WebSocket from 'ws';
 
 const validateHandleSocketConnection = (
 	socket: TestWebSocketWrapper,
@@ -264,5 +266,20 @@ describe('p2pUtils', () => {
 			blockchain,
 			transactionPool
 		);
+	});
+
+	it('broadcastToSockets', () => {
+		const socket1 = new TestWebSocketWrapper('1');
+		const socket2 = new TestWebSocketWrapper('2');
+		socket2.updateReadyState(WebSocket.CLOSED);
+		p2pServer.addConnectedSocket(socket1);
+		p2pServer.addConnectedSocket(socket2);
+
+		let actionCounter = 0;
+		const action = () => actionCounter++;
+
+		broadcastToSockets(p2pServer, action);
+		expect(actionCounter).toEqual(1);
+		expect(p2pServer.connectedSockets).toHaveLength(1);
 	});
 });
