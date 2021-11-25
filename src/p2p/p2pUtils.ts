@@ -1,6 +1,7 @@
 import { Blockchain } from '../chain/Blockchain';
 import { TransactionPool } from '../transaction/TransactionPool';
 import {
+	AllTransactionsSocketMessage,
 	ChainSocketMessage,
 	ClearTransactionsSocketMessage,
 	MessageType,
@@ -51,6 +52,7 @@ const handleSocketConnection = (
 	p2pServer.addConnectedSocket(socket);
 	logger.debug('Socket connected');
 	sendBlockchain(socket, blockchain);
+	sendAllTransactions(socket, transactionPool); // TODO add to tests
 };
 
 const sendBlockchain = (socket: WebSocketWrapper, blockchain: Blockchain) => {
@@ -63,6 +65,23 @@ const sendBlockchain = (socket: WebSocketWrapper, blockchain: Blockchain) => {
 		() => socket.send(JSON.stringify(chainMessage)),
 		(error) => {
 			logger.error('Error sending Blockchain to socket');
+			logger.error(error);
+		}
+	);
+};
+
+const sendAllTransactions = (
+	socket: WebSocketWrapper,
+	transactionPool: TransactionPool
+) => {
+	const allTransactionsMessage: AllTransactionsSocketMessage = {
+		type: MessageType.ALL_TRANSACTIONS,
+		data: transactionPool.transactions
+	};
+	E.tryCatch(
+		() => socket.send(JSON.stringify(allTransactionsMessage)),
+		(error) => {
+			logger.error('Error sending all transactions to socket');
 			logger.error(error);
 		}
 	);
