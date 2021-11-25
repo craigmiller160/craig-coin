@@ -1,7 +1,8 @@
 import { P2pServer } from '../../src/p2p/P2pServer';
 import {
 	TestWebSocketHttpsServerWrapper,
-	TestWebSocketServerWrapper
+	TestWebSocketServerWrapper,
+	TestWebSocketWrapper
 } from '../testutils/TestWebSocketWrappers';
 import '@relmify/jest-fp-ts';
 
@@ -15,16 +16,28 @@ describe('P2pServer', () => {
 	});
 
 	it('addConnectedSocket', () => {
-		throw new Error();
+		const socket = new TestWebSocketWrapper('address');
+		p2pServer.addConnectedSocket(socket);
+		expect(p2pServer.connectedSockets).toEqual([socket]);
 	});
 
 	describe('updateSockets', () => {
 		it('same length', () => {
-			throw new Error();
+			const socket1 = new TestWebSocketWrapper('1');
+			const socket2 = new TestWebSocketWrapper('2');
+			p2pServer.addConnectedSocket(socket1);
+			p2pServer.addConnectedSocket(socket2);
+			p2pServer.updateSockets([socket1, socket2]);
+			expect(p2pServer.connectedSockets).toHaveLength(2);
 		});
 
 		it('new length', () => {
-			throw new Error();
+			const socket1 = new TestWebSocketWrapper('1');
+			const socket2 = new TestWebSocketWrapper('2');
+			p2pServer.addConnectedSocket(socket1);
+			p2pServer.addConnectedSocket(socket2);
+			p2pServer.updateSockets([socket1]);
+			expect(p2pServer.connectedSockets).toHaveLength(1);
 		});
 	});
 

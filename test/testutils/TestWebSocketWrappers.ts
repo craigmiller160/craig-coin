@@ -3,6 +3,7 @@ import {
 	WebSocketServerWrapper,
 	WebSocketWrapper
 } from '../../src/p2p/WebSocketWrappers';
+import WebSocket from 'ws';
 
 export class TestWebSocketWrapper implements WebSocketWrapper {
 	readonly readyState = WebSocket.OPEN;
