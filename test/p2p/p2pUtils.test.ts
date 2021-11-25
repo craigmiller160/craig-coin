@@ -26,10 +26,6 @@ import {
 import { newTransaction } from '../../src/transaction/transactionUtils';
 import { Wallet } from '../../src/wallet/Wallet';
 
-jest.mock('../../src/p2p/webSocketWrapperUtils', () => {
-	return jest.requireActual('../testutils/testWebSocketWrapperUtils');
-});
-
 const validateHandleSocketConnection = (
 	socket: TestWebSocketWrapper,
 	p2pServer: P2pServer,

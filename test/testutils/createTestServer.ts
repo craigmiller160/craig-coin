@@ -8,10 +8,6 @@ import { genesisBlock } from '../../src/block/blockUtils';
 import { P2pServer } from '../../src/p2p/P2pServer';
 import { createP2pServer } from '../../src/p2p/p2pUtils';
 
-jest.mock('../../src/p2p/webSocketWrapperUtils', () => {
-	return jest.requireActual('./testWebSocketWrapperUtils');
-});
-
 export interface TestServer {
 	app: Express;
 	blockchain: Blockchain;
