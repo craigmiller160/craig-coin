@@ -7,7 +7,8 @@ import {
 	broadcastClearTransactions,
 	broadcastTransaction,
 	connectToPeers,
-	createP2pServer
+	createP2pServer,
+	socketMessageHandler
 } from '../../src/p2p/p2pUtils';
 import '@relmify/jest-fp-ts';
 import { P2pServer } from '../../src/p2p/P2pServer';
@@ -119,6 +120,15 @@ describe('p2pUtils', () => {
 	});
 
 	describe('socketMessageHandler', () => {
+		it('no message', () => {
+			const socket = new TestWebSocketWrapper('');
+			socketMessageHandler(socket, blockchain, transactionPool);
+			expect(socket.events['message']).toHaveLength(1);
+			socket.events['message'][0]();
+			// TODO how to validate this
+			throw new Error();
+		});
+
 		it('MessageType.CHAIN', () => {
 			throw new Error();
 		});
