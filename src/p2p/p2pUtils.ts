@@ -51,7 +51,6 @@ const handleSocketConnection = (
 	p2pServer.addConnectedSocket(socket);
 	logger.debug('Socket connected');
 	sendBlockchain(socket, blockchain);
-	// TODO do I want to send pending transactions right away?
 };
 
 const sendBlockchain = (socket: WebSocketWrapper, blockchain: Blockchain) => {
