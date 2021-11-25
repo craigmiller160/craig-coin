@@ -17,7 +17,7 @@ import {
 	TestWebSocketServerWrapper,
 	TestWebSocketWrapper
 } from './TestWebSocketWrappers';
-import { MessageType } from '../../src/p2p/SocketMessages';
+import { ChainSocketMessage, MessageType } from '../../src/p2p/SocketMessages';
 import { newTransaction } from '../../src/transaction/transactionUtils';
 import { Wallet } from '../../src/wallet/Wallet';
 
@@ -131,7 +131,24 @@ describe('p2pUtils', () => {
 		});
 
 		it('MessageType.CHAIN', () => {
-			throw new Error();
+			const socket = new TestWebSocketWrapper('');
+			socketMessageHandler(socket, blockchain, transactionPool);
+			expect(socket.events['message']).toHaveLength(1);
+			const newBlockchain = new Blockchain(unpackRight(genesisBlock()));
+			const theNewTransaction = unpackRight(
+				newTransaction(wallet, 'address', 100)
+			);
+			newBlockchain.addBlock([theNewTransaction]);
+
+			const message: ChainSocketMessage = {
+				type: MessageType.CHAIN,
+				data: newBlockchain.chain
+			};
+
+			socket.events['message'][0](JSON.stringify(message));
+
+			expect(blockchain.chain).toHaveLength(2);
+			expect(blockchain.chain).toEqual(newBlockchain.chain);
 		});
 
 		it('MessageType.TRANSACTION', () => {
