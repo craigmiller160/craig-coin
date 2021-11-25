@@ -18,6 +18,7 @@ import {
 	TestWebSocketWrapper
 } from '../testutils/TestWebSocketWrappers';
 import {
+	AllTransactionsSocketMessage,
 	ChainSocketMessage,
 	ClearTransactionsSocketMessage,
 	MessageType,
@@ -29,17 +30,24 @@ import { Wallet } from '../../src/wallet/Wallet';
 const validateHandleSocketConnection = (
 	socket: TestWebSocketWrapper,
 	p2pServer: P2pServer,
-	blockchain: Blockchain
+	blockchain: Blockchain,
+	transactionPool: TransactionPool
 ) => {
 	expect(p2pServer.connectedSockets).toHaveLength(1);
 	expect(p2pServer.connectedSockets[0]).toEqual(socket);
 
 	expect(socket.events['message']).toHaveLength(1);
-	expect(socket.sentData).toHaveLength(1);
+	expect(socket.sentData).toHaveLength(2);
 	expect(socket.sentData[0]).toEqual(
 		JSON.stringify({
 			type: MessageType.CHAIN,
 			data: blockchain.chain
+		})
+	);
+	expect(socket.sentData[1]).toEqual(
+		JSON.stringify({
+			type: MessageType.ALL_TRANSACTIONS,
+			data: transactionPool.transactions
 		})
 	);
 };
@@ -74,7 +82,12 @@ describe('p2pUtils', () => {
 		const socket = new TestWebSocketWrapper('address');
 
 		wsServer.events['connection'][0](socket);
-		validateHandleSocketConnection(socket, resultP2pServer, blockchain);
+		validateHandleSocketConnection(
+			socket,
+			resultP2pServer,
+			blockchain,
+			transactionPool
+		);
 	});
 
 	it('broadcastBlockchain', () => {
@@ -149,6 +162,23 @@ describe('p2pUtils', () => {
 
 			expect(blockchain.chain).toHaveLength(2);
 			expect(blockchain.chain).toEqual(newBlockchain.chain);
+		});
+
+		it('MessageType.ALL_TRANSACTIONS', () => {
+			const socket = new TestWebSocketWrapper('');
+			socketMessageHandler(socket, blockchain, transactionPool);
+			const theNewTransaction = unpackRight(
+				newTransaction(wallet, 'address', 100)
+			);
+
+			const message: AllTransactionsSocketMessage = {
+				type: MessageType.ALL_TRANSACTIONS,
+				data: [theNewTransaction]
+			};
+
+			socket.events['message'][0](JSON.stringify(message));
+			expect(transactionPool.transactions).toHaveLength(1);
+			expect(transactionPool.transactions).toEqual([theNewTransaction]);
 		});
 
 		it('MessageType.TRANSACTION', () => {
@@ -228,6 +258,11 @@ describe('p2pUtils', () => {
 		expect(socket.events['open']).toHaveLength(1);
 		socket.events['open'][0]();
 
-		validateHandleSocketConnection(socket, p2pServer, blockchain);
+		validateHandleSocketConnection(
+			socket,
+			p2pServer,
+			blockchain,
+			transactionPool
+		);
 	});
 });
