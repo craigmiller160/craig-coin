@@ -183,6 +183,14 @@ export const socketMessageHandler = (
 							(receivedMessage as TransactionSocketMessage).data
 						);
 						break;
+					case MessageType.ALL_TRANSACTIONS:
+						logger.info('Received all transactions from peer');
+						(
+							receivedMessage as AllTransactionsSocketMessage
+						).data.forEach((txn) =>
+							transactionPool.updateOrAddTransaction(txn)
+						);
+						break;
 					case MessageType.CLEAR_TRANSACTIONS:
 						logger.info('Received clear transactions from peer');
 						transactionPool.clear();
