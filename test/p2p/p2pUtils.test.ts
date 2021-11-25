@@ -18,6 +18,7 @@ import {
 	TestWebSocketWrapper
 } from '../testutils/TestWebSocketWrappers';
 import {
+	AllTransactionsSocketMessage,
 	ChainSocketMessage,
 	ClearTransactionsSocketMessage,
 	MessageType,
@@ -164,7 +165,20 @@ describe('p2pUtils', () => {
 		});
 
 		it('MessageType.ALL_TRANSACTIONS', () => {
-			throw new Error();
+			const socket = new TestWebSocketWrapper('');
+			socketMessageHandler(socket, blockchain, transactionPool);
+			const theNewTransaction = unpackRight(
+				newTransaction(wallet, 'address', 100)
+			);
+
+			const message: AllTransactionsSocketMessage = {
+				type: MessageType.ALL_TRANSACTIONS,
+				data: [theNewTransaction]
+			};
+
+			socket.events['message'][0](JSON.stringify(message));
+			expect(transactionPool.transactions).toHaveLength(1);
+			expect(transactionPool.transactions).toEqual([theNewTransaction]);
 		});
 
 		it('MessageType.TRANSACTION', () => {
