@@ -2,6 +2,15 @@ import { createTestServer } from '../testutils/createTestServer';
 import { unpackRight } from '../testutils/utilityFunctions';
 import { newTransaction } from '../../src/transaction/transactionUtils';
 import request from 'supertest';
+import { broadcastTransaction } from '../../src/p2p/p2pUtils';
+
+jest.mock('../../src/p2p/p2pUtils', () => {
+	const p2pUtils = jest.requireActual('../../src/p2p/p2pUtils');
+	return {
+		...p2pUtils,
+		broadcastTransaction: jest.fn()
+	};
+});
 
 describe('transactions', () => {
 	it('GET /transactions', async () => {
@@ -55,7 +64,7 @@ describe('transactions', () => {
 				recipient: 'abc',
 				amount: 100
 			};
-			const { app, p2pServer, transactionPool } = createTestServer();
+			const { app, transactionPool } = createTestServer();
 			await request(app)
 				.post('/transactions')
 				.auth(
@@ -65,7 +74,7 @@ describe('transactions', () => {
 				.send(body)
 				.expect(302);
 			expect(transactionPool.transactions).toHaveLength(1);
-			expect(p2pServer.broadcastTransaction).toHaveBeenCalled();
+			expect(broadcastTransaction).toHaveBeenCalled();
 		});
 
 		it('has error creating transaction', async () => {
@@ -73,12 +82,10 @@ describe('transactions', () => {
 				recipient: 'abc',
 				amount: 100
 			};
-			const { app, p2pServer } = createTestServer();
-			(p2pServer.broadcastTransaction as jest.Mock).mockImplementation(
-				() => {
-					throw new Error('Dying');
-				}
-			);
+			const { app } = createTestServer();
+			(broadcastTransaction as jest.Mock).mockImplementation(() => {
+				throw new Error('Dying');
+			});
 			await request(app)
 				.post('/transactions')
 				.auth(
