@@ -6,9 +6,17 @@ import {
 import WebSocket from 'ws';
 
 export class TestWebSocketWrapper implements WebSocketWrapper {
-	readonly readyState = WebSocket.OPEN;
+	#readyState: number = WebSocket.OPEN;
 	events: { [name: string]: [(message?: string) => void] } = {};
 	sentData: string[] = [];
+
+	get readyState(): number {
+		return this.#readyState;
+	}
+
+	updateReadyState(readyState: number) {
+		this.#readyState = readyState;
+	}
 
 	constructor(public address: string) {}
 
