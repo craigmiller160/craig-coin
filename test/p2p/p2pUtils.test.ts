@@ -151,6 +151,10 @@ describe('p2pUtils', () => {
 			expect(blockchain.chain).toEqual(newBlockchain.chain);
 		});
 
+		it('MessageType.ALL_TRANSACTIONS', () => {
+			throw new Error();
+		});
+
 		it('MessageType.TRANSACTION', () => {
 			const socket = new TestWebSocketWrapper('');
 			socketMessageHandler(socket, blockchain, transactionPool);
