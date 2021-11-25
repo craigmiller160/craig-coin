@@ -21,7 +21,6 @@ export class P2pServer {
 		return this.#connectedSockets.slice();
 	}
 
-	// TODO add test
 	updateSockets(sockets: ReadonlyArray<WebSocketWrapper>) {
 		if (sockets.length !== this.#connectedSockets.length) {
 			this.#connectedSockets = sockets;
