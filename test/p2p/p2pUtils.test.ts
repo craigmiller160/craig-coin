@@ -141,11 +141,19 @@ describe('p2pUtils', () => {
 	});
 
 	it('connectToPeers', () => {
-		const address = 'address';
+		const address = 'peerAddress';
 		process.env.PEERS = address;
-		connectToPeers(p2pServer, blockchain, transactionPool);
+		const socketEithers = connectToPeers(
+			p2pServer,
+			blockchain,
+			transactionPool
+		);
+		expect(socketEithers).toHaveLength(1);
+		const socket = unpackRight(socketEithers[0]) as TestWebSocketWrapper;
+		expect(socket.address).toEqual(address);
+		expect(socket.events['open']).toHaveLength(1);
+		socket.events['open'][0]();
 
-		expect(p2pServer.connectedSockets).toHaveLength(1);
-		const socket = p2pServer.connectedSockets[0];
+		validateHandleSocketConnection(socket, p2pServer, blockchain);
 	});
 });
