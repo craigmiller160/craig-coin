@@ -4,6 +4,19 @@ import { newTransaction } from '../../src/transaction/transactionUtils';
 import { mine } from '../../src/miner/minerUtils';
 import { genesisBlock } from '../../src/block/blockUtils';
 import '@relmify/jest-fp-ts';
+import {
+	broadcastBlockchain,
+	broadcastClearTransactions
+} from '../../src/p2p/p2pUtils';
+
+jest.mock('../../src/p2p/p2pUtils', () => {
+	const p2pUtils = jest.requireActual('../../src/p2p/p2pUtils');
+	return {
+		...p2pUtils,
+		broadcastBlockchain: jest.fn(),
+		broadcastClearTransactions: jest.fn()
+	};
+});
 
 describe('minerUtils', () => {
 	it('mine, but no transactions to mine', () => {
@@ -22,8 +35,8 @@ describe('minerUtils', () => {
 			mine(blockchain, transactionPool, wallet, p2pServer)
 		);
 		expect(transactionPool.transactions).toHaveLength(0);
-		expect(p2pServer.syncChains).toHaveBeenCalled();
-		expect(p2pServer.broadcastClearTransactions).toHaveBeenCalled();
+		expect(broadcastBlockchain).toHaveBeenCalled();
+		expect(broadcastClearTransactions).toHaveBeenCalled();
 
 		const newBlock = {
 			data: [
