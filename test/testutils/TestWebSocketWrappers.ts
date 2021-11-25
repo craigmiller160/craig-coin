@@ -5,6 +5,7 @@ import {
 } from '../../src/p2p/WebSocketWrappers';
 
 export class TestWebSocketWrapper implements WebSocketWrapper {
+	readonly readyState = WebSocket.OPEN;
 	events: { [name: string]: [(message?: string) => void] } = {};
 	sentData: string[] = [];
 

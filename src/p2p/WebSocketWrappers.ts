@@ -2,6 +2,7 @@ import WebSocket, { Server as WsServer } from 'ws';
 import { Server as HttpsServer } from 'https';
 
 export interface WebSocketWrapper {
+	readonly readyState: number;
 	on: (event: string, fn: (message?: string) => void) => void;
 	send: (data: string) => void;
 }
@@ -18,6 +19,10 @@ export class WebSocketWrapperImpl implements WebSocketWrapper {
 	#webSocket: WebSocket;
 	constructor(webSocket: WebSocket) {
 		this.#webSocket = webSocket;
+	}
+
+	get readyState(): number {
+		return this.#webSocket.readyState;
 	}
 
 	on(event: string, fn: (message?: string) => void) {
