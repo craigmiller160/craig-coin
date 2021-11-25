@@ -265,4 +265,8 @@ describe('p2pUtils', () => {
 			transactionPool
 		);
 	});
+
+	it('broadcastToSockets', () => {
+		throw new Error();
+	});
 });

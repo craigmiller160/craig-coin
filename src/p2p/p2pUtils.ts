@@ -119,7 +119,7 @@ const sendClearTransactions = (socket: WebSocketWrapper) => {
 	);
 };
 
-const broadcastToSockets = (
+export const broadcastToSockets = (
 	p2pServer: P2pServer,
 	broadcastAction: (socket: WebSocketWrapper) => void
 ) => {
