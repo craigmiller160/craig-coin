@@ -29,17 +29,24 @@ import { Wallet } from '../../src/wallet/Wallet';
 const validateHandleSocketConnection = (
 	socket: TestWebSocketWrapper,
 	p2pServer: P2pServer,
-	blockchain: Blockchain
+	blockchain: Blockchain,
+	transactionPool: TransactionPool
 ) => {
 	expect(p2pServer.connectedSockets).toHaveLength(1);
 	expect(p2pServer.connectedSockets[0]).toEqual(socket);
 
 	expect(socket.events['message']).toHaveLength(1);
-	expect(socket.sentData).toHaveLength(1);
+	expect(socket.sentData).toHaveLength(2);
 	expect(socket.sentData[0]).toEqual(
 		JSON.stringify({
 			type: MessageType.CHAIN,
 			data: blockchain.chain
+		})
+	);
+	expect(socket.sentData[1]).toEqual(
+		JSON.stringify({
+			type: MessageType.ALL_TRANSACTIONS,
+			data: transactionPool.transactions
 		})
 	);
 };
@@ -74,7 +81,12 @@ describe('p2pUtils', () => {
 		const socket = new TestWebSocketWrapper('address');
 
 		wsServer.events['connection'][0](socket);
-		validateHandleSocketConnection(socket, resultP2pServer, blockchain);
+		validateHandleSocketConnection(
+			socket,
+			resultP2pServer,
+			blockchain,
+			transactionPool
+		);
 	});
 
 	it('broadcastBlockchain', () => {
@@ -232,6 +244,11 @@ describe('p2pUtils', () => {
 		expect(socket.events['open']).toHaveLength(1);
 		socket.events['open'][0]();
 
-		validateHandleSocketConnection(socket, p2pServer, blockchain);
+		validateHandleSocketConnection(
+			socket,
+			p2pServer,
+			blockchain,
+			transactionPool
+		);
 	});
 });
