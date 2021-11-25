@@ -1,12 +1,16 @@
 import { Blockchain } from '../chain/Blockchain';
 import { TransactionPool } from '../transaction/TransactionPool';
 import { Wallet } from '../wallet/Wallet';
-import { P2pServer } from '../p2p-server';
 import { getValidTransactions } from '../transaction/transactionPoolUtils';
 import { rewardTransaction } from '../transaction/transactionUtils';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
 import { Block } from '../block/Block';
+import { P2pServer } from '../p2p/P2pServer';
+import {
+	broadcastBlockchain,
+	broadcastClearTransactions
+} from '../p2p/p2pUtils';
 
 export const mine = (
 	blockchain: Blockchain,
@@ -24,9 +28,9 @@ export const mine = (
 		E.map((rewardTxn) => [...validTransactions, rewardTxn]),
 		E.chain((transactions) => blockchain.addBlock(transactions)),
 		E.map((block: Block) => {
-			p2pServer.syncChains();
+			broadcastBlockchain(p2pServer, blockchain);
 			transactionPool.clear();
-			p2pServer.broadcastClearTransactions();
+			broadcastClearTransactions(p2pServer);
 			return block;
 		})
 	);

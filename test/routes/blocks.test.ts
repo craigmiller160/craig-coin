@@ -1,8 +1,6 @@
 import request from 'supertest';
 import { createTestServer } from '../testutils/createTestServer';
 
-jest.mock('../../src/p2p-server');
-
 describe('blocks', () => {
 	it('GET /blocks', async () => {
 		const { app, blockchain } = createTestServer();

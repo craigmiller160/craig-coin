@@ -1,12 +1,12 @@
 import { Blockchain } from '../chain/Blockchain';
 import { Express } from 'express';
-import { P2pServer } from '../p2p-server';
 import { logger } from '../logger';
 import { mine } from '../miner/minerUtils';
 import { TransactionPool } from '../transaction/TransactionPool';
 import { Wallet } from '../wallet/Wallet';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
+import { P2pServer } from '../p2p/P2pServer';
 
 export const configureMine = (
 	app: Express,

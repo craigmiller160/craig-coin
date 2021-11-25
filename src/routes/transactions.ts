@@ -4,9 +4,11 @@ import { Wallet } from '../wallet/Wallet';
 import { pipe } from 'fp-ts/function';
 import * as E from 'fp-ts/Either';
 import { logger } from '../logger';
-import { P2pServer } from '../p2p-server';
 import { createTransaction } from '../wallet/walletUtils';
 import { Blockchain } from '../chain/Blockchain';
+import { unknownToError } from '../utils/unknownToError';
+import { P2pServer } from '../p2p/P2pServer';
+import { broadcastTransaction } from '../p2p/p2pUtils';
 
 interface TransactionRequest {
 	readonly recipient: string;
@@ -47,8 +49,8 @@ export const configureCreateTransaction = (
 				),
 				E.chain((transaction) =>
 					E.tryCatch(
-						() => p2pServer.broadcastTransaction(transaction),
-						(error) => error as Error
+						() => broadcastTransaction(p2pServer, transaction),
+						unknownToError
 					)
 				),
 				E.fold(
