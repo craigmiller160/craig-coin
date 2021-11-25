@@ -5,7 +5,7 @@ export const logger = pino({
 	transport: {
 		target: 'pino-pretty',
 		options: {
-			translateTime: 'yyyy-MM-dd HH:mm:ss.l'
+			translateTime: 'yyyy-mm-dd HH:MM:ss.l'
 		}
 	}
 });
