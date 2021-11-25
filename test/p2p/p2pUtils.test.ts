@@ -17,7 +17,12 @@ import {
 	TestWebSocketServerWrapper,
 	TestWebSocketWrapper
 } from './TestWebSocketWrappers';
-import { ChainSocketMessage, MessageType } from '../../src/p2p/SocketMessages';
+import {
+	ChainSocketMessage,
+	ClearTransactionsSocketMessage,
+	MessageType,
+	TransactionSocketMessage
+} from '../../src/p2p/SocketMessages';
 import { newTransaction } from '../../src/transaction/transactionUtils';
 import { Wallet } from '../../src/wallet/Wallet';
 
@@ -151,19 +156,65 @@ describe('p2pUtils', () => {
 		});
 
 		it('MessageType.TRANSACTION', () => {
-			throw new Error();
+			const socket = new TestWebSocketWrapper('');
+			socketMessageHandler(socket, blockchain, transactionPool);
+			expect(socket.events['message']).toHaveLength(1);
+			const theNewTransaction = unpackRight(
+				newTransaction(wallet, 'address', 100)
+			);
+
+			const message: TransactionSocketMessage = {
+				type: MessageType.TRANSACTION,
+				data: theNewTransaction
+			};
+
+			socket.events['message'][0](JSON.stringify(message));
+			expect(blockchain.chain).toHaveLength(1);
+			expect(transactionPool.transactions).toHaveLength(1);
 		});
 
 		it('MessageType.CLEAR_TRANSACTIONS', () => {
-			throw new Error();
+			const socket = new TestWebSocketWrapper('');
+			socketMessageHandler(socket, blockchain, transactionPool);
+			expect(socket.events['message']).toHaveLength(1);
+			const theNewTransaction = unpackRight(
+				newTransaction(wallet, 'address', 100)
+			);
+			transactionPool.updateOrAddTransaction(theNewTransaction);
+
+			const message: ClearTransactionsSocketMessage = {
+				type: MessageType.CLEAR_TRANSACTIONS,
+				data: null
+			};
+
+			socket.events['message'][0](JSON.stringify(message));
+			expect(blockchain.chain).toHaveLength(1);
+			expect(transactionPool.transactions).toHaveLength(0);
 		});
 
 		it('unknown type', () => {
-			throw new Error();
+			const socket = new TestWebSocketWrapper('');
+			socketMessageHandler(socket, blockchain, transactionPool);
+			expect(socket.events['message']).toHaveLength(1);
+
+			const message = {
+				type: 'abc',
+				data: 'def'
+			};
+
+			socket.events['message'][0](JSON.stringify(message));
+			expect(blockchain.chain).toHaveLength(1);
+			expect(transactionPool.transactions).toHaveLength(0);
 		});
 
 		it('parsing error', () => {
-			throw new Error();
+			const socket = new TestWebSocketWrapper('');
+			socketMessageHandler(socket, blockchain, transactionPool);
+			expect(socket.events['message']).toHaveLength(1);
+
+			socket.events['message'][0]('<h1>Hello</h1>');
+			expect(blockchain.chain).toHaveLength(1);
+			expect(transactionPool.transactions).toHaveLength(0);
 		});
 	});
 
