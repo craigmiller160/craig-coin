@@ -18,7 +18,19 @@ export class P2pServer {
 	) {}
 
 	get connectedSockets(): ReadonlyArray<WebSocketWrapper> {
-		return this.#connectedSockets;
+		return this.#connectedSockets.slice();
+	}
+
+	// TODO add test
+	updateSockets(sockets: ReadonlyArray<WebSocketWrapper>) {
+		if (sockets.length !== this.#connectedSockets.length) {
+			this.#connectedSockets = sockets;
+			logger.debug(
+				`Updating sockets to remove closed connections. Total sockets: ${
+					this.#connectedSockets.length
+				}`
+			);
+		}
 	}
 
 	addConnectedSocket(socket: WebSocketWrapper) {
