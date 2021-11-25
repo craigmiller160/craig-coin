@@ -48,9 +48,9 @@ const handleSocketConnection = (
 	blockchain: Blockchain,
 	transactionPool: TransactionPool
 ) => {
+	logger.debug('New socket connection received');
 	socketMessageHandler(socket, blockchain, transactionPool);
 	p2pServer.addConnectedSocket(socket);
-	logger.debug('Socket connected');
 	sendBlockchain(socket, blockchain);
 	sendAllTransactions(socket, transactionPool);
 };

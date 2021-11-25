@@ -23,6 +23,11 @@ export class P2pServer {
 
 	addConnectedSocket(socket: WebSocketWrapper) {
 		this.#connectedSockets = [...this.#connectedSockets, socket];
+		logger.debug(
+			`New socket connected. Total sockets: ${
+				this.#connectedSockets.length
+			}`
+		);
 	}
 
 	listen(): E.Either<Error, void> {
