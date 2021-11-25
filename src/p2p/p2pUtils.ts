@@ -103,6 +103,7 @@ export const broadcastBlockchain = (
 	p2pServer: P2pServer,
 	blockchain: Blockchain
 ) => {
+	logger.info('Broadcasting blockchain update to peers');
 	p2pServer.connectedSockets.forEach((socket) => {
 		sendBlockchain(socket, blockchain);
 	});
@@ -112,12 +113,14 @@ export const broadcastTransaction = (
 	p2pServer: P2pServer,
 	transaction: Transaction
 ) => {
+	logger.info('Broadcasting new transaction to peers');
 	p2pServer.connectedSockets.forEach((socket) => {
 		sendTransaction(socket, transaction);
 	});
 };
 
 export const broadcastClearTransactions = (p2pServer: P2pServer) => {
+	logger.info('Broadcasting clear transactions to peers');
 	p2pServer.connectedSockets.forEach((socket) => {
 		sendClearTransactions(socket);
 	});
