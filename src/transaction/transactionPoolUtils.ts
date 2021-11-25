@@ -19,6 +19,13 @@ export const getExistingTransactionIndex = (
 		(txn) => txn.input.address === senderAddress
 	);
 
+export const mergeTransactions = (
+	transactionPool: TransactionPool,
+	transactions: ReadonlyArray<Transaction>
+) => {
+	// TODO figure this out
+};
+
 export const getValidTransactions = (
 	transactionPool: TransactionPool
 ): ReadonlyArray<Transaction> =>
