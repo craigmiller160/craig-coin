@@ -19,16 +19,6 @@ export const getExistingTransactionIndex = (
 		(txn) => txn.input.address === senderAddress
 	);
 
-export const mergeTransactions = (
-	transactionPool: TransactionPool,
-	transactions: ReadonlyArray<Transaction>
-) => {
-	const uniqueTransactions = transactions.filter(
-		(txn) => !!transactionPool.transactions.find((t) => t.id === txn.id)
-	);
-	// TODO finish this
-};
-
 export const getValidTransactions = (
 	transactionPool: TransactionPool
 ): ReadonlyArray<Transaction> =>
