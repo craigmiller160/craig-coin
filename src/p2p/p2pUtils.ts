@@ -52,7 +52,7 @@ const handleSocketConnection = (
 	p2pServer.addConnectedSocket(socket);
 	logger.debug('Socket connected');
 	sendBlockchain(socket, blockchain);
-	sendAllTransactions(socket, transactionPool); // TODO add to tests
+	sendAllTransactions(socket, transactionPool);
 };
 
 const sendBlockchain = (socket: WebSocketWrapper, blockchain: Blockchain) => {
