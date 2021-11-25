@@ -3,7 +3,6 @@ import bodyParser from 'body-parser';
 import { configureGetBlocks } from './routes/blocks';
 import { configureMine } from './routes/mine';
 import { Blockchain } from './chain/Blockchain';
-import { P2pServer } from './p2p-server';
 import { logger } from './logger';
 import { TransactionPool } from './transaction/TransactionPool';
 import {
@@ -15,6 +14,7 @@ import { configureGetWallet } from './routes/wallet';
 import nocache from 'nocache';
 import basicAuth from 'express-basic-auth';
 import { createHttpsServer } from './tls';
+import { P2pServer } from './p2p/P2pServer';
 
 const HTTP_PORT = process.env.HTTP_PORT
 	? parseInt(process.env.HTTP_PORT)
