@@ -16,7 +16,7 @@ import {
 	TestWebSocketHttpsServerWrapper,
 	TestWebSocketServerWrapper,
 	TestWebSocketWrapper
-} from './TestWebSocketWrappers';
+} from '../testutils/TestWebSocketWrappers';
 import {
 	ChainSocketMessage,
 	ClearTransactionsSocketMessage,
@@ -27,7 +27,7 @@ import { newTransaction } from '../../src/transaction/transactionUtils';
 import { Wallet } from '../../src/wallet/Wallet';
 
 jest.mock('../../src/p2p/webSocketWrapperUtils', () => {
-	return jest.requireActual('./testWebSocketWrapperUtils');
+	return jest.requireActual('../testutils/testWebSocketWrapperUtils');
 });
 
 const validateHandleSocketConnection = (
