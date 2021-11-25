@@ -150,16 +150,19 @@ export const socketMessageHandler = (
 			E.map((receivedMessage) => {
 				switch (receivedMessage.type) {
 					case MessageType.CHAIN:
+						logger.info('Received blockchain from peer');
 						blockchain.replaceChain(
 							(receivedMessage as ChainSocketMessage).data
 						);
 						break;
 					case MessageType.TRANSACTION:
+						logger.info('Received transaction from peer');
 						transactionPool.updateOrAddTransaction(
 							(receivedMessage as TransactionSocketMessage).data
 						);
 						break;
 					case MessageType.CLEAR_TRANSACTIONS:
+						logger.info('Received clear transactions from peer');
 						transactionPool.clear();
 						break;
 					default:
