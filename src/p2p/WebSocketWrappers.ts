@@ -1,4 +1,4 @@
-import WebSocket, { Server as WsServer, ServerOptions } from 'ws';
+import WebSocket, { Server as WsServer } from 'ws';
 import { Server as HttpsServer } from 'https';
 
 export interface WebSocketWrapper {
@@ -43,8 +43,8 @@ export class WebSocketHttpsServerWrapperImpl
 
 export class WebSocketServerWrapperImpl implements WebSocketServerWrapper {
 	#server: WsServer;
-	constructor(options?: ServerOptions) {
-		this.#server = new WsServer(options);
+	constructor(server: WsServer) {
+		this.#server = server;
 	}
 	on(event: string, fn: (socket: WebSocketWrapper) => void) {
 		this.#server.on(event, (ws: WebSocket) =>
