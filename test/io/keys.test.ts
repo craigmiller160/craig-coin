@@ -1,4 +1,5 @@
-import { keyFileExists } from '../../src/io/keys';
+import { keyFileExists, loadPrivateKey } from '../../src/io/keys';
+import { unpackRight } from '../testutils/utilityFunctions';
 
 jest.mock('../../src/io/constants', () => {
 	const path = jest.requireActual('path');
@@ -8,18 +9,13 @@ jest.mock('../../src/io/constants', () => {
 });
 
 describe('io keys', () => {
-	describe('keyFileExists', () => {
-		it('does exist', () => {
-			expect(keyFileExists()).toEqual(true);
-		});
-
-		it('does not exist', () => {
-			throw new Error();
-		});
+	it('keyFileExists', () => {
+		expect(keyFileExists()).toEqual(true);
 	});
 
 	it('loadPrivateKey', () => {
-		throw new Error();
+		const privKey = unpackRight(loadPrivateKey());
+		expect(privKey).toEqual('Private Key');
 	});
 
 	it('savePrivateKey', () => {

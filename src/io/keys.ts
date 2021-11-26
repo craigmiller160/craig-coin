@@ -7,8 +7,7 @@ import { unknownToError } from '../utils/unknownToError';
 const keyDirPath = path.resolve(DATA_DIR_PATH, 'keys');
 const privateKeyPath = path.resolve(keyDirPath, 'privateKey.pem');
 
-export const keyFileExists = (): boolean =>
-	fs.existsSync(path.resolve(privateKeyPath));
+export const keyFileExists = (): boolean => fs.existsSync(privateKeyPath);
 
 export const loadPrivateKey = (): E.Either<Error, string> =>
 	E.tryCatch(() => fs.readFileSync(privateKeyPath, 'utf8'), unknownToError);
