@@ -12,13 +12,18 @@ import { P2pServer } from './p2p/P2pServer';
 type ChainAndPool = [Blockchain, TransactionPool];
 type ChainPoolAndServer = [Blockchain, TransactionPool, P2pServer];
 
+const setupBlockchainAndTransactionPool = (): E.Either<Error, ChainAndPool> =>
+	pipe(
+		genesisBlock(),
+		E.map((genesisBlock): ChainAndPool => {
+			const blockchain = new Blockchain(genesisBlock);
+			const transactionPool = new TransactionPool();
+			return [blockchain, transactionPool];
+		})
+	);
+
 pipe(
-	genesisBlock(),
-	E.map((genesisBlock): ChainAndPool => {
-		const blockchain = new Blockchain(genesisBlock);
-		const transactionPool = new TransactionPool();
-		return [blockchain, transactionPool];
-	}),
+	setupBlockchainAndTransactionPool(),
 	E.chain(([blockchain, transactionPool]) =>
 		pipe(
 			createP2pServer(blockchain, transactionPool),
