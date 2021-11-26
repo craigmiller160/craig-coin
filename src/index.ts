@@ -22,29 +22,35 @@ const setupBlockchainAndTransactionPool = (): E.Either<Error, ChainAndPool> =>
 		})
 	);
 
+const setupP2pServer = (
+	blockchain: Blockchain,
+	transactionPool: TransactionPool
+): E.Either<Error, ChainPoolAndServer> =>
+	pipe(
+		createP2pServer(blockchain, transactionPool),
+		E.chain((p2pServer) =>
+			pipe(
+				p2pServer.listen(),
+				E.map(() => p2pServer)
+			)
+		),
+		E.map((p2pServer) => {
+			connectToPeers(p2pServer, blockchain, transactionPool);
+			return p2pServer;
+		}),
+		E.map(
+			(p2pServer): ChainPoolAndServer => [
+				blockchain,
+				transactionPool,
+				p2pServer
+			]
+		)
+	);
+
 pipe(
 	setupBlockchainAndTransactionPool(),
 	E.chain(([blockchain, transactionPool]) =>
-		pipe(
-			createP2pServer(blockchain, transactionPool),
-			E.chain((p2pServer) =>
-				pipe(
-					p2pServer.listen(),
-					E.map(() => p2pServer)
-				)
-			),
-			E.map((p2pServer) => {
-				connectToPeers(p2pServer, blockchain, transactionPool);
-				return p2pServer;
-			}),
-			E.map(
-				(p2pServer): ChainPoolAndServer => [
-					blockchain,
-					transactionPool,
-					p2pServer
-				]
-			)
-		)
+		setupP2pServer(blockchain, transactionPool)
 	),
 	E.fold(
 		(error) => {
