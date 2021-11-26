@@ -7,7 +7,22 @@ import { unknownToError } from './unknownToError';
 
 const ecInstance = new ec('secp256k1');
 
-export const genKeyPair = (): ec.KeyPair => ecInstance.genKeyPair();
+export const genKeyPair = (): E.Either<Error, ec.KeyPair> =>
+	E.tryCatch(() => ecInstance.genKeyPair(), unknownToError);
+
+// TODO write test
+export const parseKeyPair = (
+	publicKey: string,
+	privateKey: string
+): E.Either<Error, ec.KeyPair> =>
+	E.tryCatch(
+		() =>
+			ecInstance.keyPair({
+				pubEnc: publicKey,
+				privEnc: privateKey
+			}),
+		unknownToError
+	);
 
 export const verifySignature = (
 	publicKeyString: string,

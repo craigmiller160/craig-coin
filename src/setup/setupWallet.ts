@@ -2,6 +2,10 @@ import os from 'os';
 import path from 'path';
 import fs from 'fs';
 import * as E from 'fp-ts/Either';
+import { unknownToError } from '../utils/unknownToError';
+import { pipe } from 'fp-ts/function';
+import { parseKeyPair } from '../utils/cryptoUtils';
+import { Wallet } from '../wallet/Wallet';
 
 const DATA_DIR_ROOT = path.resolve(os.homedir(), '.craigcoin');
 const dataDirPath = !!process.env.DATA_DIR_NAME
@@ -11,22 +15,36 @@ const keyDirPath = path.resolve(dataDirPath, 'keys');
 const publicKeyPath = path.resolve(keyDirPath, 'public.pem');
 const privateKeyPath = path.resolve(keyDirPath, 'private.pem');
 
+// TODO move a lot of this into IO files and write tests
+
 const keyFilesExist = (): boolean =>
 	fs.existsSync(path.resolve(publicKeyPath)) &&
 	fs.existsSync(path.resolve(privateKeyPath));
 
-const loadKeys = (): E.Either<Error, [string,string]> => {
-    // TODO finish this
-};
+const loadKeys = (): E.Either<Error, [string, string]> =>
+	E.tryCatch(() => {
+		const publicKey = fs.readFileSync(publicKeyPath, 'utf8');
+		const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
+		return [publicKey, privateKey];
+	}, unknownToError);
 
-const saveKeys = (publicKey: string, privateKey: string) => {
-    // TODO finish this
-}
+const saveKeys = (
+	publicKey: string,
+	privateKey: string
+): E.Either<Error, void> =>
+	E.tryCatch(() => {
+		fs.writeFileSync(publicKeyPath, publicKey);
+		fs.writeFileSync(privateKeyPath, privateKey);
+	}, unknownToError);
 
-export const setupWallet = () => {
+export const setupWallet = (): E.Either<Error, Wallet> => {
 	if (keyFilesExist()) {
-        loadKeys();
-    } else {
-        // TODO gen keys and save them
-    }
+		return pipe(
+			loadKeys(),
+			E.chain(([publicKey, privateKey]) => parseKeyPair(publicKey, privateKey)),
+			E.map((keyPair) => new Wallet())
+		);
+	}
+
+	const either = keyFilesExist() ? loadKeys() : E.right([]);
 };
