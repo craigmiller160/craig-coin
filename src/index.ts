@@ -34,7 +34,9 @@ pipe(
 		(error) => {
 			logger.error('Error starting Blockchain application');
 			logger.error(error);
-			process.exit(1);
+			setTimeout(() => {
+				process.exit(1);
+			}, 1000);
 		},
 		([blockchain, transactionPool, p2pServer, wallet]) => {
 			createAndStartRestServer(
