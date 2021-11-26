@@ -4,10 +4,9 @@ import fs from 'fs';
 import * as E from 'fp-ts/Either';
 import { unknownToError } from '../utils/unknownToError';
 
-const getPrivateKeyPath = () => {
-	const keyDirPath = path.resolve(getDataDirPath(), 'keys');
-	return path.resolve(keyDirPath, 'privateKey.pem');
-};
+const getKeyDirPath = () => path.resolve(getDataDirPath(), 'keys');
+
+const getPrivateKeyPath = () => path.resolve(getKeyDirPath(), 'privateKey.pem');
 
 export const keyFileExists = (): boolean => fs.existsSync(getPrivateKeyPath());
 
@@ -18,7 +17,9 @@ export const loadPrivateKey = (): E.Either<Error, string> =>
 	);
 
 export const savePrivateKey = (privateKey: string): E.Either<Error, void> =>
-	E.tryCatch(
-		() => fs.writeFileSync(getPrivateKeyPath(), privateKey),
-		unknownToError
-	);
+	E.tryCatch(() => {
+		if (!fs.existsSync(getKeyDirPath())) {
+			fs.mkdirSync(getKeyDirPath());
+		}
+		fs.writeFileSync(getPrivateKeyPath(), privateKey);
+	}, unknownToError);
