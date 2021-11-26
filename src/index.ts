@@ -22,6 +22,12 @@ pipe(
 	E.chain(([blockchain, transactionPool]) =>
 		pipe(
 			createP2pServer(blockchain, transactionPool),
+			E.chain((p2pServer) =>
+				pipe(
+					p2pServer.listen(),
+					E.map(() => p2pServer)
+				)
+			),
 			E.map((p2pServer) => {
 				connectToPeers(p2pServer, blockchain, transactionPool);
 				return p2pServer;
@@ -39,10 +45,10 @@ pipe(
 		(error) => {
 			logger.error('Error starting Blockchain application');
 			logger.error(error);
+			process.exit(1);
 		},
 		([blockchain, transactionPool, p2pServer]) => {
 			const wallet = new Wallet();
-			p2pServer.listen();
 			createAndStartRestServer(
 				blockchain,
 				transactionPool,
