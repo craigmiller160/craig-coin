@@ -11,18 +11,10 @@ export const genKeyPair = (): E.Either<Error, ec.KeyPair> =>
 	E.tryCatch(() => ecInstance.genKeyPair(), unknownToError);
 
 // TODO write test
-export const parseKeyPair = (
-	publicKey: string,
+export const getKeyPairFromPrivate = (
 	privateKey: string
 ): E.Either<Error, ec.KeyPair> =>
-	E.tryCatch(
-		() =>
-			ecInstance.keyPair({
-				pubEnc: publicKey,
-				privEnc: privateKey
-			}),
-		unknownToError
-	);
+	E.tryCatch(() => ecInstance.keyFromPrivate(privateKey), unknownToError);
 
 export const verifySignature = (
 	publicKeyString: string,
