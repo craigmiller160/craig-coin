@@ -52,10 +52,7 @@ export const setupWallet = (): E.Either<Error, Wallet> => {
 		genKeyPair(),
 		E.chain((keyPair) =>
 			pipe(
-				saveKeys(
-					keyPair.getPublic().encode('hex', false),
-					keyPair.getPrivate().encode('hex', false)
-				),
+				saveKeys(keyPair.getPublic('hex'), keyPair.getPrivate('hex')),
 				E.map(() => keyPair)
 			)
 		),
