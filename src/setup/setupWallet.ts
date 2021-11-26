@@ -4,7 +4,6 @@ import { genKeyPair, getKeyPairFromPrivate } from '../utils/cryptoUtils';
 import { Wallet } from '../wallet/Wallet';
 import { keyFileExists, loadPrivateKey, savePrivateKey } from '../io/keys';
 
-// TODO write test
 export const setupWallet = (): E.Either<Error, Wallet> => {
 	if (keyFileExists()) {
 		return pipe(
