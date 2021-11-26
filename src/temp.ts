@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { ec } from 'elliptic';
 
 // TODO delete this file
