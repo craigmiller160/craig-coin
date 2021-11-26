@@ -41,10 +41,10 @@ export const setupWallet = (): E.Either<Error, Wallet> => {
 	if (keyFilesExist()) {
 		return pipe(
 			loadKeys(),
-			E.chain(([publicKey, privateKey]) => parseKeyPair(publicKey, privateKey)),
-			E.map((keyPair) => new Wallet())
+			E.chain(([publicKey, privateKey]) =>
+				parseKeyPair(publicKey, privateKey)
+			),
+			E.map((keyPair) => new Wallet(keyPair))
 		);
 	}
-
-	const either = keyFilesExist() ? loadKeys() : E.right([]);
 };
