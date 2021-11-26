@@ -9,8 +9,12 @@ import { unpackRight } from '../testutils/utilityFunctions';
 
 describe('cryptoUtils', () => {
 	it('genKeyPair', () => {
-		const keyPair = genKeyPair();
+		const keyPair = unpackRight(genKeyPair());
 		expect(keyPair).not.toBeUndefined();
+	});
+
+	it('getKeyPairFromPrivate', () => {
+		throw new Error();
 	});
 
 	describe('verifySignature', () => {
@@ -19,7 +23,7 @@ describe('cryptoUtils', () => {
 		let dataHash: string;
 		let validSignature: string;
 		beforeEach(() => {
-			keyPair = genKeyPair();
+			keyPair = unpackRight(genKeyPair());
 			publicKeyString = keyPair.getPublic().encode('hex', false);
 			const data = {
 				abc: 'def'
