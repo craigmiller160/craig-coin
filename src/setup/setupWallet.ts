@@ -4,11 +4,7 @@ import fs from 'fs';
 import * as E from 'fp-ts/Either';
 import { unknownToError } from '../utils/unknownToError';
 import { pipe } from 'fp-ts/function';
-import {
-	genKeyPair,
-	getKeyPairFromPrivate,
-	parseKeyPair
-} from '../utils/cryptoUtils';
+import { genKeyPair, getKeyPairFromPrivate } from '../utils/cryptoUtils';
 import { Wallet } from '../wallet/Wallet';
 
 const DATA_DIR_ROOT = path.resolve(os.homedir(), '.craigcoin');
