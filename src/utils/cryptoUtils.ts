@@ -10,7 +10,6 @@ const ecInstance = new ec('secp256k1');
 export const genKeyPair = (): E.Either<Error, ec.KeyPair> =>
 	E.tryCatch(() => ecInstance.genKeyPair(), unknownToError);
 
-// TODO write test
 export const getKeyPairFromPrivate = (
 	privateKey: string
 ): E.Either<Error, ec.KeyPair> =>
