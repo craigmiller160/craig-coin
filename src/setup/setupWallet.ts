@@ -4,7 +4,7 @@ import fs from 'fs';
 import * as E from 'fp-ts/Either';
 import { unknownToError } from '../utils/unknownToError';
 import { pipe } from 'fp-ts/function';
-import { parseKeyPair } from '../utils/cryptoUtils';
+import { genKeyPair, parseKeyPair } from '../utils/cryptoUtils';
 import { Wallet } from '../wallet/Wallet';
 
 const DATA_DIR_ROOT = path.resolve(os.homedir(), '.craigcoin');
@@ -47,4 +47,18 @@ export const setupWallet = (): E.Either<Error, Wallet> => {
 			E.map((keyPair) => new Wallet(keyPair))
 		);
 	}
+
+	return pipe(
+		genKeyPair(),
+		E.chain((keyPair) =>
+			pipe(
+				saveKeys(
+					keyPair.getPublic().encode('hex', false),
+					keyPair.getPrivate().encode('hex', false)
+				),
+				E.map(() => keyPair)
+			)
+		),
+		E.map((keyPair) => new Wallet(keyPair))
+	);
 };
