@@ -1,5 +1,6 @@
 import {
 	genKeyPair,
+	getKeyPairFromPrivate,
 	hashData,
 	hashText,
 	verifySignature
@@ -7,10 +8,22 @@ import {
 import { ec } from 'elliptic';
 import { unpackRight } from '../testutils/utilityFunctions';
 
+const ecInstance = new ec('secp256k1');
+
 describe('cryptoUtils', () => {
 	it('genKeyPair', () => {
-		const keyPair = genKeyPair();
+		const keyPair = unpackRight(genKeyPair());
 		expect(keyPair).not.toBeUndefined();
+	});
+
+	it('getKeyPairFromPrivate', () => {
+		const keyPair = ecInstance.genKeyPair();
+		const publicKey = keyPair.getPublic('hex');
+		const privateKey = keyPair.getPrivate('hex');
+
+		const newKeyPair = unpackRight(getKeyPairFromPrivate(privateKey));
+		expect(newKeyPair.getPrivate('hex')).toEqual(privateKey);
+		expect(newKeyPair.getPublic('hex')).toEqual(publicKey);
 	});
 
 	describe('verifySignature', () => {
@@ -19,7 +32,7 @@ describe('cryptoUtils', () => {
 		let dataHash: string;
 		let validSignature: string;
 		beforeEach(() => {
-			keyPair = genKeyPair();
+			keyPair = unpackRight(genKeyPair());
 			publicKeyString = keyPair.getPublic().encode('hex', false);
 			const data = {
 				abc: 'def'

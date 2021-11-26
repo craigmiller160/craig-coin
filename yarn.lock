@@ -3509,6 +3509,11 @@ optionator@^0.9.1:
     type-check "^0.4.0"
     word-wrap "^1.2.3"
 
+os@^0.1.2:
+  version "0.1.2"
+  resolved "https://craigmiller160.ddns.net:30003/repository/npm-group/os/-/os-0.1.2.tgz#f29a50c62908516ba42652de42f7038600cadbc2"
+  integrity sha512-ZoXJkvAnljwvc56MbvhtKVWmSkzV712k42Is2mA0+0KTSRakq5XXuXpjZjgAt9ctzl51ojhQWakQQpmOvXWfjQ==
+
 p-cancelable@^1.0.0:
   version "1.1.0"
   resolved "https://craigmiller160.ddns.net:30003/repository/npm-group/p-cancelable/-/p-cancelable-1.1.0.tgz#d078d15a3af409220c886f1d9a0ca2e441ab26cc"
